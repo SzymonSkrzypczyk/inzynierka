@@ -119,7 +119,8 @@ async def get_sf(
         async with session.get(FS_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}) as response:
             data = await response.json()
-            print(data)
+            from pprint import pprint
+            pprint(data)
 
 
 if __name__ == "__main__":
