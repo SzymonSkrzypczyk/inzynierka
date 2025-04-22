@@ -79,3 +79,28 @@ class CoronalMassEjection:
 
         for key in known_fields:
             setattr(self, key, kwargs.pop(key, None))
+
+
+@dataclass
+class CoronalMassEjectionAnalysis:
+    associatedCMEID: str
+    associatedCMEstartTime: str
+    catalog: str
+    dataLevel: str
+    featureCode: str
+    halfAngle: float
+    imageType: str
+    isMostAccurate: bool
+    latitude: float
+    link: str
+    longitude: float
+    measurementTechnique: str
+    note: str
+    speed: float
+    submissionTime: str
+    time21_5: str
+    type: str
+    versionId: int
+    tilt: Optional[float] = None
+    speedMeasuredAtHeight: Optional[float] = None
+    minorHalfWidth: Optional[float] = None

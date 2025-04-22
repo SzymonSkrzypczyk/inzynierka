@@ -4,7 +4,7 @@ import asyncio
 import aiohttp
 from dotenv import load_dotenv
 from os import environ
-from response_types import SolarFlare, CoronalMassEjection, CMEAnalyses, CMEInstrument
+from response_types import SolarFlare, CoronalMassEjection, CMEAnalyses, CMEInstrument, CoronalMassEjectionAnalysis
 
 CME_URL = "https://api.nasa.gov/DONKI/CME"
 CMEA_URL = "https://api.nasa.gov/DONKI/CMEAnalysis"
@@ -74,11 +74,14 @@ async def get_cmea(
     async with aiohttp.ClientSession() as session:
         async with session.get(CMEA_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(),
-                                       "catalog": "ALL", "api_key": api_key, "mostAccurateOnly": True,
+                                       "catalog": "ALL", "api_key": api_key, "mostAccurateOnly": "True",
                                        }
                                ) as response:
             data = await response.json()
-            print(data)
+
+            results = [CoronalMassEjectionAnalysis(**item) for item in data]
+
+    return results
 
 
 async def get_gs(
@@ -136,4 +139,4 @@ async def get_sf(
 
 
 if __name__ == "__main__":
-    print(asyncio.run(get_cme(NASA_API_KEY))[0])
+    print(asyncio.run(get_cmea(NASA_API_KEY)))
