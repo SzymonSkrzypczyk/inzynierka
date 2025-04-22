@@ -1,15 +1,17 @@
-from typing import Optional
+from typing import Optional, List
 from datetime import date, timedelta
 import asyncio
 import aiohttp
+from dotenv import load_dotenv
+from os import environ
+from response_types import SolarFlare, CoronalMassEjection, CMEAnalyses, CMEInstrument
 
 CME_URL = "https://api.nasa.gov/DONKI/CME"
 CMEA_URL = "https://api.nasa.gov/DONKI/CMEAnalysis"
 GS_URL = "https://api.nasa.gov/DONKI/GST"
 FS_URL = "https://api.nasa.gov/DONKI/FLR"
 
-from dotenv import load_dotenv
-from os import environ
+
 load_dotenv()
 NASA_API_KEY = environ.get("NASA_API_KEY")
 
@@ -38,7 +40,16 @@ async def get_cme(
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}
                                ) as response:
             data = await response.json()
-            print(data)
+            results = [
+                CoronalMassEjection(
+                    **{k: v for k, v in item.items() if k not in ["cmeAnalyses", "instruments"]},
+                    cmeAnalyses=[CMEAnalyses(**cme) for cme in item.get("cmeAnalyses", [])],
+                    instruments=[CMEInstrument(**instrument) for instrument in item.get("instruments", [])]
+                )
+                for item in data
+            ]
+
+    return results
 
 
 async def get_cmea(
@@ -100,7 +111,7 @@ async def get_sf(
         api_key: str,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
-):
+) -> List[SolarFlare]:
     """
     Retrieve data for solar flares
 
@@ -119,9 +130,10 @@ async def get_sf(
         async with session.get(FS_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}) as response:
             data = await response.json()
-            from pprint import pprint
-            pprint(data)
+            results = [SolarFlare(**item) for item in data]
+
+    return results
 
 
 if __name__ == "__main__":
-    asyncio.run(get_sf(NASA_API_KEY))
+    print(asyncio.run(get_cme(NASA_API_KEY))[0])
