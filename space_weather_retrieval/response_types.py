@@ -1,5 +1,5 @@
 from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields, is_dataclass
 # data classes with returned content
 
 
@@ -25,7 +25,17 @@ class SolarFlare:
         }
 
         for key in known_fields:
-            setattr(self, key, kwargs.pop(key))
+            setattr(self, key, kwargs.pop(key, None))
+        self.extra_fields = kwargs
+
+
+    def serialize(self):
+        """
+        Serialize the object to a dictionary
+        :return: dict
+        """
+        serialized_data = {field.name: getattr(self, field.name) for field in fields(self)}
+        return serialized_data
 
 
 @dataclass
@@ -48,6 +58,14 @@ class CMEAnalyses:
     enlilList: Optional[str] = None
     minorHalfWidth: Optional[float] = None
     note: Optional[str] = None
+
+    def serialize(self):
+        """
+        Serialize the object to a dictionary
+        :return: dict
+        """
+        serialized_data = {field.name: getattr(self, field.name) for field in fields(self)}
+        return serialized_data
 
 
 @dataclass
@@ -80,6 +98,29 @@ class CoronalMassEjection:
         for key in known_fields:
             setattr(self, key, kwargs.pop(key, None))
 
+        self.extra_fields = kwargs
+
+    def serialize(self) -> Dict[str, Any]:
+        """
+        Flatten nested dataclass fields for CSV output
+        """
+        result = {}
+        for f in fields(self):
+            value = getattr(self, f.name)
+            if isinstance(value, list):
+                for i, item in enumerate(value):
+                    if is_dataclass(item):
+                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
+                        result.update(nested)
+                    else:
+                        result[f"{f.name}_{i}"] = item
+            elif is_dataclass(value):
+                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
+                result.update(nested)
+            else:
+                result[f.name] = value
+        return result
+
 
 @dataclass
 class CoronalMassEjectionAnalysis:
@@ -105,6 +146,27 @@ class CoronalMassEjectionAnalysis:
     speedMeasuredAtHeight: Optional[float] = None
     minorHalfWidth: Optional[float] = None
 
+    def serialize(self) -> Dict[str, Any]:
+        """
+        Flatten nested dataclass fields for CSV output
+        """
+        result = {}
+        for f in fields(self):
+            value = getattr(self, f.name)
+            if isinstance(value, list):
+                for i, item in enumerate(value):
+                    if is_dataclass(item):
+                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
+                        result.update(nested)
+                    else:
+                        result[f"{f.name}_{i}"] = item
+            elif is_dataclass(value):
+                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
+                result.update(nested)
+            else:
+                result[f.name] = value
+        return result
+
 
 @dataclass
 class GSKpIndex:
@@ -127,3 +189,24 @@ class GeomagneticStorm:
     startTime: str
     submissionTime: str
     versionId: int
+
+    def serialize(self) -> Dict[str, Any]:
+        """
+        Flatten nested dataclass fields for CSV output
+        """
+        result = {}
+        for f in fields(self):
+            value = getattr(self, f.name)
+            if isinstance(value, list):
+                for i, item in enumerate(value):
+                    if is_dataclass(item):
+                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
+                        result.update(nested)
+                    else:
+                        result[f"{f.name}_{i}"] = item
+            elif is_dataclass(value):
+                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
+                result.update(nested)
+            else:
+                result[f.name] = value
+        return result
