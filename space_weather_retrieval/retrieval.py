@@ -5,6 +5,7 @@ import aiohttp
 from dotenv import load_dotenv
 from os import environ
 from response_types import SolarFlare, CoronalMassEjection, CMEAnalyses, CMEInstrument, CoronalMassEjectionAnalysis
+from space_weather_retrieval.response_types import GeomagneticStorm
 
 CME_URL = "https://api.nasa.gov/DONKI/CME"
 CMEA_URL = "https://api.nasa.gov/DONKI/CMEAnalysis"
@@ -107,7 +108,10 @@ async def get_gs(
         async with session.get(GS_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}) as response:
             data = await response.json()
-            print(data)
+
+            results = [GeomagneticStorm(**item) for item in data]
+
+        return results
 
 
 async def get_sf(
@@ -139,4 +143,4 @@ async def get_sf(
 
 
 if __name__ == "__main__":
-    print(asyncio.run(get_cmea(NASA_API_KEY)))
+    print(asyncio.run(get_gs(NASA_API_KEY)))

@@ -104,3 +104,26 @@ class CoronalMassEjectionAnalysis:
     tilt: Optional[float] = None
     speedMeasuredAtHeight: Optional[float] = None
     minorHalfWidth: Optional[float] = None
+
+
+@dataclass
+class GSKpIndex:
+    kpIndex: float
+    observedTime: str
+    source: str
+
+
+@dataclass
+class GSLinkedEvent:
+    activityID: str
+
+
+@dataclass
+class GeomagneticStorm:
+    allKpIndex: List[GSKpIndex]
+    gstID: str
+    link: str
+    linkedEvents: List[GSLinkedEvent]
+    startTime: str
+    submissionTime: str
+    versionId: int
