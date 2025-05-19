@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Union
 import logging
+from logging.handlers import RotatingFileHandler
 
 LOGGING_PATH = Path(__file__).parent / "logs.log"
 
@@ -16,20 +17,21 @@ class Logger:
         """
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
-        # Create a file handler
-        file_handler = logging.FileHandler(self.logging_path)
-        file_handler.setLevel(logging.INFO)
-        # Create a console handler
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.INFO)
-        # Create a formatter
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        # Add the formatter to the handlers
-        file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
-        # Add the handlers to the logger
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
+        if not logger.handlers:
+            file_handler = RotatingFileHandler(self.logging_path, maxBytes=5 * 1024 * 1024, backupCount=5)
+            file_handler.setLevel(logging.INFO)
+
+            console_handler = logging.StreamHandler()
+            console_handler.setLevel(logging.INFO)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+            file_handler.setFormatter(formatter)
+            console_handler.setFormatter(formatter)
+
+            logger.addHandler(file_handler)
+            logger.addHandler(console_handler)
+
+        logger.propagate = False
 
         return logger
 
