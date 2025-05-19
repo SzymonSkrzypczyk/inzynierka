@@ -1,10 +1,8 @@
 from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, field, fields, is_dataclass
-# data classes with returned content
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class SolarFlare:
+class SolarFlare(BaseModel):
     beginTime: str
     catalog: str
     endTime: str
@@ -16,38 +14,20 @@ class SolarFlare:
     submissionTime: str
     versionId: int
     activeRegionNum: Optional[int] = None
-    extra_fields: Dict[str, Any] = field(default_factory=dict, repr=False)
 
-    def __init__(self, **kwargs):
-        known_fields = {
-            'beginTime', 'catalog', 'endTime', 'flrID', 'link', 'note',
-            'peakTime', 'sourceLocation', 'submissionTime', 'versionId', 'activeRegionNum'
-        }
-
-        for key in known_fields:
-            setattr(self, key, kwargs.pop(key, None))
-        self.extra_fields = kwargs
+    class Config:
+        extra = "allow"
 
 
-    def serialize(self):
-        """
-        Serialize the object to a dictionary
-        :return: dict
-        """
-        serialized_data = {field.name: getattr(self, field.name) for field in fields(self)}
-        return serialized_data
-
-
-@dataclass
-class CMEAnalyses:
+class CMEAnalyses(BaseModel):
     featureCode: str
     halfAngle: float
     imageType: str
     isMostAccurate: bool
-    latitude: float
+    latitude: Optional[float] = None
     levelOfData: int
     link: str
-    longitude: float
+    longitude: Optional[float] = None
     measurementTechnique: str
     speed: float
     submissionTime: str
@@ -55,25 +35,20 @@ class CMEAnalyses:
     type: str
     tilt: Optional[float] = None
     speedMeasuredAtHeight: Optional[float] = None
-    enlilList: Optional[str] = None
+    enlilList: List[Dict[str, Any]] = Field(default_factory=list)
     minorHalfWidth: Optional[float] = None
     note: Optional[str] = None
 
-    def serialize(self):
-        """
-        Serialize the object to a dictionary
-        :return: dict
-        """
-        serialized_data = {field.name: getattr(self, field.name) for field in fields(self)}
-        return serialized_data
 
-
-@dataclass
-class CMEInstrument:
+class CMEInstrument(BaseModel):
     displayName: str
 
-@dataclass
-class CoronalMassEjection:
+
+class CMELinkedEvent(BaseModel):
+    activityID: str
+
+
+class CoronalMassEjection(BaseModel):
     cmeAnalyses: List[CMEAnalyses]
     instruments: List[CMEInstrument]
     link: str
@@ -85,45 +60,13 @@ class CoronalMassEjection:
     submissionTime: str
     versionId: int
     activeRegionNum: Optional[int] = None
-    linkedEvents: Optional[List[str]] = None
-    extra_fields: Dict[str, Any] = field(default_factory=dict, repr=False)
+    linkedEvents: Optional[List[CMELinkedEvent]] = None
 
-    def __init__(self, **kwargs):
-        known_fields = {
-            'cmeAnalyses', 'instruments', 'link', 'activityID', 'catalog',
-            'note', 'sourceLocation', 'startTime', 'submissionTime', 'versionId',
-            'activeRegionNum', 'linkedEvents'
-        }
-
-        for key in known_fields:
-            setattr(self, key, kwargs.pop(key, None))
-
-        self.extra_fields = kwargs
-
-    def serialize(self) -> Dict[str, Any]:
-        """
-        Flatten nested dataclass fields for CSV output
-        """
-        result = {}
-        for f in fields(self):
-            value = getattr(self, f.name)
-            if isinstance(value, list):
-                for i, item in enumerate(value):
-                    if is_dataclass(item):
-                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
-                        result.update(nested)
-                    else:
-                        result[f"{f.name}_{i}"] = item
-            elif is_dataclass(value):
-                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
-                result.update(nested)
-            else:
-                result[f.name] = value
-        return result
+    class Config:
+        extra = "allow"
 
 
-@dataclass
-class CoronalMassEjectionAnalysis:
+class CoronalMassEjectionAnalysis(BaseModel):
     associatedCMEID: str
     associatedCMEstartTime: str
     catalog: str
@@ -146,42 +89,18 @@ class CoronalMassEjectionAnalysis:
     speedMeasuredAtHeight: Optional[float] = None
     minorHalfWidth: Optional[float] = None
 
-    def serialize(self) -> Dict[str, Any]:
-        """
-        Flatten nested dataclass fields for CSV output
-        """
-        result = {}
-        for f in fields(self):
-            value = getattr(self, f.name)
-            if isinstance(value, list):
-                for i, item in enumerate(value):
-                    if is_dataclass(item):
-                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
-                        result.update(nested)
-                    else:
-                        result[f"{f.name}_{i}"] = item
-            elif is_dataclass(value):
-                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
-                result.update(nested)
-            else:
-                result[f.name] = value
-        return result
 
-
-@dataclass
-class GSKpIndex:
+class GSKpIndex(BaseModel):
     kpIndex: float
     observedTime: str
     source: str
 
 
-@dataclass
-class GSLinkedEvent:
+class GSLinkedEvent(BaseModel):
     activityID: str
 
 
-@dataclass
-class GeomagneticStorm:
+class GeomagneticStorm(BaseModel):
     allKpIndex: List[GSKpIndex]
     gstID: str
     link: str
@@ -189,24 +108,3 @@ class GeomagneticStorm:
     startTime: str
     submissionTime: str
     versionId: int
-
-    def serialize(self) -> Dict[str, Any]:
-        """
-        Flatten nested dataclass fields for CSV output
-        """
-        result = {}
-        for f in fields(self):
-            value = getattr(self, f.name)
-            if isinstance(value, list):
-                for i, item in enumerate(value):
-                    if is_dataclass(item):
-                        nested = {f"{f.name}_{i}_{k}": v for k, v in item.__dict__.items()}
-                        result.update(nested)
-                    else:
-                        result[f"{f.name}_{i}"] = item
-            elif is_dataclass(value):
-                nested = {f"{f.name}_{k}": v for k, v in value.__dict__.items()}
-                result.update(nested)
-            else:
-                result[f.name] = value
-        return result
