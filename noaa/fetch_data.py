@@ -1,26 +1,57 @@
 from pathlib import Path
+from datetime import datetime
 import csv
-import requests
+import asyncio
+import aiohttp
+from url_mapping import NAME2URL
 
-URLS = [
-    "https://services.swpc.noaa.gov/json/boulder_k_index_1m.json",
-    "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json",
-    "https://services.swpc.noaa.gov/json/goes/satellite-longitudes.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/magnetometers-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/differential-electrons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/primary/xray-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/secondary/differential-electrons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/secondary/differential-protons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/secondary/integral-electrons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/secondary/integral-protons-1-day.json",
-    "https://services.swpc.noaa.gov/json/goes/secondary/xray-1-day.json",
-    "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
-    "https://services.swpc.noaa.gov/json/solar-cycle/f10-7cm-flux.json",
-    "https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json",
-    "https://services.swpc.noaa.gov/json/solar_regions.json",
-    "https://services.swpc.noaa.gov/json/solar-radio-flux.json",
-    "https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json"
-]
+SAVE_DIR = Path(__file__).parent / "data"
+SAVE_DIR.mkdir(parents=True, exist_ok=True)
+
+
+async def retrieve_data(target_name: str, url: str):
+    """
+    Retrieve a data for a specific url
+
+    :param target_name:
+    :param url:
+    :return:
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if not response.ok:
+                if response.status == 403:
+                    raise Exception(f"Forbidden: {response.status}")
+                elif response.status == 500:
+                    raise Exception(f"Server error: {response.status}")
+                elif response.status == 503:
+                    raise Exception(f"Service unavailable: {response.status}")
+
+            data = await response.json()
+
+            if data is None:
+                raise Exception(f"No data found for the given date range")
+
+            # Append the data to a CSV file
+            filename = SAVE_DIR / f"{target_name}_{datetime.today().date()}.csv"
+            with open(filename, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                # Write the header only if the file is empty
+                if file.tell() == 0:
+                    writer.writerow(data[0].keys())
+                for item in data:
+                    writer.writerow(item.values())
+
+
+async def retrieve_all_data():
+    """
+    Retrieve all data from the URLs in NAME2URL
+    """
+    tasks = []
+    for target_name, url in NAME2URL.items():
+        tasks.append(retrieve_data(target_name, url))
+    await asyncio.gather(*tasks)
+
+
+if __name__ == "__main__":
+    asyncio.run(retrieve_all_data())
