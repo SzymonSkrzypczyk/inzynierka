@@ -78,3 +78,270 @@
 2025-05-19 17:42:32,864 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-protons-1-day
 2025-05-19 17:42:32,867 - logger - INFO - Writing header for primary-differential-protons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
 2025-05-19 17:42:32,874 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:45:04,632 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/boulder_k_index_1m.json
+2025-05-19 17:45:04,640 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/planetary_k_index_1m.json
+2025-05-19 17:45:04,640 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/satellite-longitudes.json
+2025-05-19 17:45:04,640 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/magnetometers-1-day.json
+2025-05-19 17:45:04,641 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-electrons-1-day.json
+2025-05-19 17:45:04,641 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json
+2025-05-19 17:45:04,641 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-1-day.json
+2025-05-19 17:45:04,641 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json
+2025-05-19 17:45:04,641 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json
+2025-05-19 17:45:04,642 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-electrons-1-day.json
+2025-05-19 17:45:04,642 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-protons-1-day.json
+2025-05-19 17:45:04,642 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-electrons-1-day.json
+2025-05-19 17:45:04,642 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-protons-1-day.json
+2025-05-19 17:45:04,642 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json
+2025-05-19 17:45:04,643 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+2025-05-19 17:45:04,643 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/f10-7cm-flux.json
+2025-05-19 17:45:04,643 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json
+2025-05-19 17:45:04,643 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar_regions.json
+2025-05-19 17:45:04,643 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-radio-flux.json
+2025-05-19 17:45:04,644 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json
+2025-05-19 17:45:04,869 - logger - WARNING - Data contains nested structures, flattening the data for planetary_k_index_1m
+2025-05-19 17:45:04,870 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/planetary_k_index_1m_2025-05-19.csv
+2025-05-19 17:45:04,881 - logger - WARNING - Data contains nested structures, flattening the data for boulder_k_index_1m
+2025-05-19 17:45:04,883 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/boulder_k_index_1m_2025-05-19.csv
+2025-05-19 17:45:04,888 - logger - WARNING - Data contains nested structures, flattening the data for solar_regions
+2025-05-19 17:45:04,890 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar_regions_2025-05-19.csv
+2025-05-19 17:45:04,890 - logger - WARNING - Data contains nested structures, flattening the data for f10-7cm-flux
+2025-05-19 17:45:04,891 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/f10-7cm-flux_2025-05-19.csv
+2025-05-19 17:45:04,892 - logger - WARNING - Data contains nested structures, flattening the data for satellite-longitudes
+2025-05-19 17:45:04,892 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/satellite-longitudes_2025-05-19.csv
+2025-05-19 17:45:04,893 - logger - WARNING - Data contains nested structures, flattening the data for dscovr_mag_1s
+2025-05-19 17:45:04,895 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/dscovr_mag_1s_2025-05-19.csv
+2025-05-19 17:45:04,920 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-protons-1-day
+2025-05-19 17:45:04,926 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:45:04,936 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-electrons-1-day
+2025-05-19 17:45:04,945 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:45:04,947 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-protons-1-day
+2025-05-19 17:45:04,953 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:45:04,990 - logger - WARNING - Data contains nested structures, flattening the data for secondary-xray-1-day
+2025-05-19 17:45:05,005 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-xray-1-day_2025-05-19.csv
+2025-05-19 17:45:05,010 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-protons-1-day
+2025-05-19 17:45:05,020 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:45:05,026 - logger - WARNING - Data contains nested structures, flattening the data for magnetometers-1-day
+2025-05-19 17:45:05,033 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/magnetometers-1-day_2025-05-19.csv
+2025-05-19 17:45:05,039 - logger - WARNING - Data contains nested structures, flattening the data for primary-xray-1-day
+2025-05-19 17:45:05,052 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-xray-1-day_2025-05-19.csv
+2025-05-19 17:45:05,063 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-protons-1-day
+2025-05-19 17:45:05,073 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:45:05,074 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-electrons-1-day
+2025-05-19 17:45:05,075 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:45:05,075 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-electrons-1-day
+2025-05-19 17:45:05,076 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:45:05,077 - logger - WARNING - Data contains nested structures, flattening the data for solar-radio-flux
+2025-05-19 17:45:05,080 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar-radio-flux_2025-05-19.csv
+2025-05-19 17:45:05,099 - logger - WARNING - Data contains nested structures, flattening the data for predicted-solar-cycle
+2025-05-19 17:45:05,100 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/predicted-solar-cycle_2025-05-19.csv
+2025-05-19 17:45:05,112 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-electrons-1-day
+2025-05-19 17:45:05,118 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:45:05,424 - logger - WARNING - Data contains nested structures, flattening the data for observed-solar-cycle-indices
+2025-05-19 17:45:05,436 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/observed-solar-cycle-indices_2025-05-19.csv
+2025-05-19 17:45:05,437 - logger - INFO - All data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19
+2025-05-19 17:45:05,437 - logger - INFO - Compressing data for 2025-05-19
+2025-05-19 17:45:05,536 - logger - INFO - Data compressed to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19.zip
+2025-05-19 17:46:14,307 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/boulder_k_index_1m.json
+2025-05-19 17:46:14,314 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/planetary_k_index_1m.json
+2025-05-19 17:46:14,315 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/satellite-longitudes.json
+2025-05-19 17:46:14,315 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/magnetometers-1-day.json
+2025-05-19 17:46:14,315 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-electrons-1-day.json
+2025-05-19 17:46:14,315 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json
+2025-05-19 17:46:14,316 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-1-day.json
+2025-05-19 17:46:14,316 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json
+2025-05-19 17:46:14,316 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json
+2025-05-19 17:46:14,316 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-electrons-1-day.json
+2025-05-19 17:46:14,316 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-protons-1-day.json
+2025-05-19 17:46:14,317 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-electrons-1-day.json
+2025-05-19 17:46:14,317 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-protons-1-day.json
+2025-05-19 17:46:14,317 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json
+2025-05-19 17:46:14,317 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+2025-05-19 17:46:14,317 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/f10-7cm-flux.json
+2025-05-19 17:46:14,318 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json
+2025-05-19 17:46:14,318 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar_regions.json
+2025-05-19 17:46:14,318 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-radio-flux.json
+2025-05-19 17:46:14,318 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json
+2025-05-19 17:46:14,424 - logger - WARNING - Data contains nested structures, flattening the data for planetary_k_index_1m
+2025-05-19 17:46:14,425 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/planetary_k_index_1m_2025-05-19.csv
+2025-05-19 17:46:14,456 - logger - WARNING - Data contains nested structures, flattening the data for dscovr_mag_1s
+2025-05-19 17:46:14,459 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/dscovr_mag_1s_2025-05-19.csv
+2025-05-19 17:46:14,466 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-protons-1-day
+2025-05-19 17:46:14,472 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:46:14,473 - logger - WARNING - Data contains nested structures, flattening the data for satellite-longitudes
+2025-05-19 17:46:14,474 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/satellite-longitudes_2025-05-19.csv
+2025-05-19 17:46:14,495 - logger - WARNING - Data contains nested structures, flattening the data for primary-xray-1-day
+2025-05-19 17:46:14,508 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-xray-1-day_2025-05-19.csv
+2025-05-19 17:46:14,515 - logger - WARNING - Data contains nested structures, flattening the data for secondary-xray-1-day
+2025-05-19 17:46:14,528 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-xray-1-day_2025-05-19.csv
+2025-05-19 17:46:14,549 - logger - WARNING - Data contains nested structures, flattening the data for boulder_k_index_1m
+2025-05-19 17:46:14,551 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/boulder_k_index_1m_2025-05-19.csv
+2025-05-19 17:46:14,569 - logger - WARNING - Data contains nested structures, flattening the data for solar-radio-flux
+2025-05-19 17:46:14,572 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar-radio-flux_2025-05-19.csv
+2025-05-19 17:46:14,579 - logger - WARNING - Data contains nested structures, flattening the data for observed-solar-cycle-indices
+2025-05-19 17:46:14,588 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/observed-solar-cycle-indices_2025-05-19.csv
+2025-05-19 17:46:14,766 - logger - WARNING - Data contains nested structures, flattening the data for f10-7cm-flux
+2025-05-19 17:46:14,767 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/f10-7cm-flux_2025-05-19.csv
+2025-05-19 17:46:14,768 - logger - WARNING - Data contains nested structures, flattening the data for predicted-solar-cycle
+2025-05-19 17:46:14,769 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/predicted-solar-cycle_2025-05-19.csv
+2025-05-19 17:46:14,857 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-electrons-1-day
+2025-05-19 17:46:14,858 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:46:14,866 - logger - WARNING - Data contains nested structures, flattening the data for magnetometers-1-day
+2025-05-19 17:46:14,874 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/magnetometers-1-day_2025-05-19.csv
+2025-05-19 17:46:14,875 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-electrons-1-day
+2025-05-19 17:46:14,876 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:46:14,950 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-electrons-1-day
+2025-05-19 17:46:14,958 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:46:15,087 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-protons-1-day
+2025-05-19 17:46:15,098 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:46:15,101 - logger - WARNING - Data contains nested structures, flattening the data for solar_regions
+2025-05-19 17:46:15,102 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar_regions_2025-05-19.csv
+2025-05-19 17:46:15,139 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-electrons-1-day
+2025-05-19 17:46:15,145 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:46:15,151 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-protons-1-day
+2025-05-19 17:46:15,160 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:46:15,163 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-protons-1-day
+2025-05-19 17:46:15,167 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:46:15,168 - logger - INFO - All data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19
+2025-05-19 17:46:15,168 - logger - INFO - Compressing data for 2025-05-19
+2025-05-19 17:46:15,306 - logger - INFO - Data compressed to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19.zip
+2025-05-19 17:48:03,319 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/boulder_k_index_1m.json
+2025-05-19 17:48:03,327 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/planetary_k_index_1m.json
+2025-05-19 17:48:03,327 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/satellite-longitudes.json
+2025-05-19 17:48:03,328 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/magnetometers-1-day.json
+2025-05-19 17:48:03,328 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-electrons-1-day.json
+2025-05-19 17:48:03,328 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json
+2025-05-19 17:48:03,328 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-1-day.json
+2025-05-19 17:48:03,328 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json
+2025-05-19 17:48:03,329 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json
+2025-05-19 17:48:03,329 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-electrons-1-day.json
+2025-05-19 17:48:03,329 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-protons-1-day.json
+2025-05-19 17:48:03,329 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-electrons-1-day.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-protons-1-day.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/f10-7cm-flux.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json
+2025-05-19 17:48:03,330 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar_regions.json
+2025-05-19 17:48:03,331 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-radio-flux.json
+2025-05-19 17:48:03,331 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json
+2025-05-19 17:48:03,642 - logger - WARNING - Data contains nested structures, flattening the data for planetary_k_index_1m
+2025-05-19 17:48:03,643 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/planetary_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:03,645 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-electrons-1-day
+2025-05-19 17:48:03,646 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:03,646 - logger - WARNING - Data contains nested structures, flattening the data for predicted-solar-cycle
+2025-05-19 17:48:03,647 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/predicted-solar-cycle_2025-05-19.csv
+2025-05-19 17:48:03,648 - logger - WARNING - Data contains nested structures, flattening the data for f10-7cm-flux
+2025-05-19 17:48:03,648 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/f10-7cm-flux_2025-05-19.csv
+2025-05-19 17:48:03,649 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-electrons-1-day
+2025-05-19 17:48:03,650 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:03,652 - logger - WARNING - Data contains nested structures, flattening the data for dscovr_mag_1s
+2025-05-19 17:48:03,654 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/dscovr_mag_1s_2025-05-19.csv
+2025-05-19 17:48:03,663 - logger - WARNING - Data contains nested structures, flattening the data for satellite-longitudes
+2025-05-19 17:48:03,663 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/satellite-longitudes_2025-05-19.csv
+2025-05-19 17:48:03,669 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-protons-1-day
+2025-05-19 17:48:03,675 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:03,681 - logger - WARNING - Data contains nested structures, flattening the data for observed-solar-cycle-indices
+2025-05-19 17:48:03,690 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/observed-solar-cycle-indices_2025-05-19.csv
+2025-05-19 17:48:03,730 - logger - WARNING - Data contains nested structures, flattening the data for primary-xray-1-day
+2025-05-19 17:48:03,743 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:03,750 - logger - WARNING - Data contains nested structures, flattening the data for secondary-xray-1-day
+2025-05-19 17:48:03,763 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:03,770 - logger - WARNING - Data contains nested structures, flattening the data for solar-radio-flux
+2025-05-19 17:48:03,773 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar-radio-flux_2025-05-19.csv
+2025-05-19 17:48:03,822 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-electrons-1-day
+2025-05-19 17:48:03,828 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:03,831 - logger - WARNING - Data contains nested structures, flattening the data for magnetometers-1-day
+2025-05-19 17:48:03,838 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/magnetometers-1-day_2025-05-19.csv
+2025-05-19 17:48:03,841 - logger - WARNING - Data contains nested structures, flattening the data for solar_regions
+2025-05-19 17:48:03,842 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar_regions_2025-05-19.csv
+2025-05-19 17:48:03,938 - logger - WARNING - Data contains nested structures, flattening the data for boulder_k_index_1m
+2025-05-19 17:48:03,941 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/boulder_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:03,968 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-protons-1-day
+2025-05-19 17:48:03,983 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:04,074 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-protons-1-day
+2025-05-19 17:48:04,086 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:04,151 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-electrons-1-day
+2025-05-19 17:48:04,159 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:49,962 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/boulder_k_index_1m.json
+2025-05-19 17:48:49,970 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/planetary_k_index_1m.json
+2025-05-19 17:48:49,971 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/satellite-longitudes.json
+2025-05-19 17:48:49,971 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/magnetometers-1-day.json
+2025-05-19 17:48:49,971 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-electrons-1-day.json
+2025-05-19 17:48:49,971 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json
+2025-05-19 17:48:49,972 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-1-day.json
+2025-05-19 17:48:49,972 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json
+2025-05-19 17:48:49,972 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json
+2025-05-19 17:48:49,972 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-electrons-1-day.json
+2025-05-19 17:48:49,973 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/differential-protons-1-day.json
+2025-05-19 17:48:49,973 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-electrons-1-day.json
+2025-05-19 17:48:49,973 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/integral-protons-1-day.json
+2025-05-19 17:48:49,973 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/goes/secondary/xrays-1-day.json
+2025-05-19 17:48:49,973 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json
+2025-05-19 17:48:49,974 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/f10-7cm-flux.json
+2025-05-19 17:48:49,974 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json
+2025-05-19 17:48:49,974 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar_regions.json
+2025-05-19 17:48:49,974 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/solar-radio-flux.json
+2025-05-19 17:48:49,974 - logger - INFO - Retrieving data from URL https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json
+2025-05-19 17:48:51,258 - logger - WARNING - Data contains nested structures, flattening the data for satellite-longitudes
+2025-05-19 17:48:51,258 - logger - INFO - Writing header for satellite-longitudes to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/satellite-longitudes_2025-05-19.csv
+2025-05-19 17:48:51,259 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/satellite-longitudes_2025-05-19.csv
+2025-05-19 17:48:51,261 - logger - WARNING - Data contains nested structures, flattening the data for solar_regions
+2025-05-19 17:48:51,263 - logger - INFO - Writing header for solar_regions to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar_regions_2025-05-19.csv
+2025-05-19 17:48:51,263 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar_regions_2025-05-19.csv
+2025-05-19 17:48:51,267 - logger - WARNING - Data contains nested structures, flattening the data for boulder_k_index_1m
+2025-05-19 17:48:51,269 - logger - INFO - Writing header for boulder_k_index_1m to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/boulder_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:51,270 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/boulder_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:51,271 - logger - WARNING - Data contains nested structures, flattening the data for f10-7cm-flux
+2025-05-19 17:48:51,271 - logger - INFO - Writing header for f10-7cm-flux to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/f10-7cm-flux_2025-05-19.csv
+2025-05-19 17:48:51,272 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/f10-7cm-flux_2025-05-19.csv
+2025-05-19 17:48:51,272 - logger - WARNING - Data contains nested structures, flattening the data for planetary_k_index_1m
+2025-05-19 17:48:51,272 - logger - INFO - Writing header for planetary_k_index_1m to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/planetary_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:51,273 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/planetary_k_index_1m_2025-05-19.csv
+2025-05-19 17:48:51,275 - logger - WARNING - Data contains nested structures, flattening the data for solar-radio-flux
+2025-05-19 17:48:51,275 - logger - INFO - Writing header for solar-radio-flux to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar-radio-flux_2025-05-19.csv
+2025-05-19 17:48:51,277 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/solar-radio-flux_2025-05-19.csv
+2025-05-19 17:48:51,295 - logger - WARNING - Data contains nested structures, flattening the data for dscovr_mag_1s
+2025-05-19 17:48:51,296 - logger - INFO - Writing header for dscovr_mag_1s to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/dscovr_mag_1s_2025-05-19.csv
+2025-05-19 17:48:51,297 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/dscovr_mag_1s_2025-05-19.csv
+2025-05-19 17:48:51,304 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-protons-1-day
+2025-05-19 17:48:51,306 - logger - INFO - Writing header for secondary-integral-protons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,310 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,311 - logger - WARNING - Data contains nested structures, flattening the data for predicted-solar-cycle
+2025-05-19 17:48:51,312 - logger - INFO - Writing header for predicted-solar-cycle to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/predicted-solar-cycle_2025-05-19.csv
+2025-05-19 17:48:51,312 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/predicted-solar-cycle_2025-05-19.csv
+2025-05-19 17:48:51,314 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-protons-1-day
+2025-05-19 17:48:51,316 - logger - INFO - Writing header for primary-integral-protons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,319 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,326 - logger - WARNING - Data contains nested structures, flattening the data for magnetometers-1-day
+2025-05-19 17:48:51,328 - logger - INFO - Writing header for magnetometers-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/magnetometers-1-day_2025-05-19.csv
+2025-05-19 17:48:51,333 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/magnetometers-1-day_2025-05-19.csv
+2025-05-19 17:48:51,339 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-protons-1-day
+2025-05-19 17:48:51,342 - logger - INFO - Writing header for secondary-differential-protons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,349 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,351 - logger - WARNING - Data contains nested structures, flattening the data for secondary-differential-electrons-1-day
+2025-05-19 17:48:51,353 - logger - INFO - Writing header for secondary-differential-electrons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,358 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,362 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-electrons-1-day
+2025-05-19 17:48:51,364 - logger - INFO - Writing header for primary-differential-electrons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,368 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,374 - logger - WARNING - Data contains nested structures, flattening the data for primary-differential-protons-1-day
+2025-05-19 17:48:51,381 - logger - INFO - Writing header for primary-differential-protons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,388 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-differential-protons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,395 - logger - WARNING - Data contains nested structures, flattening the data for primary-xray-1-day
+2025-05-19 17:48:51,397 - logger - INFO - Writing header for primary-xray-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:51,407 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:51,414 - logger - WARNING - Data contains nested structures, flattening the data for observed-solar-cycle-indices
+2025-05-19 17:48:51,416 - logger - INFO - Writing header for observed-solar-cycle-indices to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/observed-solar-cycle-indices_2025-05-19.csv
+2025-05-19 17:48:51,421 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/observed-solar-cycle-indices_2025-05-19.csv
+2025-05-19 17:48:51,427 - logger - WARNING - Data contains nested structures, flattening the data for secondary-xray-1-day
+2025-05-19 17:48:51,429 - logger - INFO - Writing header for secondary-xray-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:51,440 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-xray-1-day_2025-05-19.csv
+2025-05-19 17:48:51,684 - logger - WARNING - Data contains nested structures, flattening the data for secondary-integral-electrons-1-day
+2025-05-19 17:48:51,684 - logger - INFO - Writing header for secondary-integral-electrons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,685 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/secondary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,686 - logger - WARNING - Data contains nested structures, flattening the data for primary-integral-electrons-1-day
+2025-05-19 17:48:51,686 - logger - INFO - Writing header for primary-integral-electrons-1-day to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,687 - logger - INFO - Data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19/primary-integral-electrons-1-day_2025-05-19.csv
+2025-05-19 17:48:51,687 - logger - INFO - All data retrieved and saved to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19
+2025-05-19 17:48:51,687 - logger - INFO - Compressing data for 2025-05-19
+2025-05-19 17:48:51,738 - logger - INFO - Data compressed to /Users/szymon/Desktop/smoker_detection/inzynierka/noaa/data/2025-05-19.zip

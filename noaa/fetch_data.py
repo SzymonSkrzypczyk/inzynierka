@@ -1,3 +1,4 @@
+from shutil import make_archive
 from pathlib import Path
 from typing import Union
 from datetime import datetime
@@ -66,6 +67,19 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
 
             logger.log(f"Data retrieved and saved to {filename}")
 
+
+def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR):
+    """
+
+    :param target_name:
+    :param target_dir:
+    :return:
+    """
+    target_dir = Path(target_dir)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    logger.log(f"Compressing data for {target_name}")
+    make_archive(target_name, 'zip', target_dir)
+
 async def retrieve_all_data():
     """
     Retrieve all data from the URLs in NAME2URL
@@ -75,6 +89,9 @@ async def retrieve_all_data():
     for target_name, url in NAME2URL.items():
         tasks.append(retrieve_data(target_name, url, target_dir))
     await asyncio.gather(*tasks)
+    logger.log(f"All data retrieved and saved to {target_dir}")
+    compress_data(target_dir.name, target_dir)
+    logger.log(f"Data compressed to {target_dir}.zip")
 
 
 if __name__ == "__main__":
