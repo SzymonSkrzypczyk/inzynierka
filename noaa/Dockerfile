@@ -17,7 +17,8 @@ COPY url_mapping.py .
 
 # Copy entrypoint and crontab files
 COPY entrypoint.sh .
-COPY crontab.txt .
+COPY cron.txt .
+COPY .env .
 
 RUN chmod +x entrypoint.sh send2dropbox.py fetch_data.py logger.py url_mapping.py
 

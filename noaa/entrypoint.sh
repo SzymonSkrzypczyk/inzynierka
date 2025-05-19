@@ -1,6 +1,6 @@
 #!/bin/bash
 
-crontab /app/crontab.txt
+crontab /app/cron.txt
 
 cron
 

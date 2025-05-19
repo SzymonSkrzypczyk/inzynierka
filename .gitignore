@@ -3,3 +3,4 @@ noaa/__pycache__
 noaa/data
 .env
 .DS_Store
+.pytest_cache
