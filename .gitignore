@@ -1,3 +1,5 @@
 .idea
 noaa/__pycache__
 noaa/data
+.env
+.DS_Store

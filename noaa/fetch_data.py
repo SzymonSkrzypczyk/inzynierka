@@ -7,9 +7,11 @@ import asyncio
 import aiohttp
 from url_mapping import NAME2URL
 from logger import Logger
+from send2dropbox import send_to_dropbox
 
 SAVE_DIR = Path(__file__).parent / "data"
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
+DROPBOX_DIR = "/inzynierka"
 logger = Logger()
 
 async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path] = SAVE_DIR):
@@ -104,6 +106,7 @@ async def retrieve_all_data():
     logger.log(f"All data retrieved and saved to {target_dir}")
     compress_data(target_dir.name, target_dir)
     logger.log(f"Data compressed to {target_dir}.zip")
+    send_to_dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{DROPBOX_DIR}/{target_dir.name}.zip", logger)
 
 
 if __name__ == "__main__":
