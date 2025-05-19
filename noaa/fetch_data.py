@@ -29,8 +29,18 @@ async def retrieve_data(target_name: str, url: str):
 
             data = await response.json()
 
-            if data is None:
+            if data is None or not data:
                 raise Exception(f"No data found for the given date range")
+
+            # Preprocess the data as needed
+            has_nested = any(isinstance(item, dict) for item in data)
+            if has_nested:
+                # Flatten the data if it contains nested structures
+                data = [
+                    {**item, **{k: v for k, v in item.items() if isinstance(v, dict)}}
+                    for item in data
+                ]
+
 
             # Append the data to a CSV file
             filename = SAVE_DIR / f"{target_name}_{datetime.today().date()}.csv"
