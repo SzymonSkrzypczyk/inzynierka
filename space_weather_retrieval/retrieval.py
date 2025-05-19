@@ -40,6 +40,16 @@ async def get_cme(
         async with session.get(CME_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}
                                ) as response:
+            if not response.ok:
+                if response.status == 204:
+                    raise Exception(f"No data found for the given date range: {start_date} to {end_date}")
+                elif response.status == 403:
+                    raise Exception(f"Forbidden: {response.status}")
+                elif response.status == 500:
+                    raise Exception(f"Server error: {response.status}")
+                elif response.status == 503:
+                    raise Exception(f"Service unavailable: {response.status}")
+
             data = await response.json()
             results = [
                 CoronalMassEjection(
@@ -78,6 +88,16 @@ async def get_cmea(
                                        "catalog": "ALL", "api_key": api_key, "mostAccurateOnly": "True",
                                        }
                                ) as response:
+            if not response.ok:
+                if response.status == 204:
+                    raise Exception(f"No data found for the given date range: {start_date} to {end_date}")
+                elif response.status == 403:
+                    raise Exception(f"Forbidden: {response.status}")
+                elif response.status == 500:
+                    raise Exception(f"Server error: {response.status}")
+                elif response.status == 503:
+                    raise Exception(f"Service unavailable: {response.status}")
+
             data = await response.json()
 
             results = [CoronalMassEjectionAnalysis(**item) for item in data]
@@ -107,6 +127,16 @@ async def get_gs(
     async with aiohttp.ClientSession() as session:
         async with session.get(GS_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}) as response:
+            if not response.ok:
+                if response.status == 204:
+                    raise Exception(f"No data found for the given date range: {start_date} to {end_date}")
+                elif response.status == 403:
+                    raise Exception(f"Forbidden: {response.status}")
+                elif response.status == 500:
+                    raise Exception(f"Server error: {response.status}")
+                elif response.status == 503:
+                    raise Exception(f"Service unavailable: {response.status}")
+
             data = await response.json()
 
             results = [GeomagneticStorm(**item) for item in data]
@@ -136,6 +166,16 @@ async def get_sf(
     async with aiohttp.ClientSession() as session:
         async with session.get(FS_URL,
                                params={"startDate": start_date.isoformat(), "endDate": end_date.isoformat(), "api_key": api_key}) as response:
+            if not response.ok:
+                if response.status == 204:
+                    raise Exception(f"No data found for the given date range: {start_date} to {end_date}")
+                elif response.status == 403:
+                    raise Exception(f"Forbidden: {response.status}")
+                elif response.status == 500:
+                    raise Exception(f"Server error: {response.status}")
+                elif response.status == 503:
+                    raise Exception(f"Service unavailable: {response.status}")
+                
             data = await response.json()
             results = [SolarFlare(**item) for item in data]
 
