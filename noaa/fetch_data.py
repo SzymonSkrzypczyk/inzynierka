@@ -1,4 +1,4 @@
-from shutil import make_archive
+from shutil import make_archive, rmtree
 from pathlib import Path
 from typing import Union
 from datetime import datetime
@@ -68,17 +68,29 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
             logger.log(f"Data retrieved and saved to {filename}")
 
 
-def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR):
+def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, remove_dir: bool = True):
     """
+    Compress the data directory into a zip file
 
     :param target_name:
     :param target_dir:
+    :param remove_dir:
     :return:
     """
     target_dir = Path(target_dir)
     target_dir.mkdir(parents=True, exist_ok=True)
     logger.log(f"Compressing data for {target_name}")
-    make_archive(target_name, 'zip', target_dir)
+    make_archive(
+        base_name=str(target_dir.parent / target_name),
+        format='zip',
+        root_dir=target_dir.parent,
+        base_dir=target_dir.name
+    )
+
+    if remove_dir:
+        logger.log(f"Removing directory {target_dir}")
+        rmtree(target_dir, ignore_errors=False)
+        logger.log(f"Directory {target_dir} removed")
 
 async def retrieve_all_data():
     """
