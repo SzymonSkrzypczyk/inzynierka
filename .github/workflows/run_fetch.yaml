@@ -2,7 +2,7 @@ name: "Run Fetch Data"
 
 on:
   schedule:
-    - cron: "20 18 * * *"
+    - cron: "22 16 * * *"
 
 jobs:
   build-and-run:
