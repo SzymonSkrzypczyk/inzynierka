@@ -3,6 +3,7 @@ name: "Run Fetch Data"
 on:
   schedule:
     - cron: "40 16 * * *"
+  workflow_dispatch:
 
 jobs:
   build-and-run:
