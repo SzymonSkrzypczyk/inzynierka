@@ -1,6 +1,6 @@
 .idea
 noaa/__pycache__
-noaa/data
+data
 .env
 .DS_Store
 .pytest_cache

@@ -1,7 +1,7 @@
 from pathlib import Path
 import pytest
 
-from noaa.logger import Logger
+from logger import Logger
 
 LOG_FILE_PATH = Path(__file__).parent / "test_logs.log"
 

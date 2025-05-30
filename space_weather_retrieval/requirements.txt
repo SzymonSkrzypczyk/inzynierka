@@ -1,4 +1,0 @@
-asyncio
-python-dotenv
-requests
-pydantic

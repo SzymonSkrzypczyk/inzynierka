@@ -1,5 +1,6 @@
-requests
-python-dotenv
 aiohttp
+asyncio
 dropbox
-dotenv
+chardet
+python-dotenv
+pytest

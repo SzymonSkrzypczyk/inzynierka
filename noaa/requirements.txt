@@ -1,6 +1,0 @@
-aiohttp
-asyncio
-dropbox
-chardet
-python-dotenv
-pytest
