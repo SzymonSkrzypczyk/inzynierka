@@ -4,3 +4,4 @@ noaa/data
 .env
 .DS_Store
 .pytest_cache
+*.log

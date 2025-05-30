@@ -9,7 +9,9 @@ from logger import Logger
 
 load_dotenv()
 
-DROPBOX_API_KEY = getenv("DROPBOX_API_KEY")
+DROPBOX_APP_SECRET = getenv("DROPBOX_APP_SECRET")
+DROPBOX_APP_KEY = getenv("DROPBOX_APP_KEY")
+DROPBOX_REFRESH_TOKEN = getenv("DROPBOX_REFRESH_TOKEN")
 
 
 def send_to_dropbox(
@@ -24,7 +26,11 @@ def send_to_dropbox(
     :param dropbox_path: Path in Dropbox where the file will be uploaded
     :param logger: Logger instance for logging
     """
-    dbx = dropbox.Dropbox(DROPBOX_API_KEY)
+    dbx = dropbox.Dropbox(
+        app_secret=DROPBOX_APP_SECRET,
+        app_key=DROPBOX_APP_KEY,
+        oauth2_refresh_token=DROPBOX_REFRESH_TOKEN
+    )
 
     with open(archive_path, "rb") as f:
         logger.log(f"Uploading {archive_path} to Dropbox at {dropbox_path}")
