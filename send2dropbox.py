@@ -43,6 +43,7 @@ def send_to_dropbox(
                 dbx.files_upload(f.read(), dropbox_path, mode=WriteMode('overwrite'))
 
                 logger.log(f"Successfully uploaded {archive_path} to Dropbox at {dropbox_path}")
+                return
             except ApiError as e:
                 logger.log_exception(f"API error: {e}")
                 retries += 1

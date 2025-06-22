@@ -73,6 +73,7 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
                             writer.writerow(item.values())
 
                     logger.log(f"Data retrieved and saved to {filename}")
+                    return
                 except Exception as e:
                     retries += 1
                     logger.log_error(f"Error retrieving data from {url}: {e}. Retrying {retries}/3")
