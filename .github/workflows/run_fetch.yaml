@@ -45,9 +45,9 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Send result email
-        # v6 jest juz dostepne
         uses: dawidd6/action-send-mail@v3
         with:
+          connection_url: ${{ secrets.MAIL_CONNECTION }}
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.MAIL_SENDER }}
