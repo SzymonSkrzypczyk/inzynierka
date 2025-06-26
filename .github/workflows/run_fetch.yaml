@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.run_docker.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,9 +27,34 @@ jobs:
           load: true
 
       - name: Run Docker container
+        id: run_docker
         run: |
             docker run --rm \
             -e DROPBOX_APP_KEY=${{ secrets.DROPBOX_APP_KEY }} \
             -e DROPBOX_APP_SECRET=${{ secrets.DROPBOX_APP_SECRET }} \
             -e DROPBOX_REFRESH_TOKEN=${{ secrets.DROPBOX_REFRESH_TOKEN }} \
             szymonskrzypczyk/inzynierka:latest
+
+  send-email:
+    needs: build-and-run
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Get today's date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Send result email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_SENDER }}
+          password: ${{ secrets.MAIL_APP_PASSWORD }}
+          secure: true
+          subject: "${{ github.workflow }} - ${{ needs.build-and-run.result }} - ${{ steps.date.outputs.date }}"
+          body: |
+            Wynik pobrania danych i przesłania do Dropboxa: ${{ needs.build-and-run.result }}
+            Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          to: ${{ secrets.EMAIL_TO }}
+          from: sender@example.com
