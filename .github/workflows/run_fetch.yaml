@@ -45,6 +45,7 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Send result email
+        # v6 jest juz dostepne
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -57,4 +58,4 @@ jobs:
             Wynik pobrania danych i przesłania do Dropboxa: ${{ needs.build-and-run.result }}
             Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           to: ${{ secrets.EMAIL_TO }}
-          from: ${{ secrets.MAIL_SENDER }}
+          from: ${{ secrets.APP_NAME }}
