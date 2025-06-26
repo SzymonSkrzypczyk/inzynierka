@@ -57,4 +57,4 @@ jobs:
             Wynik pobrania danych i przesłania do Dropboxa: ${{ needs.build-and-run.result }}
             Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           to: ${{ secrets.EMAIL_TO }}
-          from: sender@example.com
+          from: ${{ secrets.MAIL_SENDER }}
