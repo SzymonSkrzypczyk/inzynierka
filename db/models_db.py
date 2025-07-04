@@ -5,7 +5,15 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-class DscovrMag1s(Base):
+
+class BoulderKIndex1M(Base):
+    __tablename__ = "boulder_k_index_1m"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    time_tag = Column(DateTime, unique=True, index=True, nullable=False)
+    k_index = Column(Float, nullable=False)
+
+
+class DscovrMag1S(Base):
     __tablename__ = "dscovr_mag_1s"
     id = Column(Integer, primary_key=True, autoincrement=True)
     time_tag = Column(DateTime, unique=True, index=True)
@@ -22,7 +30,7 @@ class DscovrMag1s(Base):
     phi_gsm = Column(Float)
 
 
-class F107cmFlux(Base):
+class F107CmFlux(Base):
     __tablename__ = "f10-7cm-flux"
     id = Column(Integer, primary_key=True, autoincrement=True)
     time_tag = Column(DateTime, unique=True, index=True)
@@ -57,7 +65,7 @@ class ObservedSolarCycleIndices(Base):
     smoothed_f10_7 = Column("smoothed_f10.7", Float)
 
 
-class PlanetaryKIndex1m(Base):
+class PlanetaryKIndex1M(Base):
     __tablename__ = "planetary_k_index_1m"
     id = Column(Integer, primary_key=True, autoincrement=True)
     time_tag = Column(DateTime, unique=True, index=True)

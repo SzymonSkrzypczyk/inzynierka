@@ -32,6 +32,10 @@
 - **estimated_kp** – szacowany indeks Kp  
 - **kp** – klasyfikacja w postaci tekstowej (np. „4+”) :contentReference[oaicite:7]{index=7}  
 
+# boulder_k_index_1m  
+- **time_tag** – znacznik czasu (ISO, co minutę)  
+- **k_index** –  lokalna miara zaburzeń poziomego komponentu ziemskiego pola magnetycznego, liczona na podstawie maksymalnych odchyleń w 3-godzinnym oknie.
+
 # predicted-solar-cycle  
 - **time-tag** – miesiąc (format YYYY-MM)  
 - **predicted_ssn** – prognozowana medianowa liczba plam słonecznych  
