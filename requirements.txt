@@ -4,3 +4,5 @@ dropbox
 chardet
 python-dotenv
 pytest
+SQLAlchemy
+psycopg2-binary
