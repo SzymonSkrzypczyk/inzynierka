@@ -48,10 +48,6 @@ class Magnetometers1Day(Base):
     total = Column(Float)
     arcjet_flag = Column(Boolean)
 
-    __table_args__ = (
-        UniqueConstraint("time_tag", "satellite", name="uq_magnetometers_time_satellite"),
-    )
-
 
 class ObservedSolarCycleIndices(Base):
     __tablename__ = "observed-solar-cycle-indices"
@@ -77,7 +73,7 @@ class PlanetaryKIndex1M(Base):
 class PredictedSolarCycle(Base):
     __tablename__ = "predicted-solar-cycle"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    time_tag = Column(DateTime, unique=True, index=True)
+    time_tag = Column("time_tag", DateTime, unique=True, index=True)
     predicted_ssn = Column(Float)
     high25_ssn = Column(Float)
     high_ssn = Column(Float)
@@ -100,7 +96,7 @@ class PrimaryDifferentialElectrons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class PrimaryDifferentialProtons1Day(Base):
@@ -109,7 +105,7 @@ class PrimaryDifferentialProtons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
     yaw_flip = Column(Boolean)
     channel = Column(String)
 
@@ -120,7 +116,7 @@ class PrimaryIntegralElectrons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class PrimaryIntegralProtons1Day(Base):
@@ -129,7 +125,7 @@ class PrimaryIntegralProtons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class PrimaryXray1Day(Base):
@@ -140,7 +136,7 @@ class PrimaryXray1Day(Base):
     flux = Column(Float)
     observed_flux = Column(Float)
     electron_correction = Column(Float)
-    electron_contaminaton = Column(Float)
+    electron_contaminaton = Column(Boolean)
     energy = Column(String)
 
 
@@ -157,7 +153,7 @@ class SecondaryDifferentialElectrons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class SecondaryDifferentialProtons1Day(Base):
@@ -166,7 +162,7 @@ class SecondaryDifferentialProtons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
     yaw_flip = Column(Boolean)
     channel = Column(String)
 
@@ -177,7 +173,7 @@ class SecondaryIntegralElectrons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class SecondaryIntegralProtons1Day(Base):
@@ -186,7 +182,7 @@ class SecondaryIntegralProtons1Day(Base):
     time_tag = Column(DateTime)
     satellite = Column(String)
     flux = Column(Float)
-    energy = Column(Float)
+    energy = Column(String)
 
 
 class SecondaryXray1Day(Base):
@@ -207,10 +203,6 @@ class SolarRadioFlux(Base):
     time_tag = Column(DateTime)
     common_name = Column(String)
     details = Column(String)
-
-    __table_args__ = (
-        UniqueConstraint("time_tag", "common_name", name="uq_radio_flux"),
-    )
 
 
 class SolarRegions(Base):
@@ -245,7 +237,3 @@ class SolarRegions(Base):
     x_flare_probability = Column(Float)
     proton_probability = Column(Float)
     first_date = Column(DateTime)
-
-    __table_args__ = (
-        UniqueConstraint("observed_date", "region", name="uq_solar_region"),
-    )
