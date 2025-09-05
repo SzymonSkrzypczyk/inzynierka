@@ -18,6 +18,8 @@ import (
 	"time"
 )
 
+const DATA_DIRECTORY = "./data"
+
 type TokenResponse struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
@@ -82,48 +84,110 @@ func loadSecrets() (DropboxAppSecret, DropboxAppKey, DropboxRefreshToken string)
 	return
 }
 
-func listZipContents(zipFilePath string) error {
-	// Open zip file
+func extractZipContents(zipFilePath string) error {
+	err := os.MkdirAll(DATA_DIRECTORY, 0755)
+	if err != nil {
+		return fmt.Errorf("failed to create data directory: %v", err)
+	}
+
 	reader, err := zip.OpenReader(zipFilePath)
 	if err != nil {
 		return err
 	}
 	defer reader.Close()
 
-	fmt.Println("\n=== ZIP CONTENTS ===")
-	fmt.Printf("Total files/directories: %d\n\n", len(reader.File))
-
-	// Track directories
-	directories := make(map[string]bool)
+	fmt.Println("\n=== EXTRACTING ZIP CONTENTS ===")
+	fmt.Printf("Total files: %d\n", len(reader.File))
+	fmt.Printf("Extracting to: %s\n\n", DATA_DIRECTORY)
 
 	for _, file := range reader.File {
-		fmt.Printf("Name: %s\n", file.Name)
-		fmt.Printf("  Size: %d bytes\n", file.UncompressedSize64)
-		fmt.Printf("  Modified: %s\n", file.Modified)
-
 		if file.FileInfo().IsDir() {
-			fmt.Printf("  Type: Directory\n")
-			directories[file.Name] = true
-		} else {
-			fmt.Printf("  Type: File\n")
-			// Add parent directories
-			dir := filepath.Dir(file.Name)
-			for dir != "." && dir != "/" {
-				directories[dir+"/"] = true
-				dir = filepath.Dir(dir)
+			continue
+		}
+
+		fmt.Printf("Extracting: %s\n", file.Name)
+
+		rc, err := file.Open()
+		if err != nil {
+			return fmt.Errorf("failed to open file %s in zip: %v", file.Name, err)
+		}
+
+		fileName := filepath.Base(file.Name)
+		destPath := filepath.Join(DATA_DIRECTORY, fileName)
+
+		destFile, err := os.Create(destPath)
+		if err != nil {
+			rc.Close()
+			return fmt.Errorf("failed to create destination file %s: %v", destPath, err)
+		}
+
+		_, err = io.Copy(destFile, rc)
+		rc.Close()
+		destFile.Close()
+
+		if err != nil {
+			return fmt.Errorf("failed to copy file %s: %v", file.Name, err)
+		}
+
+		fmt.Printf("  → Saved as: %s\n", destPath)
+
+		if strings.HasSuffix(strings.ToLower(fileName), ".zip") {
+			fmt.Printf("  → Detected nested zip, extracting contents...\n")
+			err = extractNestedZip(destPath, DATA_DIRECTORY)
+			if err != nil {
+				log.Printf("Warning: failed to extract nested zip %s: %v", fileName, err)
 			}
 		}
-		fmt.Println()
 	}
 
-	// List unique directories
-	if len(directories) > 0 {
-		fmt.Println("=== DIRECTORIES FOUND ===")
-		for dir := range directories {
-			fmt.Printf("📁 %s\n", dir)
+	fmt.Println("\n=== EXTRACTION COMPLETE ===")
+	return nil
+}
+
+func extractNestedZip(zipPath, baseDataDir string) error {
+	reader, err := zip.OpenReader(zipPath)
+	if err != nil {
+		return err
+	}
+	defer reader.Close()
+
+	zipName := strings.TrimSuffix(filepath.Base(zipPath), ".zip")
+	subDir := filepath.Join(baseDataDir, zipName)
+	err = os.MkdirAll(subDir, 0755)
+	if err != nil {
+		return fmt.Errorf("failed to create subdirectory %s: %v", subDir, err)
+	}
+
+	fmt.Printf("    → Extracting %d files to: %s\n", len(reader.File), subDir)
+
+	for _, file := range reader.File {
+		// Skip directories
+		if file.FileInfo().IsDir() {
+			continue
 		}
-	} else {
-		fmt.Println("No directories found in zip file")
+
+		rc, err := file.Open()
+		if err != nil {
+			return fmt.Errorf("failed to open nested file %s: %v", file.Name, err)
+		}
+
+		fileName := filepath.Base(file.Name)
+		destPath := filepath.Join(subDir, fileName)
+		destFile, err := os.Create(destPath)
+		if err != nil {
+			rc.Close()
+			return fmt.Errorf("failed to create nested file %s: %v", destPath, err)
+		}
+
+		_, err = io.Copy(destFile, rc)
+		rc.Close()
+		destFile.Close()
+
+		if err != nil {
+			return fmt.Errorf("failed to copy nested file %s: %v", file.Name, err)
+		}
+
+		fmt.Printf("    → %s\n", destPath)
 	}
 
 	return nil
@@ -177,9 +241,9 @@ func main() {
 	fmt.Printf("Zip file saved to: %s\n", tempFilePath)
 	fmt.Printf("File size: %d bytes\n", bytesWritten)
 
-	// List the contents of the downloaded zip
-	if err := listZipContents(tempFilePath); err != nil {
-		log.Printf("Failed to list zip contents: %v", err)
+	// Extract the contents of the downloaded zip
+	if err := extractZipContents(tempFilePath); err != nil {
+		log.Fatalf("Failed to extract zip contents: %v", err)
 	}
 
 	fmt.Println("Response:", res)
