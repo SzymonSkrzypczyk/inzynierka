@@ -5,10 +5,12 @@ import (
 	"db/extract"
 	_ "db/extract"
 	"db/secrets"
+	"db/utils"
 	"fmt"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
 	"log"
+	"os"
 )
 
 func main() {
@@ -61,4 +63,9 @@ func main() {
 
 	fmt.Println("All operations completed successfully!")
 	fmt.Printf("Response: %+v\n", res)
+
+	err = utils.RemoveDataDirectory(extract.DataDirectory)
+	if err != nil {
+		os.Exit(1)
+	}
 }
