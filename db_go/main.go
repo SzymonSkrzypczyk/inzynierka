@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
-	_ "github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
-	_ "github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
 	"io"
 	"log"
 	"net/http"
@@ -18,7 +16,28 @@ import (
 	"time"
 )
 
-const DATA_DIRECTORY = "./data"
+const (
+	DataDirectory           = "./data"
+	AlreadyProcessedMessage = "Already Processed Skipping..." // Message indicating already processed data
+)
+
+// Example Database Models
+type SpaceWeatherData struct {
+	ID        uint      `gorm:"primaryKey"`
+	Date      time.Time `gorm:"index"`
+	DataType  string    `gorm:"index"`
+	TimeTag   time.Time
+	Data      string `gorm:"type:jsonb"` // Store CSV data as JSON
+	CreatedAt time.Time
+}
+
+type ProcessingLog struct {
+	ID          uint   `gorm:"primaryKey"`
+	Date        string `gorm:"uniqueIndex"`
+	FilesCount  int
+	ProcessedAt time.Time
+	Status      string
+}
 
 type TokenResponse struct {
 	AccessToken string `json:"access_token"`
@@ -84,8 +103,55 @@ func loadSecrets() (DropboxAppSecret, DropboxAppKey, DropboxRefreshToken string)
 	return
 }
 
+func downloadFromDropbox(content io.Reader) (string, error) {
+	// Create a temporary directory holding the daily reports
+
+	fileInfo, err := os.Stat(DataDirectory)
+	if err == nil && !fileInfo.IsDir() {
+		return "", fmt.Errorf("data directory %s exists and is not a directory", DataDirectory)
+	} else if err == nil {
+		fmt.Printf("Data directory %s already exists, skipping extraction\n", DataDirectory)
+		return AlreadyProcessedMessage, nil
+	}
+
+	tempDir := os.TempDir()
+	timestamp := time.Now().Format("20060102_150405")
+	tempFileName := fmt.Sprintf("dropbox_inzynierka_%s.zip", timestamp)
+	tempFilePath := filepath.Join(tempDir, tempFileName)
+
+	tempFile, err := os.Create(tempFilePath)
+	if err != nil {
+		log.Fatalf("Failed to create temp file: %v", err)
+		return "", err
+	}
+
+	// extra defer to ensure file is closed
+	defer func(tempFile *os.File) {
+		err := tempFile.Close()
+		if err != nil {
+			log.Fatalf("Failed to close temp file: %v", err)
+		}
+	}(tempFile)
+
+	bytesWritten, err := io.Copy(tempFile, content)
+	if err != nil {
+		log.Fatalf("Failed to write zip content to temp file: %v", err)
+		return "", err
+	}
+
+	fmt.Println("Download successful!")
+	fmt.Printf("Zip file saved to: %s\n", tempFilePath)
+	fmt.Printf("File size: %d bytes\n", bytesWritten)
+
+	return tempFilePath, nil // Return full path instead of just filename
+}
+
 func extractZipContents(zipFilePath string) error {
-	err := os.MkdirAll(DATA_DIRECTORY, 0755)
+	if zipFilePath == AlreadyProcessedMessage {
+		fmt.Println("Data already processed, skipping zip extraction")
+		return nil
+	}
+	err := os.MkdirAll(DataDirectory, 0755)
 	if err != nil {
 		return fmt.Errorf("failed to create data directory: %v", err)
 	}
@@ -98,7 +164,7 @@ func extractZipContents(zipFilePath string) error {
 
 	fmt.Println("\n=== EXTRACTING ZIP CONTENTS ===")
 	fmt.Printf("Total files: %d\n", len(reader.File))
-	fmt.Printf("Extracting to: %s\n\n", DATA_DIRECTORY)
+	fmt.Printf("Extracting to: %s\n\n", DataDirectory)
 
 	for _, file := range reader.File {
 		if file.FileInfo().IsDir() {
@@ -113,7 +179,7 @@ func extractZipContents(zipFilePath string) error {
 		}
 
 		fileName := filepath.Base(file.Name)
-		destPath := filepath.Join(DATA_DIRECTORY, fileName)
+		destPath := filepath.Join(DataDirectory, fileName)
 
 		destFile, err := os.Create(destPath)
 		if err != nil {
@@ -133,7 +199,7 @@ func extractZipContents(zipFilePath string) error {
 
 		if strings.HasSuffix(strings.ToLower(fileName), ".zip") {
 			fmt.Printf("  → Detected nested zip, extracting contents...\n")
-			err = extractNestedZip(destPath, DATA_DIRECTORY)
+			err = extractNestedZip(destPath, DataDirectory)
 			if err != nil {
 				log.Printf("Warning: failed to extract nested zip %s: %v", fileName, err)
 			}
@@ -220,31 +286,15 @@ func main() {
 	}
 	defer content.Close()
 
-	// Create a temporary directory holding the daily reports
-	tempDir := os.TempDir()
-	timestamp := time.Now().Format("20060102_150405")
-	tempFileName := fmt.Sprintf("dropbox_inzynierka_%s.zip", timestamp)
-	tempFilePath := filepath.Join(tempDir, tempFileName)
-
-	tempFile, err := os.Create(tempFilePath)
+	tempFilePath, err := downloadFromDropbox(content)
 	if err != nil {
-		log.Fatalf("Failed to create temp file: %v", err)
+		log.Fatalf("Failed to download from Dropbox: %v", err)
 	}
-	defer tempFile.Close()
-
-	bytesWritten, err := io.Copy(tempFile, content)
-	if err != nil {
-		log.Fatalf("Failed to write zip content to temp file: %v", err)
-	}
-
-	fmt.Println("Download successful!")
-	fmt.Printf("Zip file saved to: %s\n", tempFilePath)
-	fmt.Printf("File size: %d bytes\n", bytesWritten)
-
 	// Extract the contents of the downloaded zip
 	if err := extractZipContents(tempFilePath); err != nil {
 		log.Fatalf("Failed to extract zip contents: %v", err)
 	}
 
-	fmt.Println("Response:", res)
+	fmt.Println("All operations completed successfully!")
+	fmt.Printf("Response: %+v\n", res)
 }
