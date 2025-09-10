@@ -59,12 +59,21 @@ func DownloadFromDropbox(content io.Reader) (string, error) {
 	return tempFilePath, nil
 }
 
-func ExtractZipContents(zipFilePath string) error {
+func ExtractZipContents(zipFilePath string, targetDate string) error {
 	if zipFilePath == AlreadyProcessedMessage {
 		fmt.Println("Data already processed, skipping zip extraction")
 		return nil
 	}
-	err := os.MkdirAll(DataDirectory, 0755)
+
+	// Determine the extraction directory based on target date
+	var extractionDir string
+	if targetDate != "" {
+		extractionDir = filepath.Join(DataDirectory, targetDate)
+	} else {
+		extractionDir = DataDirectory
+	}
+
+	err := os.MkdirAll(extractionDir, 0755)
 	if err != nil {
 		return fmt.Errorf("failed to create data directory: %v", err)
 	}
@@ -77,7 +86,7 @@ func ExtractZipContents(zipFilePath string) error {
 
 	fmt.Println("\n=== EXTRACTING ZIP CONTENTS ===")
 	fmt.Printf("Total files: %d\n", len(reader.File))
-	fmt.Printf("Extracting to: %s\n\n", DataDirectory)
+	fmt.Printf("Extracting to: %s\n\n", extractionDir)
 
 	for _, file := range reader.File {
 		if file.FileInfo().IsDir() {
@@ -92,7 +101,7 @@ func ExtractZipContents(zipFilePath string) error {
 		}
 
 		fileName := filepath.Base(file.Name)
-		destPath := filepath.Join(DataDirectory, fileName)
+		destPath := filepath.Join(extractionDir, fileName)
 
 		destFile, err := os.Create(destPath)
 		if err != nil {
@@ -112,7 +121,7 @@ func ExtractZipContents(zipFilePath string) error {
 
 		if strings.HasSuffix(strings.ToLower(fileName), ".zip") {
 			fmt.Printf("  → Detected nested zip, extracting contents...\n")
-			err = extractNestedZip(destPath, DataDirectory)
+			err = extractNestedZip(destPath, extractionDir, targetDate)
 			if err != nil {
 				log.Printf("Warning: failed to extract nested zip %s: %v", fileName, err)
 			}
@@ -123,7 +132,7 @@ func ExtractZipContents(zipFilePath string) error {
 	return nil
 }
 
-func extractNestedZip(zipPath, baseDataDir string) error {
+func extractNestedZip(zipPath, baseDataDir string, targetDate string) error {
 	reader, err := zip.OpenReader(zipPath)
 	if err != nil {
 		return err
@@ -131,7 +140,15 @@ func extractNestedZip(zipPath, baseDataDir string) error {
 	defer reader.Close()
 
 	zipName := strings.TrimSuffix(filepath.Base(zipPath), ".zip")
-	subDir := filepath.Join(baseDataDir, zipName)
+
+	// For target date processing, extract directly to the target date directory
+	var subDir string
+	if targetDate != "" {
+		subDir = baseDataDir // Already points to data/{targetDate}
+	} else {
+		subDir = filepath.Join(baseDataDir, zipName)
+	}
+
 	err = os.MkdirAll(subDir, 0755)
 	if err != nil {
 		return fmt.Errorf("failed to create subdirectory %s: %v", subDir, err)

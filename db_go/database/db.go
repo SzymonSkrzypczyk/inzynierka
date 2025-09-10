@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"log"
 	"os"
 	"path/filepath"
@@ -74,9 +75,15 @@ func InitDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
-func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) error {
+func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string, dateStr string) error {
 	if len(records) < 2 {
 		return nil
+	}
+
+	// Parse the date for use in models that need it
+	processDate, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return fmt.Errorf("invalid date format %s: %v", dateStr, err)
 	}
 
 	switch dataType {
@@ -90,7 +97,7 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "dscovr_mag_1s":
@@ -117,26 +124,27 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "magnetometers-1-day":
 		var data []Magnetometers1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
+				satellite := record[1]
 				he, _ := strconv.ParseFloat(record[2], 64)
 				hp, _ := strconv.ParseFloat(record[3], 64)
 				hn, _ := strconv.ParseFloat(record[4], 64)
 				total, _ := strconv.ParseFloat(record[5], 64)
 
 				data = append(data, Magnetometers1Day{
-					TimeTag: timeTag, Satellite: record[1], He: he, Hp: hp,
+					TimeTag: timeTag, Satellite: satellite, He: he, Hp: hp,
 					Hn: hn, Total: total, ArcJetFlag: utils.ParseBool(record[6]),
 				})
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "planetary_k_index_1m":
@@ -152,7 +160,7 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "satellite-longitudes":
@@ -160,25 +168,28 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 		for _, record := range records[1:] {
 			if len(record) >= 2 {
 				data = append(data, SatelliteLongitudes{
-					Satellite: record[0], Longitude: utils.ParseFloatPtr(record[1]),
+					Satellite: record[0],
+					Longitude: utils.ParseFloatPtr(record[1]),
+					TimeTag:   processDate,
 				})
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "solar-radio-flux":
 		var data []SolarRadioFlux
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 3 {
+				commonName := record[1]
 				data = append(data, SolarRadioFlux{
-					TimeTag: timeTag, CommonName: record[1], Details: record[2],
+					TimeTag: timeTag, CommonName: commonName, Details: record[2],
 				})
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	case "solar_regions":
@@ -213,7 +224,7 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 			}
 		}
 		if len(data) > 0 {
-			return db.CreateInBatches(data, 1000).Error
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
 	// Handle particle data patterns
@@ -236,46 +247,62 @@ func saveElectronData(db *gorm.DB, dataType string, records [][]string) error {
 		var data []PrimaryDifferentialElectrons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, PrimaryDifferentialElectrons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "primary-integral"):
 		var data []PrimaryIntegralElectrons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, PrimaryIntegralElectrons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "secondary-differential"):
 		var data []SecondaryDifferentialElectrons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, SecondaryDifferentialElectrons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "secondary-integral"):
 		var data []SecondaryIntegralElectrons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, SecondaryIntegralElectrons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	}
 	return nil
 }
@@ -286,50 +313,68 @@ func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 		var data []PrimaryDifferentialProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 6 {
+				satellite := record[1]
+				energy := record[3]
+				channel := record[5]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				yawFlip, _ := strconv.Atoi(record[4])
 				data = append(data, PrimaryDifferentialProtons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
-					YawFlip: yawFlip, Channel: record[5],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
+					YawFlip: yawFlip, Channel: channel,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "primary-integral"):
 		var data []PrimaryIntegralProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, PrimaryIntegralProtons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "secondary-differential"):
 		var data []SecondaryDifferentialProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 6 {
+				satellite := record[1]
+				energy := record[3]
+				channel := record[5]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				yawFlip, _ := strconv.Atoi(record[4])
 				data = append(data, SecondaryDifferentialProtons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
-					YawFlip: yawFlip, Channel: record[5],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
+					YawFlip: yawFlip, Channel: channel,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "secondary-integral"):
 		var data []SecondaryIntegralProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
+				satellite := record[1]
+				energy := record[3]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, SecondaryIntegralProtons1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, Energy: record[3],
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	}
 	return nil
 }
@@ -340,38 +385,50 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 		var data []PrimaryXray1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
+				satellite := record[1]
+				energy := record[6]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				observedFlux, _ := strconv.ParseFloat(record[3], 64)
 				electronCorrection, _ := strconv.ParseFloat(record[4], 64)
 				data = append(data, PrimaryXray1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, ObservedFlux: observedFlux,
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, ObservedFlux: observedFlux,
 					ElectronCorrection: electronCorrection, ElectronContamination: utils.ParseBool(record[5]),
-					Energy: record[6],
+					Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	case strings.Contains(dataType, "secondary"):
 		var data []SecondaryXray1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
+				satellite := record[1]
+				energy := record[6]
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				observedFlux, _ := strconv.ParseFloat(record[3], 64)
 				electronCorrection, _ := strconv.ParseFloat(record[4], 64)
 				data = append(data, SecondaryXray1Day{
-					TimeTag: timeTag, Satellite: record[1], Flux: flux, ObservedFlux: observedFlux,
+					TimeTag: timeTag, Satellite: satellite, Flux: flux, ObservedFlux: observedFlux,
 					ElectronCorrection: electronCorrection, ElectronContamination: utils.ParseBool(record[5]),
-					Energy: record[6],
+					Energy: energy,
 				})
 			}
 		}
-		return db.CreateInBatches(data, 1000).Error
+		if len(data) > 0 {
+			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
+		}
 	}
 	return nil
 }
 
-func ProcessDailyData(db *gorm.DB) error {
+func ProcessDailyData(db *gorm.DB, targetDate string) error {
 	fmt.Println("\n=== PROCESSING DAILY DATA TO DATABASE ===")
+
+	if targetDate != "" {
+		fmt.Printf("Target date specified: %s\n", targetDate)
+	}
 
 	entries, err := os.ReadDir(extract.DataDirectory)
 	if err != nil {
@@ -389,11 +446,21 @@ func ProcessDailyData(db *gorm.DB) error {
 			continue
 		}
 
+		// If targetDate is specified, only process that date
+		if targetDate != "" && dateStr != targetDate {
+			continue
+		}
+
 		// Check if already processed
 		var existingLog ProcessingLog
 		if db.Where("date = ?", dateStr).First(&existingLog).Error == nil {
-			fmt.Printf("Date %s already processed, skipping...\n", dateStr)
-			continue
+			if targetDate != "" {
+				fmt.Printf("Date %s already processed. Skipping to avoid duplicates.\n", dateStr)
+				return nil
+			} else {
+				fmt.Printf("Date %s already processed, skipping...\n", dateStr)
+				continue
+			}
 		}
 
 		fmt.Printf("\nProcessing data for date: %s\n", dateStr)
@@ -402,6 +469,9 @@ func ProcessDailyData(db *gorm.DB) error {
 		files, err := os.ReadDir(dayDir)
 		if err != nil {
 			log.Printf("Failed to read directory %s: %v", dayDir, err)
+			if targetDate != "" {
+				return fmt.Errorf("failed to read target date directory: %v", err)
+			}
 			continue
 		}
 
@@ -420,11 +490,11 @@ func ProcessDailyData(db *gorm.DB) error {
 				continue
 			}
 
-			fmt.Printf("Processing: %s (type: %s)\n", file.Name(), dataType)
+			fmt.Printf("  Processing: %s (type: %s)\n", file.Name(), dataType)
 
 			csvFile, err := os.Open(filePath)
 			if err != nil {
-				log.Printf("Error opening %s: %v", file.Name(), err)
+				log.Printf("    Error opening %s: %v", file.Name(), err)
 				continue
 			}
 
@@ -433,17 +503,17 @@ func ProcessDailyData(db *gorm.DB) error {
 			csvFile.Close()
 
 			if err != nil {
-				log.Printf("Error reading CSV %s: %v", file.Name(), err)
+				log.Printf("    Error reading CSV %s: %v", file.Name(), err)
 				continue
 			}
 
-			if err = saveDataToSpecificTable(db, dataType, records); err != nil {
-				log.Printf("Error saving %s to database: %v", file.Name(), err)
+			if err = saveDataToSpecificTable(db, dataType, records, dateStr); err != nil {
+				log.Printf("    Error saving %s to database: %v", file.Name(), err)
 				continue
 			}
 
 			filesProcessed++
-			fmt.Printf("Saved %s\n", file.Name())
+			fmt.Printf("    ✓ Saved %s\n", file.Name())
 		}
 
 		// log processing to sync the progress
@@ -458,7 +528,18 @@ func ProcessDailyData(db *gorm.DB) error {
 			log.Printf("Failed to log processing for date %s: %v", dateStr, err)
 		}
 
-		fmt.Printf("Completed processing %d files for %s\n", filesProcessed, dateStr)
+		fmt.Printf("  Completed processing %d files for %s\n", filesProcessed, dateStr)
+
+		// If processing a specific date, we're done
+		if targetDate != "" {
+			fmt.Printf("\n=== COMPLETED PROCESSING FOR TARGET DATE %s ===\n", targetDate)
+			return nil
+		}
+	}
+
+	// Check if target date was not found
+	if targetDate != "" {
+		return fmt.Errorf("target date %s not found in data directory", targetDate)
 	}
 
 	fmt.Println("\n=== DATABASE PROCESSING COMPLETE ===")
