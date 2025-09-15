@@ -35,6 +35,50 @@ jobs:
             -e DROPBOX_REFRESH_TOKEN=${{ secrets.DROPBOX_REFRESH_TOKEN }} \
             szymonskrzypczyk/inzynierka:latest
 
+  save-database:
+    needs: build-and-run
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Get today's date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Build Go application
+        run: |
+          cd db_go
+          go build -o db_processor .
+
+      - name: Run Go application
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          cd db_go
+          ./db_processor -date=${{ steps.date.outputs.date }}
+
+      - name: Report Go script status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Go script executed successfully"
+          else
+            echo "Go script execution failed"
+          fi
+
   send-email:
     needs: build-and-run
     runs-on: ubuntu-latest
