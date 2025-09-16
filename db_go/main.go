@@ -1,13 +1,13 @@
 package main
 
 import (
-	"db/database"
-	"db/dropbox"
-	"db/extract"
-	_ "db/extract"
-	"db/secrets"
-	"db/utils"
 	"fmt"
+	"github.com/SzymonSkrzypczyk/db_go/database"
+	"github.com/SzymonSkrzypczyk/db_go/dropbox"
+	"github.com/SzymonSkrzypczyk/db_go/extract"
+	_ "github.com/SzymonSkrzypczyk/db_go/extract"
+	"github.com/SzymonSkrzypczyk/db_go/secrets"
+	"github.com/SzymonSkrzypczyk/db_go/utils"
 	"log"
 	"os"
 	"time"

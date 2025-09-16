@@ -1,4 +1,4 @@
-module db
+module github.com/SzymonSkrzypczyk/db_go
 
 go 1.24.3
 

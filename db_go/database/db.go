@@ -1,10 +1,10 @@
 package database
 
 import (
-	"db/extract"
-	"db/utils"
 	"encoding/csv"
 	"fmt"
+	"github.com/SzymonSkrzypczyk/db_go/extract"
+	"github.com/SzymonSkrzypczyk/db_go/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
