@@ -38,6 +38,8 @@ jobs:
   save-database:
     needs: collect-data
     runs-on: ubuntu-latest
+    container:
+      image: node:20-bookworm-slim
     if: always()
     outputs:
       result: ${{ steps.db_script.outcome }}
@@ -45,10 +47,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install CA certificates
+        run: |
+          apt-get update
+          apt-get install -y ca-certificates
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.24.3'
 
       - name: Get today's date
         id: date
