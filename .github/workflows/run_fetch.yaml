@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-run:
+  collect-data:
     runs-on: ubuntu-latest
     outputs:
       result: ${{ steps.run_docker.outcome }}
@@ -35,8 +35,62 @@ jobs:
             -e DROPBOX_REFRESH_TOKEN=${{ secrets.DROPBOX_REFRESH_TOKEN }} \
             szymonskrzypczyk/inzynierka:latest
 
+  save-database:
+    needs: collect-data
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-bookworm-slim
+    if: always()
+    outputs:
+      result: ${{ steps.db_script.outcome }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install CA certificates
+        run: |
+          apt-get update
+          apt-get install -y ca-certificates
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24.3'
+
+      - name: Get today's date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Build Go application
+        run: |
+          cd db_go
+          go build -o db_save .
+
+      - name: Run Go application
+        id: db_script
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          cd db_go
+          ./db_save ${{ steps.date.outputs.date }}
+
+      - name: Report Go script status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Go script executed successfully"
+          else
+            echo "Go script execution failed"
+          fi
+
   send-email:
-    needs: build-and-run
+    needs: [collect-data, save-database]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -48,8 +102,11 @@ jobs:
         uses: dawidd6/action-send-mail@v6
         with:
           connection_url: ${{ secrets.MAIL_CONNECTION }}
-          subject: "${{ github.workflow }} - ${{ needs.build-and-run.result }} - ${{ steps.date.outputs.date }}"
+          subject: "${{ github.workflow }} - ${{ steps.date.outputs.date }}"
           body: |
-            Wynik pobrania danych i przesłania do Dropboxa: ${{ needs.build-and-run.result }}
+            Workflow results for ${{ steps.date.outputs.date }}:
+            
+            Data fetching & upload to Dropbox: ${{ needs.collect-data.result }}
+            Database processing: ${{ needs.save-database.result }}
           to: ${{ secrets.EMAIL_TO }}
           from: ${{ secrets.APP_NAME }}

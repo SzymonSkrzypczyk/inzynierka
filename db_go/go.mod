@@ -5,7 +5,7 @@ go 1.24.3
 require (
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.5
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.3
+	gorm.io/gorm v1.31.0
 )
 
 require (
