@@ -169,3 +169,23 @@ https://services.swpc.noaa.gov/json/goes/primary/integral-protons-plot-1-day.jso
 - Launch Date: 01 March 2022
 - End of Life: >= 2040
 - Status: Operational
+
+## 19 - **[GOES-19](https://space.oscar.wmo.int/satellites/view/goes_19)**
+
+### Known instruments:
+1. **Advanced Baseline Imager** ([ABI](https://space.oscar.wmo.int/instruments/view/abi)) - Multi-purpose VIS/IR imagery and wind derivation by tracking clouds and water vapour features
+2. **Extreme Ultraviolet Sensor / X-Ray Sensor Irradiance Sensors** ([EXIS](https://space.oscar.wmo.int/instruments/view/exis)) - To monitor EUV and X-rays from the solar disk
+3. **Geostationary Search and Rescue** ([GEOS&R](https://space.oscar.wmo.int/instruments/view/geos_r)) - To relay distress signals from users in difficulty to search and rescue centres
+4. **Geostationary Lightning Mapper** ([GLM](https://space.oscar.wmo.int/instruments/view/glm)) - Proxy for convective precipitation, proxy for NOx generation, study of Earth electric field
+5. **SEM / Magnetometer** ([SEM/MAG](https://space.oscar.wmo.int/instruments/view/sem_mag)) - Observation of the geomagnetic field in the magnetosphere
+6. **Solar Ultraviolet Imager** ([SUVI](https://space.oscar.wmo.int/instruments/view/suvi)) - Space Weather - Solar activity monitoring
+7. **Data Collection and Interrogation Service** ([DCIS](https://space.oscar.wmo.int/instruments/view/dcis)) - Data collection from in-situ Data Collection Platforms
+9. **SEISS / Magnetospheric Particle Sensor** ([SEISS/MPS](https://space.oscar.wmo.int/instruments/view/seiss_mps)) - To monitor electrons and protons representing a hazard for the satellite
+10. **SEISS / Energetic Heavy Ion Sensor** ([SEISS/EHIS](https://space.oscar.wmo.int/instruments/view/seiss_ehis)) - To measure proton, alpha-particle and heavy ion fluxes at platform level
+11. **SEISS / Solar and Galactic Proton Sensor** ([SEISS/SGPS](https://space.oscar.wmo.int/instruments/view/seiss_sgps)) - To measure high-energy protons at platform level
+12. **Compact CORonagraph-1** ([CCOR-1](https://space.oscar.wmo.int/instruments/view/ccor_1)) - Visible-light imaging of solar corona; monitoring of coronal mass ejections (CME)
+
+### Other information:
+- Launch Date: 25 June 2024
+- End of Life: >= 2033
+- Status: Operational
