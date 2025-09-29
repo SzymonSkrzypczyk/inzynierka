@@ -45,3 +45,25 @@ https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json - do wiatru slonec
 https://services.swpc.noaa.gov/json/goes/primary/xray-flares-7-day.json
 https://services.swpc.noaa.gov/json/goes/primary/integral-protons-plot-1-day.json
 
+# Satellites descriptions
+
+## 13 - **[GOES-13](https://space.oscar.wmo.int/satellites/view/goes_13)**
+
+### Known instruments:
+1) Geostationary Search and Rescue([GEOS&R](https://space.oscar.wmo.int/instruments/view/geos_r)) - To relay distress signals from users in difficulty to search and rescue centres
+2) SEM / Magnetometer([SEM/MAG](https://space.oscar.wmo.int/instruments/view/sem_mag)) - Observation of the geomagnetic field in the magnetosphere
+3) GOES Sounder([SOUNDER](https://space.oscar.wmo.int/instruments/view/sounder)) - Atmospheric temperature/humidity sounding
+4) Solar X-ray Imager([SXI](https://space.oscar.wmo.int/instruments/view/sxi)) - Space Weather - Solar activity monitoring
+5) SEM / Energetic Particles Sensor([SEM/EPS](https://space.oscar.wmo.int/instruments/view/sem_eps)) - Observation of electrons, protons and alpha-particles at platform level
+6) SEM / High Energy Proton and Alpha Particles Detector([SEM/HEPAD](https://space.oscar.wmo.int/instruments/view/sem_hepad)) - Observation of high-energy protons and alpha-particles at platform level
+7) SEM / X-Ray Sensor - Extreme Ultra-Violet Sensor([SEM/XRS-EUV](https://space.oscar.wmo.int/instruments/view/sem_xrs_euv)) - 	To measure disk-integrated solar X-ray and EUV fluxes
+8) Data Collection and Interrogation Service([DCIS](https://space.oscar.wmo.int/instruments/view/dcis)) - Data collection from in-situ Data Collection Platforms
+9) GOES Imager([IMAGER](https://space.oscar.wmo.int/instruments/view/imager_goes_12_15)) - Multi-purpose imagery and wind derivation by tracking clouds and water vapour features
+
+### Other information:
+- Launch on 24 May 2006
+
+- End of Life in October 2019
+
+- It's inactive
+
