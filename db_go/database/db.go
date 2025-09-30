@@ -77,8 +77,8 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 		var data []BoulderKIndex1m
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil {
-				if kIndex, err := strconv.ParseFloat(record[1], 64); err == nil {
-					data = append(data, BoulderKIndex1m{TimeTag: timeTag, KIndex: kIndex})
+				if kIndex, err := strconv.ParseFloat(record[1], 32); err == nil {
+					data = append(data, BoulderKIndex1m{TimeTag: timeTag, KIndex: float32(kIndex)})
 				}
 			}
 		}
@@ -90,22 +90,17 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 		var data []DscovrMag1s
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 12 {
-				bt, _ := strconv.ParseFloat(record[1], 64)
-				bxGse, _ := strconv.ParseFloat(record[2], 64)
-				byGse, _ := strconv.ParseFloat(record[3], 64)
-				bzGse, _ := strconv.ParseFloat(record[4], 64)
-				thetaGse, _ := strconv.ParseFloat(record[5], 64)
-				phiGse, _ := strconv.ParseFloat(record[6], 64)
-				bxGsm, _ := strconv.ParseFloat(record[7], 64)
-				byGsm, _ := strconv.ParseFloat(record[8], 64)
-				bzGsm, _ := strconv.ParseFloat(record[9], 64)
-				thetaGsm, _ := strconv.ParseFloat(record[10], 64)
-				phiGsm, _ := strconv.ParseFloat(record[11], 64)
+				bt, _ := strconv.ParseFloat(record[1], 32)
+				bxGsm, _ := strconv.ParseFloat(record[7], 32)
+				byGsm, _ := strconv.ParseFloat(record[8], 32)
+				bzGsm, _ := strconv.ParseFloat(record[9], 32)
 
 				data = append(data, DscovrMag1s{
-					TimeTag: timeTag, Bt: bt, BxGse: bxGse, ByGse: byGse, BzGse: bzGse,
-					ThetaGse: thetaGse, PhiGse: phiGse, BxGsm: bxGsm, ByGsm: byGsm,
-					BzGsm: bzGsm, ThetaGsm: thetaGsm, PhiGsm: phiGsm,
+					TimeTag: timeTag,
+					Bt:      float32(bt),
+					BxGsm:   float32(bxGsm),
+					ByGsm:   float32(byGsm),
+					BzGsm:   float32(bzGsm),
 				})
 			}
 		}
@@ -116,16 +111,15 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 	case "magnetometers-1-day":
 		var data []Magnetometers1Day
 		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
-				satellite := record[1]
-				he, _ := strconv.ParseFloat(record[2], 64)
-				hp, _ := strconv.ParseFloat(record[3], 64)
-				hn, _ := strconv.ParseFloat(record[4], 64)
-				total, _ := strconv.ParseFloat(record[5], 64)
+			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 6 {
+				fmt.Println(record[1])
+				satellite := utils.ParseInt8Ptr(record[1])
+				total, _ := strconv.ParseFloat(record[5], 32)
 
 				data = append(data, Magnetometers1Day{
-					TimeTag: timeTag, Satellite: satellite, He: he, Hp: hp,
-					Hn: hn, Total: total, ArcJetFlag: utils.ParseBool(record[6]),
+					TimeTag:   timeTag,
+					Satellite: satellite,
+					Total:     float32(total),
 				})
 			}
 		}
@@ -138,44 +132,35 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
 				kpIndex, _ := strconv.Atoi(record[1])
-				estimatedKp, _ := strconv.ParseFloat(record[2], 64)
+				estimatedKp, _ := strconv.ParseFloat(record[2], 32)
 
 				data = append(data, PlanetaryKIndex1m{
-					TimeTag: timeTag, KpIndex: kpIndex, EstimatedKp: estimatedKp, Kp: record[3],
+					TimeTag:     timeTag,
+					KpIndex:     int8(kpIndex),
+					EstimatedKp: float32(estimatedKp),
+					Kp:          record[3],
 				})
 			}
 		}
 		if len(data) > 0 {
 			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
+
 	case "solar_regions":
 		var data []SolarRegions
 		for _, record := range records[1:] {
 			if observedDate, err := time.Parse("2006-01-02", record[0]); err == nil && len(record) >= 28 {
 				region, _ := strconv.Atoi(record[1])
-				var firstDate *time.Time
-				if len(record) > 28 && record[28] != "" {
-					if fd, err := utils.ParseTime(record[28]); err == nil {
-						firstDate = &fd
-					}
-				}
 
 				data = append(data, SolarRegions{
-					ObservedDate: observedDate, Region: region,
-					Latitude: utils.ParseIntPtr(record[2]), Longitude: utils.ParseIntPtr(record[3]),
-					Location: utils.ParseStringPtr(record[4]), CarringtonLongitude: utils.ParseIntPtr(record[5]),
-					OldCarringtonLongitude: utils.ParseIntPtr(record[6]), Area: utils.ParseIntPtr(record[7]),
-					SpotClass: utils.ParseStringPtr(record[8]), Extent: utils.ParseIntPtr(record[9]),
-					NumberSpots: utils.ParseIntPtr(record[10]), MagClass: utils.ParseStringPtr(record[11]),
-					MagString: utils.ParseStringPtr(record[12]), Status: utils.ParseStringPtr(record[13]),
-					CXrayEvents: utils.ParseIntPtr(record[14]), MXrayEvents: utils.ParseIntPtr(record[15]),
-					XXrayEvents: utils.ParseIntPtr(record[16]), ProtonEvents: utils.ParseStringPtr(record[17]),
-					SFlares: utils.ParseIntPtr(record[18]), ImpulseFlares1: utils.ParseIntPtr(record[19]),
-					ImpulseFlares2: utils.ParseIntPtr(record[20]), ImpulseFlares3: utils.ParseIntPtr(record[21]),
-					ImpulseFlares4: utils.ParseIntPtr(record[22]), Protons: utils.ParseStringPtr(record[23]),
-					CFlareProbability: utils.ParseIntPtr(record[24]), MFlareProbability: utils.ParseIntPtr(record[25]),
-					XFlareProbability: utils.ParseIntPtr(record[26]), ProtonProbability: utils.ParseIntPtr(record[27]),
-					FirstDate: firstDate,
+					ObservedDate:      observedDate,
+					Region:            int16(region),
+					Area:              utils.ParseInt16Ptr(record[7]),
+					MagClass:          utils.ParseStringPtr(record[11]),
+					MXrayEvents:       utils.ParseInt8Ptr(record[15]),
+					XXrayEvents:       utils.ParseInt8Ptr(record[16]),
+					MFlareProbability: utils.ParseInt8Ptr(record[25]),
+					XFlareProbability: utils.ParseInt8Ptr(record[26]),
 				})
 			}
 		}
@@ -183,7 +168,6 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
 
-	// Handle particle data patterns
 	default:
 		if strings.Contains(dataType, "protons") {
 			return saveProtonData(db, dataType, records)
@@ -201,11 +185,14 @@ func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 		var data []PrimaryIntegralProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
+				satellite := utils.ParseInt8Ptr(record[1])
 				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
+				flux, _ := strconv.ParseFloat(record[2], 32)
 				data = append(data, PrimaryIntegralProtons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
+					TimeTag:   timeTag,
+					Satellite: satellite,
+					Flux:      float32(flux),
+					Energy:    energy,
 				})
 			}
 		}
@@ -216,11 +203,14 @@ func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 		var data []SecondaryIntegralProtons1Day
 		for _, record := range records[1:] {
 			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
+				satellite := utils.ParseInt8Ptr(record[1])
 				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
+				flux, _ := strconv.ParseFloat(record[2], 32)
 				data = append(data, SecondaryIntegralProtons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
+					TimeTag:   timeTag,
+					Satellite: satellite,
+					Flux:      float32(flux),
+					Energy:    energy,
 				})
 			}
 		}
@@ -236,16 +226,13 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 	case strings.Contains(dataType, "primary"):
 		var data []PrimaryXray1Day
 		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
-				satellite := record[1]
-				energy := record[6]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				observedFlux, _ := strconv.ParseFloat(record[3], 64)
-				electronCorrection, _ := strconv.ParseFloat(record[4], 64)
+			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 3 {
+				satellite := utils.ParseInt8Ptr(record[1])
+				flux, _ := strconv.ParseFloat(record[2], 32)
 				data = append(data, PrimaryXray1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, ObservedFlux: observedFlux,
-					ElectronCorrection: electronCorrection, ElectronContamination: utils.ParseBool(record[5]),
-					Energy: energy,
+					TimeTag:   timeTag,
+					Satellite: satellite,
+					Flux:      float32(flux),
 				})
 			}
 		}
@@ -255,16 +242,13 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 	case strings.Contains(dataType, "secondary"):
 		var data []SecondaryXray1Day
 		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 7 {
-				satellite := record[1]
-				energy := record[6]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				observedFlux, _ := strconv.ParseFloat(record[3], 64)
-				electronCorrection, _ := strconv.ParseFloat(record[4], 64)
+			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 3 {
+				satellite := utils.ParseInt8Ptr(record[1])
+				flux, _ := strconv.ParseFloat(record[2], 32)
 				data = append(data, SecondaryXray1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, ObservedFlux: observedFlux,
-					ElectronCorrection: electronCorrection, ElectronContamination: utils.ParseBool(record[5]),
-					Energy: energy,
+					TimeTag:   timeTag,
+					Satellite: satellite,
+					Flux:      float32(flux),
 				})
 			}
 		}
@@ -327,7 +311,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 			continue
 		}
 
-		filesProcessed := 0
+		var filesProcessed int16 = 0
 		for _, file := range files {
 			if file.IsDir() || !strings.HasSuffix(file.Name(), ".csv") {
 				continue
@@ -389,6 +373,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		}
 	}
 
+	// Check if target date was not found
 	// Check if target date was not found
 	if targetDate != "" {
 		return fmt.Errorf("target date %s not found in data directory", targetDate)
