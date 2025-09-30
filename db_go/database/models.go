@@ -45,32 +45,6 @@ type PlanetaryKIndex1m struct {
 	Kp          string
 }
 
-type PrimaryDifferentialElectrons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_pde_time_satellite_energy"`
-	Satellite string    `gorm:"uniqueIndex:idx_pde_time_satellite_energy"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_pde_time_satellite_energy"`
-}
-
-type PrimaryDifferentialProtons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_pdp_time_satellite_energy_channel"`
-	Satellite string    `gorm:"uniqueIndex:idx_pdp_time_satellite_energy_channel"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_pdp_time_satellite_energy_channel"`
-	YawFlip   int
-	Channel   string `gorm:"uniqueIndex:idx_pdp_time_satellite_energy_channel"`
-}
-
-type PrimaryIntegralElectrons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_pie_time_satellite_energy"`
-	Satellite string    `gorm:"uniqueIndex:idx_pie_time_satellite_energy"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_pie_time_satellite_energy"`
-}
-
 type PrimaryIntegralProtons1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_pip_time_satellite_energy"`
@@ -90,39 +64,6 @@ type PrimaryXray1Day struct {
 	Energy                string `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
 }
 
-type SatelliteLongitudes struct {
-	ID        uint   `gorm:"primaryKey"`
-	Satellite string `gorm:"uniqueIndex"`
-	Longitude *float64
-	TimeTag   time.Time
-}
-
-type SecondaryDifferentialElectrons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_sde_time_satellite_energy"`
-	Satellite string    `gorm:"uniqueIndex:idx_sde_time_satellite_energy"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_sde_time_satellite_energy"`
-}
-
-type SecondaryDifferentialProtons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_sdp_time_satellite_energy_channel"`
-	Satellite string    `gorm:"uniqueIndex:idx_sdp_time_satellite_energy_channel"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_sdp_time_satellite_energy_channel"`
-	YawFlip   int
-	Channel   string `gorm:"uniqueIndex:idx_sdp_time_satellite_energy_channel"`
-}
-
-type SecondaryIntegralElectrons1Day struct {
-	ID        uint      `gorm:"primaryKey"`
-	TimeTag   time.Time `gorm:"uniqueIndex:idx_sie_time_satellite_energy"`
-	Satellite string    `gorm:"uniqueIndex:idx_sie_time_satellite_energy"`
-	Flux      float64
-	Energy    string `gorm:"uniqueIndex:idx_sie_time_satellite_energy"`
-}
-
 type SecondaryIntegralProtons1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_sip_time_satellite_energy"`
@@ -140,13 +81,6 @@ type SecondaryXray1Day struct {
 	ElectronCorrection    float64
 	ElectronContamination bool
 	Energy                string `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
-}
-
-type SolarRadioFlux struct {
-	ID         uint      `gorm:"primaryKey"`
-	TimeTag    time.Time `gorm:"uniqueIndex"`
-	CommonName string
-	Details    string `gorm:"type:text"`
 }
 
 type SolarRegions struct {
