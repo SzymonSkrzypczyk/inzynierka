@@ -22,7 +22,7 @@ type DscovrMag1s struct {
 type Magnetometers1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_mag_time_satellite;type:timestamp(0)"`
-	Satellite *int8     `gorm:"uniqueIndex:idx_mag_time_satellite;type:varchar(20)"`
+	Satellite int8      `gorm:"uniqueIndex:idx_mag_time_satellite;type:smallint"`
 	Total     float32   `gorm:"type:real"`
 }
 
@@ -37,7 +37,7 @@ type PlanetaryKIndex1m struct {
 type PrimaryIntegralProtons1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_pip_time_satellite_energy;type:timestamp(0)"`
-	Satellite *int8     `gorm:"uniqueIndex:idx_pip_time_satellite_energy;type:varchar(20)"`
+	Satellite int8      `gorm:"uniqueIndex:idx_pip_time_satellite_energy;type:smallint"`
 	Flux      float32   `gorm:"type:real"`
 	Energy    string    `gorm:"uniqueIndex:idx_pip_time_satellite_energy;type:varchar(15)"`
 }
@@ -45,14 +45,14 @@ type PrimaryIntegralProtons1Day struct {
 type PrimaryXray1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_pxr_time_satellite;type:timestamp(0)"`
-	Satellite *int8     `gorm:"uniqueIndex:idx_pxr_time_satellite;type:varchar(20)"`
+	Satellite int8      `gorm:"uniqueIndex:idx_pxr_time_satellite;type:smallint"`
 	Flux      float32   `gorm:"type:real"`
 }
 
 type SecondaryIntegralProtons1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_sip_time_satellite_energy;type:timestamp(0)"`
-	Satellite *int8     `gorm:"uniqueIndex:idx_sip_time_satellite_energy;type:varchar(20)"`
+	Satellite int8      `gorm:"uniqueIndex:idx_sip_time_satellite_energy;type:smallint"`
 	Flux      float32   `gorm:"type:real"`
 	Energy    string    `gorm:"uniqueIndex:idx_sip_time_satellite_energy;type:varchar(15)"`
 }
@@ -60,7 +60,7 @@ type SecondaryIntegralProtons1Day struct {
 type SecondaryXray1Day struct {
 	ID        uint      `gorm:"primaryKey"`
 	TimeTag   time.Time `gorm:"uniqueIndex:idx_sxr_time_satellite;type:timestamp(0)"`
-	Satellite *int8     `gorm:"uniqueIndex:idx_sxr_time_satellite;type:varchar(20)"`
+	Satellite int8      `gorm:"uniqueIndex:idx_sxr_time_satellite;type:smallint"`
 	Flux      float32   `gorm:"type:real"`
 }
 

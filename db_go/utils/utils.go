@@ -52,9 +52,19 @@ func ParseInt8Ptr(s string) *int8 {
 	if s == "" {
 		return nil
 	}
-	if val, err := strconv.Atoi(s); err == nil {
+	if val, err := strconv.Atoi(s); err == nil && val >= -128 && val <= 127 {
 		result := int8(val)
 		return &result
 	}
 	return nil
+}
+
+func ParseInt8(s string) int8 {
+	if s == "" {
+		return 0
+	}
+	if val, err := strconv.Atoi(s); err == nil && val >= -128 && val <= 127 {
+		return int8(val)
+	}
+	return 0
 }
