@@ -11,30 +11,19 @@ type BoulderKIndex1m struct {
 }
 
 type DscovrMag1s struct {
-	ID       uint      `gorm:"primaryKey"`
-	TimeTag  time.Time `gorm:"uniqueIndex"`
-	Bt       float64
-	BxGse    float64
-	ByGse    float64
-	BzGse    float64
-	ThetaGse float64
-	PhiGse   float64
-	BxGsm    float64
-	ByGsm    float64
-	BzGsm    float64
-	ThetaGsm float64
-	PhiGsm   float64
+	ID      uint      `gorm:"primaryKey"`
+	TimeTag time.Time `gorm:"uniqueIndex"`
+	Bt      float64
+	BxGsm   float64
+	ByGsm   float64
+	BzGsm   float64
 }
 
 type Magnetometers1Day struct {
-	ID         uint      `gorm:"primaryKey"`
-	TimeTag    time.Time `gorm:"uniqueIndex:idx_mag_time_satellite"`
-	Satellite  string    `gorm:"uniqueIndex:idx_mag_time_satellite"`
-	He         float64
-	Hp         float64
-	Hn         float64
-	Total      float64
-	ArcJetFlag bool
+	ID        uint      `gorm:"primaryKey"`
+	TimeTag   time.Time `gorm:"uniqueIndex:idx_mag_time_satellite"`
+	Satellite string    `gorm:"uniqueIndex:idx_mag_time_satellite"`
+	Total     float64
 }
 
 type PlanetaryKIndex1m struct {
@@ -54,14 +43,10 @@ type PrimaryIntegralProtons1Day struct {
 }
 
 type PrimaryXray1Day struct {
-	ID                    uint      `gorm:"primaryKey"`
-	TimeTag               time.Time `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
-	Satellite             string    `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
-	Flux                  float64
-	ObservedFlux          float64
-	ElectronCorrection    float64
-	ElectronContamination bool
-	Energy                string `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
+	ID        uint      `gorm:"primaryKey"`
+	TimeTag   time.Time `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
+	Satellite string    `gorm:"uniqueIndex:idx_pxr_time_satellite_energy"`
+	Flux      float64
 }
 
 type SecondaryIntegralProtons1Day struct {
@@ -73,47 +58,22 @@ type SecondaryIntegralProtons1Day struct {
 }
 
 type SecondaryXray1Day struct {
-	ID                    uint      `gorm:"primaryKey"`
-	TimeTag               time.Time `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
-	Satellite             string    `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
-	Flux                  float64
-	ObservedFlux          float64
-	ElectronCorrection    float64
-	ElectronContamination bool
-	Energy                string `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
+	ID        uint      `gorm:"primaryKey"`
+	TimeTag   time.Time `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
+	Satellite string    `gorm:"uniqueIndex:idx_sxr_time_satellite_energy"`
+	Flux      float64
 }
 
 type SolarRegions struct {
-	ID                     uint      `gorm:"primaryKey"`
-	ObservedDate           time.Time `gorm:"uniqueIndex:idx_solar_date_region"`
-	Region                 int       `gorm:"uniqueIndex:idx_solar_date_region"`
-	Latitude               *int
-	Longitude              *int
-	Location               *string
-	CarringtonLongitude    *int
-	OldCarringtonLongitude *int
-	Area                   *int
-	SpotClass              *string
-	Extent                 *int
-	NumberSpots            *int
-	MagClass               *string
-	MagString              *string
-	Status                 *string
-	CXrayEvents            *int
-	MXrayEvents            *int
-	XXrayEvents            *int
-	ProtonEvents           *string
-	SFlares                *int
-	ImpulseFlares1         *int
-	ImpulseFlares2         *int
-	ImpulseFlares3         *int
-	ImpulseFlares4         *int
-	Protons                *string
-	CFlareProbability      *int
-	MFlareProbability      *int
-	XFlareProbability      *int
-	ProtonProbability      *int
-	FirstDate              *time.Time
+	ID                uint      `gorm:"primaryKey"`
+	ObservedDate      time.Time `gorm:"uniqueIndex:idx_solar_date_region"`
+	Region            int       `gorm:"uniqueIndex:idx_solar_date_region"`
+	Area              *int
+	MagClass          *string
+	MXrayEvents       *int
+	XXrayEvents       *int
+	MFlareProbability *int
+	XFlareProbability *int
 }
 
 type ProcessingLog struct {
