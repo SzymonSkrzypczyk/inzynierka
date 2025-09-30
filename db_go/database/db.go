@@ -52,18 +52,10 @@ func InitDatabase() (*gorm.DB, error) {
 		&DscovrMag1s{},
 		&Magnetometers1Day{},
 		&PlanetaryKIndex1m{},
-		&PrimaryDifferentialElectrons1Day{},
-		&PrimaryDifferentialProtons1Day{},
-		&PrimaryIntegralElectrons1Day{},
 		&PrimaryIntegralProtons1Day{},
 		&PrimaryXray1Day{},
-		&SatelliteLongitudes{},
-		&SecondaryDifferentialElectrons1Day{},
-		&SecondaryDifferentialProtons1Day{},
-		&SecondaryIntegralElectrons1Day{},
 		&SecondaryIntegralProtons1Day{},
 		&SecondaryXray1Day{},
-		&SolarRadioFlux{},
 		&SolarRegions{},
 		&ProcessingLog{},
 	)
@@ -75,15 +67,9 @@ func InitDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
-func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string, dateStr string) error {
+func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) error {
 	if len(records) < 2 {
 		return nil
-	}
-
-	// Parse the date for use in models that need it
-	processDate, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		return fmt.Errorf("invalid date format %s: %v", dateStr, err)
 	}
 
 	switch dataType {
@@ -162,36 +148,6 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string, d
 		if len(data) > 0 {
 			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
 		}
-
-	case "satellite-longitudes":
-		var data []SatelliteLongitudes
-		for _, record := range records[1:] {
-			if len(record) >= 2 {
-				data = append(data, SatelliteLongitudes{
-					Satellite: record[0],
-					Longitude: utils.ParseFloatPtr(record[1]),
-					TimeTag:   processDate,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-
-	case "solar-radio-flux":
-		var data []SolarRadioFlux
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 3 {
-				commonName := record[1]
-				data = append(data, SolarRadioFlux{
-					TimeTag: timeTag, CommonName: commonName, Details: record[2],
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-
 	case "solar_regions":
 		var data []SolarRegions
 		for _, record := range records[1:] {
@@ -229,9 +185,7 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string, d
 
 	// Handle particle data patterns
 	default:
-		if strings.Contains(dataType, "electrons") {
-			return saveElectronData(db, dataType, records)
-		} else if strings.Contains(dataType, "protons") {
+		if strings.Contains(dataType, "protons") {
 			return saveProtonData(db, dataType, records)
 		} else if strings.Contains(dataType, "xray") {
 			return saveXrayData(db, dataType, records)
@@ -241,92 +195,8 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string, d
 	return nil
 }
 
-func saveElectronData(db *gorm.DB, dataType string, records [][]string) error {
-	switch {
-	case strings.Contains(dataType, "primary-differential"):
-		var data []PrimaryDifferentialElectrons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
-				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				data = append(data, PrimaryDifferentialElectrons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-	case strings.Contains(dataType, "primary-integral"):
-		var data []PrimaryIntegralElectrons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
-				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				data = append(data, PrimaryIntegralElectrons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-	case strings.Contains(dataType, "secondary-differential"):
-		var data []SecondaryDifferentialElectrons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
-				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				data = append(data, SecondaryDifferentialElectrons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-	case strings.Contains(dataType, "secondary-integral"):
-		var data []SecondaryIntegralElectrons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 4 {
-				satellite := record[1]
-				energy := record[3]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				data = append(data, SecondaryIntegralElectrons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-	}
-	return nil
-}
-
 func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 	switch {
-	case strings.Contains(dataType, "primary-differential"):
-		var data []PrimaryDifferentialProtons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 6 {
-				satellite := record[1]
-				energy := record[3]
-				channel := record[5]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				yawFlip, _ := strconv.Atoi(record[4])
-				data = append(data, PrimaryDifferentialProtons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-					YawFlip: yawFlip, Channel: channel,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
 	case strings.Contains(dataType, "primary-integral"):
 		var data []PrimaryIntegralProtons1Day
 		for _, record := range records[1:] {
@@ -336,24 +206,6 @@ func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 				flux, _ := strconv.ParseFloat(record[2], 64)
 				data = append(data, PrimaryIntegralProtons1Day{
 					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-				})
-			}
-		}
-		if len(data) > 0 {
-			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
-		}
-	case strings.Contains(dataType, "secondary-differential"):
-		var data []SecondaryDifferentialProtons1Day
-		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 6 {
-				satellite := record[1]
-				energy := record[3]
-				channel := record[5]
-				flux, _ := strconv.ParseFloat(record[2], 64)
-				yawFlip, _ := strconv.Atoi(record[4])
-				data = append(data, SecondaryDifferentialProtons1Day{
-					TimeTag: timeTag, Satellite: satellite, Flux: flux, Energy: energy,
-					YawFlip: yawFlip, Channel: channel,
 				})
 			}
 		}
@@ -507,7 +359,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 				continue
 			}
 
-			if err = saveDataToSpecificTable(db, dataType, records, dateStr); err != nil {
+			if err = saveDataToSpecificTable(db, dataType, records); err != nil {
 				log.Printf("    Error saving %s to database: %v", file.Name(), err)
 				continue
 			}
