@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -31,31 +30,41 @@ func ParseTime(timeStr string) (time.Time, error) {
 	return time.Time{}, fmt.Errorf("unable to parse time: %s", timeStr)
 }
 
-func ParseBool(s string) bool { return strings.ToLower(s) == "true" }
-
-func ParseIntPtr(s string) *int {
-	if s == "" {
-		return nil
-	}
-	if val, err := strconv.Atoi(s); err == nil {
-		return &val
-	}
-	return nil
-}
-
-func ParseFloatPtr(s string) *float64 {
-	if s == "" {
-		return nil
-	}
-	if val, err := strconv.ParseFloat(s, 64); err == nil {
-		return &val
-	}
-	return nil
-}
-
 func ParseStringPtr(s string) *string {
 	if s == "" {
 		return nil
 	}
 	return &s
+}
+
+func ParseInt16Ptr(s string) *int16 {
+	if s == "" {
+		return nil
+	}
+	if val, err := strconv.Atoi(s); err == nil {
+		result := int16(val)
+		return &result
+	}
+	return nil
+}
+
+func ParseInt8Ptr(s string) *int8 {
+	if s == "" {
+		return nil
+	}
+	if val, err := strconv.Atoi(s); err == nil && val >= -128 && val <= 127 {
+		result := int8(val)
+		return &result
+	}
+	return nil
+}
+
+func ParseInt8(s string) int8 {
+	if s == "" {
+		return 0
+	}
+	if val, err := strconv.Atoi(s); err == nil && val >= -128 && val <= 127 {
+		return int8(val)
+	}
+	return 0
 }
