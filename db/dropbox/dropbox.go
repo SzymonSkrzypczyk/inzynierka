@@ -2,7 +2,7 @@ package dropbox
 
 import (
 	"fmt"
-	"github.com/SzymonSkrzypczyk/db_go/extract"
+	"github.com/SzymonSkrzypczyk/db/extract"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
 	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
 	"log"

@@ -1,5 +1,5 @@
 .idea
-noaa/__pycache__
+noaa/__pycache__/
 data
 .env
 .DS_Store
