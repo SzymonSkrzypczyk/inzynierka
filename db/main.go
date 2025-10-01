@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/SzymonSkrzypczyk/db_go/database"
-	"github.com/SzymonSkrzypczyk/db_go/dropbox"
-	"github.com/SzymonSkrzypczyk/db_go/extract"
-	_ "github.com/SzymonSkrzypczyk/db_go/extract"
-	"github.com/SzymonSkrzypczyk/db_go/secrets"
-	"github.com/SzymonSkrzypczyk/db_go/utils"
+	"github.com/SzymonSkrzypczyk/db/database"
+	"github.com/SzymonSkrzypczyk/db/dropbox"
+	"github.com/SzymonSkrzypczyk/db/extract"
+	_ "github.com/SzymonSkrzypczyk/db/extract"
+	"github.com/SzymonSkrzypczyk/db/secrets"
+	"github.com/SzymonSkrzypczyk/db/utils"
 	"log"
 	"os"
 	"time"

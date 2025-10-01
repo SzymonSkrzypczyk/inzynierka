@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Go application
         run: |
-          cd db_go
+          cd db
           go build -o db_save .
 
       - name: Run Go application
@@ -78,7 +78,7 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_PORT: ${{ secrets.DB_PORT }}
         run: |
-          cd db_go
+          cd db
           ./db_save ${{ steps.date.outputs.date }}
 
       - name: Report Go script status

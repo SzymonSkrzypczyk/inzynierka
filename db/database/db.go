@@ -3,8 +3,8 @@ package database
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/SzymonSkrzypczyk/db_go/extract"
-	"github.com/SzymonSkrzypczyk/db_go/utils"
+	"github.com/SzymonSkrzypczyk/db/extract"
+	"github.com/SzymonSkrzypczyk/db/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
