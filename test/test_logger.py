@@ -1,88 +1,110 @@
-from pathlib import Path
 import pytest
+from unittest.mock import patch, MagicMock, mock_open
+from pathlib import Path
+from dropbox.exceptions import ApiError, AuthError
 
-from logger import Logger
-
-LOG_FILE_PATH = Path(__file__).parent / "test_logs.log"
-
-
-@pytest.fixture(scope="session", autouse=True)
-def cleanup_logs():
-    yield  # This runs your tests
-    if LOG_FILE_PATH.exists():
-        LOG_FILE_PATH.unlink()
+from send2dropbox import send_to_dropbox, MAX_RETRIES, SEND_RETRY_SLEEP_TIME
 
 
-@pytest.fixture
-def logger():
-    """
-    Fixture to create a Logger instance for testing.
-    """
-    return Logger(logging_path=LOG_FILE_PATH)
+class TestSendToDropbox:
+    @patch('send2dropbox.dropbox.Dropbox')
+    @patch('send2dropbox.sleep')
+    def test_send_to_dropbox_success(self, mock_sleep, mock_dropbox_class):
+        mock_dbx = MagicMock()
+        mock_dropbox_class.return_value = mock_dbx
+        mock_logger = MagicMock()
+        file_path = Path("test_file.zip")
+        dropbox_path = "/backup/test_file.zip"
 
+        with patch('builtins.open', mock_open(read_data=b'file_content')) as m:
+            send_to_dropbox(file_path, dropbox_path, mock_logger)
 
-def test_logger_initialization(logger):
-    """
-    Test the initialization of the Logger class.
-    """
-    assert logger is not None
-    assert isinstance(logger, Logger)
-    assert logger.logging_path.exists()
-    assert logger.logging_path.is_file()
-    assert logger.logging_path.stat().st_size == 0
+        mock_dropbox_class.assert_called_once()
+        mock_dbx.files_upload.assert_called_once()
+        mock_logger.log.assert_called_with(f"Successfully uploaded {file_path} to Dropbox at {dropbox_path}")
+        mock_sleep.assert_not_called()
 
+    @patch('send2dropbox.dropbox.Dropbox')
+    @patch('send2dropbox.sleep')
+    def test_send_to_dropbox_api_error_with_retry_success(self, mock_sleep, mock_dropbox_class):
+        mock_dbx = MagicMock()
+        api_error = ApiError(
+            error={"error_summary": "Test API error"},
+            user_message_text="Test user message",
+            user_message_locale="en",
+            request_id="test_request_id"
+        )
+        mock_dbx.files_upload.side_effect = [api_error, None]
+        mock_dropbox_class.return_value = mock_dbx
+        mock_logger = MagicMock()
+        file_path = Path("test_file.zip")
+        dropbox_path = "/backup/test_file.zip"
 
-def test_log_message(logger):
-    """
-    Test logging a message.
-    """
-    logger.log("Test log message")
-    with open(logger.logging_path, "r") as f:
-        logs = f.readlines()
-        assert len(logs) == 1
-        assert "Test log message" in logs[0]
+        with patch('builtins.open', mock_open(read_data=b'file_content')):
+            send_to_dropbox(file_path, dropbox_path, mock_logger)
 
+        assert mock_dbx.files_upload.call_count == 2
+        mock_sleep.assert_called_once_with(SEND_RETRY_SLEEP_TIME)
+        mock_logger.log_exception.assert_called_once()
 
-def test_log_error(logger):
-    """
-    Test logging an error message.
-    """
-    logger.log_error("Test error message")
-    with open(logger.logging_path, "r") as f:
-        logs = f.readlines()
-        assert len(logs) == 2
-        assert "Test error message" in logs[1]
+    @patch('send2dropbox.dropbox.Dropbox')
+    @patch('send2dropbox.sleep')
+    def test_send_to_dropbox_auth_error_with_retry_success(self, mock_sleep, mock_dropbox_class):
+        mock_dbx = MagicMock()
+        auth_error = AuthError(
+            error="Test Auth error",
+            request_id="test_request_id"
+        )
+        mock_dbx.files_upload.side_effect = [auth_error, None]
+        mock_dropbox_class.return_value = mock_dbx
+        mock_logger = MagicMock()
+        file_path = "test_file.zip"
+        dropbox_path = "/backup/test_file.zip"
 
+        with patch('builtins.open', mock_open(read_data=b'file_content')):
+            send_to_dropbox(file_path, dropbox_path, mock_logger)
 
-def test_log_warning(logger):
-    """
-    Test logging a warning message.
-    """
-    logger.log_warning("Test warning message")
-    with open(logger.logging_path, "r") as f:
-        logs = f.readlines()
-        assert len(logs) == 3
-        assert "Test warning message" in logs[2]
+        assert mock_dbx.files_upload.call_count == 2
+        mock_sleep.assert_called_once_with(SEND_RETRY_SLEEP_TIME)
+        mock_logger.log_exception.assert_called_once()
 
+    @patch('send2dropbox.dropbox.Dropbox')
+    @patch('send2dropbox.sleep')
+    def test_send_to_dropbox_max_retries_exceeded(self, mock_sleep, mock_dropbox_class):
+        mock_dbx = MagicMock()
+        api_error = ApiError(
+            error={"error_summary": "Test API error"},
+            user_message_text="Test user message",
+            user_message_locale="en",
+            request_id="test_request_id"
+        )
+        mock_dbx.files_upload.side_effect = [api_error] * MAX_RETRIES
+        mock_dropbox_class.return_value = mock_dbx
+        mock_logger = MagicMock()
+        file_path = "test_file.zip"
+        dropbox_path = "/backup/test_file.zip"
 
-def test_log_exception(logger):
-    """
-    Test logging an exception message.
-    """
-    try:
-        raise ValueError("Test exception")
-    except Exception as e:
-        logger.log_exception(e)
+        with patch('builtins.open', mock_open(read_data=b'file_content')):
+            with pytest.raises(Exception, match=f"Failed to upload {file_path} to Dropbox after {MAX_RETRIES} retries"):
+                send_to_dropbox(file_path, dropbox_path, mock_logger)
 
-    with open(logger.logging_path, "r") as f:
-        logs = f.readlines()
-        assert len(logs) == 8
-        assert "Test exception" in logs[3]
+        assert mock_dbx.files_upload.call_count == MAX_RETRIES
+        assert mock_sleep.call_count == MAX_RETRIES
+        assert mock_logger.log_error.called
 
+    @patch('send2dropbox.dropbox.Dropbox')
+    def test_send_to_dropbox_file_handling(self, mock_dropbox_class):
+        mock_dbx = MagicMock()
+        mock_dropbox_class.return_value = mock_dbx
+        mock_logger = MagicMock()
+        file_path = Path("test_file.zip")
+        dropbox_path = "/backup/test_file.zip"
+        file_content = b'test file content'
 
-def test_log_file_size(logger):
-    """
-    Test the size of the log file.
-    """
-    logger.log("Test log message")
-    assert logger.logging_path.stat().st_size > 0
+        with patch('builtins.open', mock_open(read_data=file_content)) as m:
+            send_to_dropbox(file_path, dropbox_path, mock_logger)
+
+        m.assert_called_once_with(file_path, 'rb')
+        mock_dbx.files_upload.assert_called_once()
+        args, kwargs = mock_dbx.files_upload.call_args
+        assert args[0] == file_content
