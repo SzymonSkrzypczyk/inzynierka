@@ -15,7 +15,6 @@ except Exception:
 
 
 def _parse_energy_val(e):
-    # parse energy value from string like '10 MeV' to float 10.0
     if pd.isna(e):
         return np.nan
     if isinstance(e, (int, float)):
@@ -34,7 +33,6 @@ def render(limit=None):
     df_p = read_table(p_tab, limit=limit) if p_tab else pd.DataFrame()
     df_s = read_table(s_tab, limit=limit) if s_tab else pd.DataFrame()
 
-    # Multi-line: time vs flux separated by energy
     for name, df in (('Primary', df_p), ('Secondary', df_s)):
         if df.empty:
             st.info(f'Brak danych: {name} Integral Protons')

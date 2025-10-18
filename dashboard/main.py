@@ -2,9 +2,9 @@ import streamlit as st
 import runpy
 from pathlib import Path
 
-st.set_page_config(page_title="Panel geomagnetyczny — Multi", layout="wide")
-st.title("Panel geomagnetyczny i słoneczny")
-st.sidebar.header("Nawigacja")
+st.set_page_config(page_title="Pogoda kosmiczna", layout="wide")
+st.title("Dashboard do analizy pogody kosmicznej")
+st.sidebar.header("Opcje")
 
 BASE = Path(__file__).parent
 PAGES = [

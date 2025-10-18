@@ -20,7 +20,7 @@ def _classify_flux(v):
         return 'Unknown'
     if v <= 0:
         return 'Unknown'
-    # standard GOES thresholds
+    # standard GOES thresholds for X-ray fluxes
     if v >= 1e-4:
         return 'X'
     if v >= 1e-5:
@@ -63,7 +63,6 @@ def render(limit=None):
             set_layout(fig, f'{name} — Flux')
             st.plotly_chart(fig, use_container_width=True)
 
-        # Threshold plot — classify
         if 'flux' in df.columns:
             st.subheader('Threshold plot — klasy rozbłysków')
             with st.expander('Opis'):
@@ -76,7 +75,6 @@ def render(limit=None):
             set_layout(fig2, f'{name} — Klasy rozbłysków')
             st.plotly_chart(fig2, use_container_width=True)
 
-        # Scatter Flux vs KpIndex (use planetary Kp daily average)
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = read_table(pk_tab, limit=limit) if pk_tab else pd.DataFrame()
         if not df_k.empty:
@@ -97,7 +95,7 @@ def render(limit=None):
                 fig3 = px.scatter(merged, x='flux', y=kcol, labels={'flux':'Flux', kcol:'Kp'}, trendline='ols', color_discrete_sequence=['#636EFA'])
                 set_layout(fig3, 'Flux vs KpIndex')
                 st.plotly_chart(fig3, use_container_width=True)
-        # Histogram of Flux over time
+
         st.subheader('Histogram — rozkład Flux')
         with st.expander('Opis'):
             st.markdown('''

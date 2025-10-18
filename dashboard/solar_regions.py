@@ -16,7 +16,7 @@ def render(limit=None):
         st.info('Brak danych dla SolarRegions')
         return
 
-    # ensure observed date as date
+    # observed date as date type
     date_col = None
     for c in df.columns:
         if 'observed' in c or 'date' in c:
@@ -33,11 +33,10 @@ def render(limit=None):
             Macierz aktywnych regionów z podziałem na klasy magnetyczne. 
             Pozwala obserwować rozwój aktywności słonecznej oraz potencjalne źródła rozbłysków
             ''')
-        color = 'magclass' if 'magclass' in df.columns else None
+        color = 'mag_class' if 'mag_class' in df.columns else None
         fig = px.scatter(df, x='observed_date', y='region', color=color, labels={'observed_date':'Data','region':'Region','magclass':'Klasa magnetyczna'})
         st.plotly_chart(fig, use_container_width=True)
 
-    # Line chart: Area over time
     if 'area' in df.columns and 'observed_date' in df.columns:
         st.subheader('Powierzchnia regionów w czasie')
         with st.expander('Opis'):
@@ -45,12 +44,11 @@ def render(limit=None):
             Pokazuje zmiany łącznej powierzchni aktywnych regionów słonecznych w czasie. 
             Wykres pozwala obserwować rozwój i zanikanie aktywnych regionów
             ''')
-        # aggregate mean area per date
+
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Data','area':'Średnia powierzchnia'})
         st.plotly_chart(fig2, use_container_width=True)
 
-    # Count plot — number of regions active over time
     if 'observed_date' in df.columns:
         st.subheader('Liczba regionów aktywnych w czasie')
         with st.expander('Opis'):

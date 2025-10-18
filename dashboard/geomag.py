@@ -14,7 +14,6 @@ def _set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
                       font=dict(family='Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
                       hovermode='x unified')
-    # enable rangeslider for time series only when requested
     if rangeslider and 'xaxis' in fig.layout:
         fig.update_layout(xaxis=dict(rangeselector=dict(buttons=[
             dict(count=1, label='1d', step='day', stepmode='backward'),
@@ -58,14 +57,14 @@ def render(limit=None):
             df_p['hour'] = df_p['_date'].dt.hour
             pivot = df_p.groupby(['date','hour'])[ycol].mean().reset_index()
             heat = pivot.pivot(index='date', columns='hour', values=ycol)
-            # ensure hour columns are integers and include full 0-23 range for consistent plotting
+            # ensure hour columns are integers and include 0-23 range
             try:
                 heat.columns = heat.columns.astype(int)
             except Exception:
                 pass
             hours = list(range(24))
             heat = heat.reindex(columns=hours, fill_value=0)
-            # sort dates descending (most recent first)
+            # sort dates descending
             heat = heat.sort_index(ascending=False).fillna(0)
             st.markdown('#### Heatmap — intensywność KpIndex')
             with st.expander('Opis'):
@@ -73,9 +72,8 @@ def render(limit=None):
                 Wizualizacja średniego KpIndex w formie kolorowej mapy, 
                 gdzie intensywność koloru odpowiada sile aktywności geomagnetycznej
                 ''')
-            # prepare explicit labels so hours are treated as categorical (not dates)
+            # hours as categorical
             x_hours = [f"{int(h):02d}:00" for h in heat.columns]
-            # format y axis dates as ISO strings to avoid ambiguous types
             def _fmt_date(d):
                 try:
                     return d.isoformat()
@@ -86,11 +84,10 @@ def render(limit=None):
             fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina', y='Data', color='Kp'))
             fig2.update_xaxes(tickmode='array')
             fig2.update_yaxes(tickmode='array')
-            # don't apply date rangeslider to heatmap (columns are categorical hours)
+            # don't apply date rangeslider to heatmap
             _set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False)
             st.plotly_chart(fig2, use_container_width=True)
 
-            # scatter for storms
             storms = df_p[df_p[ycol] >= 5]
             if not storms.empty:
                 st.markdown('#### Burze geomagnetyczne')
@@ -125,7 +122,7 @@ def render(limit=None):
         if tcol and ycol:
             fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'K-index'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3))
-            _set_layout(fig, 'Boulder K-index — KIndex vs Czas')
+            _set_layout(fig, 'Index K vs Czas')
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.write(df_b.head())
