@@ -44,6 +44,10 @@ def render(limit=None):
             st.write(df.head())
             continue
         st.subheader(f'{name} — Flux według Energy (multi-line)')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Flux'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)

@@ -28,6 +28,10 @@ def render(limit=None):
     # Scatter ObservedDate vs Region colored by MagClass
     if 'observed_date' in df.columns and 'region' in df.columns:
         st.subheader('Regiony: Data vs Region (kolor = MagClass)')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         color = 'magclass' if 'magclass' in df.columns else None
         fig = px.scatter(df, x='observed_date', y='region', color=color, labels={'observed_date':'Data','region':'Region','magclass':'Klasa magnetyczna'})
         st.plotly_chart(fig, use_container_width=True)
@@ -35,6 +39,10 @@ def render(limit=None):
     # Line chart: Area over time
     if 'area' in df.columns and 'observed_date' in df.columns:
         st.subheader('Powierzchnia regionów w czasie')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         # aggregate mean area per date
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Data','area':'Średnia powierzchnia'})
@@ -43,6 +51,10 @@ def render(limit=None):
     # Count plot — number of regions active over time
     if 'observed_date' in df.columns:
         st.subheader('Liczba regionów aktywnych w czasie')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Data','count':'Liczba regionów'})
         st.plotly_chart(fig4, use_container_width=True)

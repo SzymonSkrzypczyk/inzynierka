@@ -48,6 +48,10 @@ def render(limit=None):
             st.write(df.head())
             continue
         st.subheader(f'{name} — TimeTag vs Flux (per satelita)')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
             fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Flux'}, log_y=True)
             fig.update_traces(mode='lines+markers', marker=dict(size=3), line=dict(width=1.5))
@@ -63,6 +67,10 @@ def render(limit=None):
         # Threshold plot — classify
         if 'flux' in df.columns:
             st.subheader('Threshold plot — klasy rozbłysków')
+            with st.expander('Opis'):
+                st.markdown('''
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+                ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
             fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Flux'}, log_y=True, color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','A/B':'#8c564b','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6), selector=dict(mode='markers'))
@@ -92,6 +100,10 @@ def render(limit=None):
                 st.plotly_chart(fig3, use_container_width=True)
         # Histogram of Flux over time
         st.subheader('Histogram — rozkład Flux')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         fig4 = px.histogram(df, x='flux', nbins=80, labels={'flux':'Flux'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'Rozkład Flux', rangeslider=False)
         st.plotly_chart(fig4, use_container_width=True)

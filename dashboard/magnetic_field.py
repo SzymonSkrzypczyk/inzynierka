@@ -22,6 +22,10 @@ def render(limit=None):
         return
     tcol = pick_time_column(df)
     st.subheader("Składniki pola magnetycznego")
+    with st.expander('Opis'):
+        st.markdown('''
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+        ''')
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
         fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Czas'})
@@ -39,6 +43,10 @@ def render(limit=None):
             break
     if bzg:
         st.subheader('Histogram — rozkład BzGsm')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         fig2 = px.histogram(df, x=bzg, nbins=80, labels={bzg: 'BzGsm'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład BzGsm', rangeslider=False)
         st.plotly_chart(fig2, use_container_width=True)
@@ -51,6 +59,10 @@ def render(limit=None):
             break
     if btcol and bzg:
         st.subheader('Scatter — Bt vs BzGsm')
+        with st.expander('Opis'):
+            st.markdown('''
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            ''')
         fig3 = px.scatter(df, x=btcol, y=bzg, labels={btcol: 'Bt', bzg: 'BzGsm'}, trendline='ols', opacity=0.7)
         set_layout(fig3, 'Bt vs BzGsm')
         st.plotly_chart(fig3, use_container_width=True)
