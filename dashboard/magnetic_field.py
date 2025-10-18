@@ -1,12 +1,16 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-import numpy as np
 
 try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
+
+try:
+    from plot_utils import set_layout
+except Exception:
+    from dashboard.plot_utils import set_layout
 
 
 def render(limit=None):
@@ -17,10 +21,12 @@ def render(limit=None):
         st.info("Brak danych magnetometru DSCOVR")
         return
     tcol = pick_time_column(df)
-    st.subheader("Multi-line: składniki pola")
+    st.subheader("Składniki pola magnetycznego")
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
         fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Czas'})
+        fig.update_traces(mode='lines+markers', marker=dict(size=3), line=dict(width=1))
+        set_layout(fig, 'Składniki pola: Bt, Bx, By, Bz')
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.write(df.head())
@@ -33,7 +39,8 @@ def render(limit=None):
             break
     if bzg:
         st.subheader('Histogram — rozkład BzGsm')
-        fig2 = px.histogram(df, x=bzg, nbins=80, labels={bzg: 'BzGsm'})
+        fig2 = px.histogram(df, x=bzg, nbins=80, labels={bzg: 'BzGsm'}, color_discrete_sequence=['#636EFA'])
+        set_layout(fig2, 'Rozkład BzGsm', rangeslider=False)
         st.plotly_chart(fig2, use_container_width=True)
 
     # Scatter Bt vs BzGsm
@@ -44,5 +51,6 @@ def render(limit=None):
             break
     if btcol and bzg:
         st.subheader('Scatter — Bt vs BzGsm')
-        fig3 = px.scatter(df, x=btcol, y=bzg, labels={btcol: 'Bt', bzg: 'BzGsm'}, trendline='ols')
+        fig3 = px.scatter(df, x=btcol, y=bzg, labels={btcol: 'Bt', bzg: 'BzGsm'}, trendline='ols', opacity=0.7)
+        set_layout(fig3, 'Bt vs BzGsm')
         st.plotly_chart(fig3, use_container_width=True)
