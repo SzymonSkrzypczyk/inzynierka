@@ -1,20 +1,38 @@
-from sqlalchemy import create_engine
-import pandas as pd
 import streamlit as st
-import os
+import runpy
+from pathlib import Path
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-DB_PORT = os.getenv("DB_PORT", "5432")
+st.set_page_config(page_title="Panel geomagnetyczny — Multi", layout="wide")
+st.title("Panel geomagnetyczny i słoneczny")
+st.sidebar.header("Nawigacja")
 
-engine = create_engine(f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+BASE = Path(__file__).parent
+PAGES = [
+    ("Geomagnetyzm", "geomag.py"),
+    ("Pole magnetyczne", "magnetic_field.py"),
+    ("Protony", "protons.py"),
+    ("Promieniowanie X", "xray.py"),
+    ("Regiony słoneczne", "solar_regions.py")
+]
 
-@st.cache_data(ttl=600)
-def load_data():
-    return pd.read_sql("SELECT * FROM processing_logs LIMIT 10000", engine)
+page_names = [p[0] for p in PAGES]
+choice = st.sidebar.selectbox("Wybierz typ analizy", page_names)
 
-st.title("Data Processing Dashboard")
-data = load_data()
-st.dataframe(data)
+max_rows = st.sidebar.number_input("Maksymalna liczba wierszy (0 = bez limitu)", min_value=0, value=10000, step=1000)
+limit = int(max_rows) if max_rows > 0 else None
+
+sel_index = page_names.index(choice)
+sel_file = PAGES[sel_index][1]
+sel_path = BASE / sel_file
+
+if not sel_path.exists():
+    st.error(f"Plik strony nie znaleziony: {sel_file}")
+else:
+    try:
+        mod = runpy.run_path(str(sel_path))
+        if 'render' in mod and callable(mod['render']):
+            mod['render'](limit=limit)
+        else:
+            st.error('Brak funkcji render(limit=...) w module strony')
+    except Exception as e:
+        st.exception(e)
