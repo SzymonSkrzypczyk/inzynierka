@@ -23,8 +23,6 @@ def render(limit=None):
             break
     if date_col:
         df['observed_date'] = pd.to_datetime(df[date_col]).dt.date
-    else:
-        st.info('Nie znaleziono kolumny daty obserwacji')
 
     # Scatter ObservedDate vs Region colored by MagClass
     if 'observed_date' in df.columns and 'region' in df.columns:
@@ -42,8 +40,6 @@ def render(limit=None):
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Data','area':'Średnia powierzchnia'})
         st.plotly_chart(fig2, use_container_width=True)
-    else:
-        st.info('Brak kolumny Area do wykresu linii')
 
     # Bar chart: MagClass vs mean M/X flare probabilities
     probs = []
@@ -71,6 +67,3 @@ def render(limit=None):
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Data','count':'Liczba regionów'})
         st.plotly_chart(fig4, use_container_width=True)
-    else:
-        st.info('Brak dat do wykresu zliczeń')
-

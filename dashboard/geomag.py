@@ -21,7 +21,7 @@ def render(limit=None):
     st.subheader("Planetarny i lokalny K-index")
 
     # Planetary Kp
-    p_table = find_table_like(["planetary", "kp"]) or find_table_like(["kp", "index"])
+    p_table = find_table_like(["planetary", "k"]) or find_table_like(["k", "index"])
     df_p = read_table(p_table, limit=limit) if p_table else pd.DataFrame()
     if not df_p.empty:
         tcol = pick_time_column(df_p)

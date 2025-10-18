@@ -18,9 +18,6 @@ PAGES = [
 page_names = [p[0] for p in PAGES]
 choice = st.sidebar.selectbox("Wybierz typ analizy", page_names)
 
-max_rows = st.sidebar.number_input("Maksymalna liczba wierszy (0 = bez limitu)", min_value=0, value=10000, step=1000)
-limit = int(max_rows) if max_rows > 0 else None
-
 sel_index = page_names.index(choice)
 sel_file = PAGES[sel_index][1]
 sel_path = BASE / sel_file
@@ -31,7 +28,7 @@ else:
     try:
         mod = runpy.run_path(str(sel_path))
         if 'render' in mod and callable(mod['render']):
-            mod['render'](limit=limit)
+            mod['render']()
         else:
             st.error('Brak funkcji render(limit=...) w module strony')
     except Exception as e:

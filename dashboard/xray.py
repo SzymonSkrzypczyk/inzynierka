@@ -44,19 +44,18 @@ def render(limit=None):
             continue
         st.subheader(f'{name} — TimeTag vs Flux (per satelita)')
         if 'satellite' in df.columns and 'flux' in df.columns:
-            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Flux'})
+            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Flux'}, log_y=True)
             st.plotly_chart(fig, use_container_width=True)
         else:
-            # fallback: plot numeric
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Czas', ycol:'Flux'})
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Czas', ycol:'Flux'}, log_y=True)
             st.plotly_chart(fig, use_container_width=True)
 
         # Threshold plot — classify
         if 'flux' in df.columns:
             st.subheader('Threshold plot — klasy rozbłysków')
             df['flare_class'] = df['flux'].apply(_classify_flux)
-            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Flux'})
+            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Flux'}, log_y=True)
             st.plotly_chart(fig2, use_container_width=True)
 
         # Scatter Flux vs KpIndex (use planetary Kp daily average)
