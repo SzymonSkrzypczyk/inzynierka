@@ -14,7 +14,6 @@ except Exception:
 
 
 def _classify_flux(v):
-    # Try GOES-like thresholds (W/m2). If values too large/small, fallback to quantiles
     try:
         v = float(v)
     except Exception:
@@ -50,7 +49,7 @@ def render(limit=None):
         st.subheader(f'{name} — TimeTag vs Flux (per satelita)')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje zmiany strumienia protonów lub promieniowania rentgenowskiego w czasie dla każdego satelity osobno
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
             fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Flux'}, log_y=True)
@@ -69,8 +68,8 @@ def render(limit=None):
             st.subheader('Threshold plot — klasy rozbłysków')
             with st.expander('Opis'):
                 st.markdown('''
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
-                ''')
+                Pokazuje liczbę zdarzeń lub wartości strumienia promieniowania w podziale na klasy rozbłysków z 
+                uwzględnieniem określonych progów klasyfikacji''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
             fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Flux'}, log_y=True, color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','A/B':'#8c564b','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6), selector=dict(mode='markers'))
@@ -102,7 +101,7 @@ def render(limit=None):
         st.subheader('Histogram — rozkład Flux')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            okazuje rozkład wartości strumienia protonów lub promieniowania rentgenowskiego (Flux) w wybranym przedziale czasowym
             ''')
         fig4 = px.histogram(df, x='flux', nbins=80, labels={'flux':'Flux'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'Rozkład Flux', rangeslider=False)

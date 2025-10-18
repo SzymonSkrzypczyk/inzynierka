@@ -30,7 +30,8 @@ def render(limit=None):
         st.subheader('Regiony: Data vs Region (kolor = MagClass)')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Macierz aktywnych regionów z podziałem na klasy magnetyczne. 
+            Pozwala obserwować rozwój aktywności słonecznej oraz potencjalne źródła rozbłysków
             ''')
         color = 'magclass' if 'magclass' in df.columns else None
         fig = px.scatter(df, x='observed_date', y='region', color=color, labels={'observed_date':'Data','region':'Region','magclass':'Klasa magnetyczna'})
@@ -41,7 +42,8 @@ def render(limit=None):
         st.subheader('Powierzchnia regionów w czasie')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje zmiany łącznej powierzchni aktywnych regionów słonecznych w czasie. 
+            Wykres pozwala obserwować rozwój i zanikanie aktywnych regionów
             ''')
         # aggregate mean area per date
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
@@ -53,7 +55,7 @@ def render(limit=None):
         st.subheader('Liczba regionów aktywnych w czasie')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje liczbę aktywnych regionów słonecznych w kolejnych dniach
             ''')
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Data','count':'Liczba regionów'})

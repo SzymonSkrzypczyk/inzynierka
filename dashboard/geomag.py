@@ -44,7 +44,8 @@ def render(limit=None):
         st.markdown("#### Planetarny Kp — wykres czasowy")
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje zmiany planetarnego indeksu geomagnetycznego Kp w czasie. 
+            Można wyróżnić progowe wartości np. burze geomagnetyczne (Kp ≥ 5)
             ''')
         if tcol and ycol:
             fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Kp"}, markers=True)
@@ -66,10 +67,11 @@ def render(limit=None):
             heat = heat.reindex(columns=hours, fill_value=0)
             # sort dates descending (most recent first)
             heat = heat.sort_index(ascending=False).fillna(0)
-            st.markdown('#### Heatmap — intensywność KpIndex (średnia)')
+            st.markdown('#### Heatmap — intensywność KpIndex')
             with st.expander('Opis'):
                 st.markdown('''
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+                Wizualizacja średniego KpIndex w formie kolorowej mapy, 
+                gdzie intensywność koloru odpowiada sile aktywności geomagnetycznej
                 ''')
             # prepare explicit labels so hours are treated as categorical (not dates)
             x_hours = [f"{int(h):02d}:00" for h in heat.columns]
@@ -91,10 +93,10 @@ def render(limit=None):
             # scatter for storms
             storms = df_p[df_p[ycol] >= 5]
             if not storms.empty:
-                st.markdown('#### Burze geomagnetyczne — Kp >= 5')
+                st.markdown('#### Burze geomagnetyczne')
                 with st.expander('Opis'):
                     st.markdown('''
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+                    Zaznacza momenty, w których Kp ≥ 5, czyli wystąpiły burze geomagnetyczne
                     ''')
                 fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
                                   size=ycol, size_max=12, labels={tcol: 'Czas', ycol: 'Kp'}, hover_data=storms.columns)
@@ -118,7 +120,7 @@ def render(limit=None):
         st.markdown("#### Boulder K-index — wykres czasowy")
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje lokalny indeks K (Boulder) w czasie. Może służyć do lokalnej oceny zmian pola geomagnetycznego
             ''')
         if tcol and ycol:
             fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'K-index'}, line_shape='spline')

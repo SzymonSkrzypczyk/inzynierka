@@ -24,7 +24,7 @@ def render(limit=None):
     st.subheader("Składniki pola magnetycznego")
     with st.expander('Opis'):
         st.markdown('''
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+        Analiza zmienności i korelacji składników pola magnetycznego w układzie GSM
         ''')
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
@@ -45,7 +45,10 @@ def render(limit=None):
         st.subheader('Histogram — rozkład BzGsm')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje rozkład wartości składowej pola magnetycznego w osi Z w układzie GSM (BzGsm). 
+             Histogram pozwala ocenić, jak często występują wartości dodatnie i ujemne Bz, 
+             co jest istotne w analizie geomagnetycznej, ponieważ długotrwałe ujemne 
+             Bz sprzyja rekoneksji magnetosferycznej i burzom geomagnetycznym
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=80, labels={bzg: 'BzGsm'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład BzGsm', rangeslider=False)
@@ -61,7 +64,7 @@ def render(limit=None):
         st.subheader('Scatter — Bt vs BzGsm')
         with st.expander('Opis'):
             st.markdown('''
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac sapien accumsan, ornare felis vitae, eleifend erat. Sed ut erat orci. Mauris vehicula nulla sed quam tincidunt, et mattis mauris semper. Nulla tristique lectus id lobortis placerat. Suspendisse potenti. Proin scelerisque, dui ut ullamcorper pulvinar, tellus felis dignissim quam, non vestibulum ligula enim vitae tellus
+            Pokazuje zależność między całkowitym polem magnetycznym (Bt) a jego składową w osi Z w układzie GSM (BzGsm)
             ''')
         fig3 = px.scatter(df, x=btcol, y=bzg, labels={btcol: 'Bt', bzg: 'BzGsm'}, trendline='ols', opacity=0.7)
         set_layout(fig3, 'Bt vs BzGsm')
