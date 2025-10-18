@@ -6,3 +6,7 @@ python-dotenv
 pytest
 SQLAlchemy
 psycopg2-binary
+streamlit
+plotly
+pandas
+sqlalchemy
