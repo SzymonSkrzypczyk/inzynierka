@@ -6,11 +6,7 @@ try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
-
-try:
-    from plot_utils import set_layout
-except Exception:
-    from dashboard.plot_utils import set_layout
+from plot_utils import set_layout, add_gray_areas_empty
 
 
 def _classify_flux(v):
@@ -58,13 +54,15 @@ def render(limit=None):
             fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Flux'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
             set_layout(fig, f'{name} — Flux per satelita')
-            st.plotly_chart(fig, use_container_width=True)
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Czas', ycol:'Flux'}, log_y=True, color_discrete_sequence=['#636EFA'])
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.4))
             set_layout(fig, f'{name} — Flux')
-            st.plotly_chart(fig, use_container_width=True)
+
+
+        add_gray_areas_empty(fig, df, tcol)
+        st.plotly_chart(fig, use_container_width=True)
 
         if 'flux' in df.columns:
             st.subheader('Threshold plot — klasy rozbłysków')
@@ -77,6 +75,7 @@ def render(limit=None):
                               color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','A/B':'#8c564b','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
             set_layout(fig2, f'{name} — Klasy rozbłysków')
+            add_gray_areas_empty(fig2, df, tcol)
             st.plotly_chart(fig2, use_container_width=True)
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])

@@ -9,9 +9,9 @@ except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
 try:
-    from plot_utils import set_layout
+    from plot_utils import set_layout, add_gray_areas_empty
 except Exception:
-    from dashboard.plot_utils import set_layout
+    from dashboard.plot_utils import set_layout, add_gray_areas_empty
 
 
 def _parse_energy_val(e):
@@ -55,10 +55,11 @@ def render(limit=None):
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Flux'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
             set_layout(fig, f'{name} — Flux według Energy', rangeslider=True)
-            st.plotly_chart(fig, use_container_width=True)
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Flux'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
             set_layout(fig, f'{name} — Flux', rangeslider=True)
-            st.plotly_chart(fig, use_container_width=True)
+
+        add_gray_areas_empty(fig, df, tcol)
+        st.plotly_chart(fig, use_container_width=True)

@@ -7,10 +7,7 @@ try:
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
-try:
-    from plot_utils import set_layout
-except Exception:
-    from dashboard.plot_utils import set_layout
+from plot_utils import set_layout, add_gray_areas_empty
 
 
 @st.cache_data(ttl=600)
@@ -57,6 +54,8 @@ def render(limit=None):
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
         set_layout(fig, 'Składniki pola: Bt, Bx, By, Bz')
+
+        add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.write(df.head())

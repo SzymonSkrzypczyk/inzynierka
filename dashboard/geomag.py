@@ -7,6 +7,7 @@ try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
+from plot_utils import add_gray_areas_empty
 
 
 def _set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
@@ -55,6 +56,7 @@ def render(limit=None):
             fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Kp"}, markers=True)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
             _set_layout(fig, "Planetarny Kp — KpIndex vs Czas")
+            add_gray_areas_empty(fig, df_p, tcol)
             st.plotly_chart(fig, use_container_width=True)
 
             df_p['_date'] = pd.to_datetime(df_p[tcol])
@@ -126,6 +128,7 @@ def render(limit=None):
             fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'K-index'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
             _set_layout(fig, 'Index K vs Czas')
+            add_gray_areas_empty(fig, df_b, tcol)
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.write(df_b.head())
