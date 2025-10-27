@@ -31,7 +31,7 @@ def _load_table_cached(name, limit):
 
 
 def render(limit=None):
-    st.title('Protony — integralne')
+    st.title('Promieniowanie protonowe — strumienie integralne')
     p_tab = find_table_like(['primary','integral','proton'])
     s_tab = find_table_like(['secondary','integral','proton'])
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
@@ -45,21 +45,25 @@ def render(limit=None):
         if tcol is None:
             st.write(df.head())
             continue
-        st.subheader(f'{name} — Flux według Energy')
+        st.subheader(f'{name} — Strumienie protonowe według energii')
         with st.expander('Opis'):
             st.markdown('''
-            Pokazuje strumień protonów (Primary i Secondary) w różnych pasmach energetycznych w czasie
+            **Strumienie protonowe** przedstawiają intensywność promieniowania kosmicznego pochodzącego 
+            od Słońca w różnych pasmach energetycznych. Protony o wysokiej energii mogą stanowić 
+            zagrożenie dla astronautów, satelitów i systemów elektronicznych. Wykres pokazuje 
+            zmiany strumienia w czasie dla różnych energii - od niskoenergetycznych protonów 
+            słonecznych po wysokoenergetyczne cząstki kosmiczne.
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Flux'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Strumień [cm⁻²·s⁻¹]'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
-            set_layout(fig, f'{name} — Flux według Energy', rangeslider=True)
+            set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True)
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Flux'}, log_y=True, markers=True)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Strumień [cm⁻²·s⁻¹]'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
-            set_layout(fig, f'{name} — Flux', rangeslider=True)
+            set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True)
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, use_container_width=True)

@@ -46,16 +46,18 @@ def render(limit=None):
     if not df_p.empty:
         tcol = pick_time_column(df_p)
         ycol = _detect_k_column(df_p)
-        st.markdown("#### Planetarny Kp — wykres czasowy")
+        st.markdown("#### Planetarny indeks Kp — analiza czasowa")
         with st.expander('Opis'):
             st.markdown('''
-            Pokazuje zmiany planetarnego indeksu geomagnetycznego Kp w czasie. 
-            Można wyróżnić progowe wartości np. burze geomagnetyczne (Kp ≥ 5)
+            **Planetarny indeks geomagnetyczny Kp** przedstawia globalną aktywność geomagnetyczną Ziemi w skali 0-9. 
+            Wartości Kp ≥ 5 oznaczają burze geomagnetyczne, które mogą wpływać na systemy nawigacyjne, 
+            komunikację radiową i sieci energetyczne. Wykres pozwala monitorować długoterminowe trendy 
+            aktywności geomagnetycznej oraz identyfikować okresy zwiększonej aktywności słonecznej.
             ''')
         if tcol and ycol:
-            fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Kp"}, markers=True)
+            fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Indeks Kp"}, markers=True)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
-            _set_layout(fig, "Planetarny Kp — KpIndex vs Czas")
+            _set_layout(fig, "Planetarny indeks geomagnetyczny Kp w czasie")
             add_gray_areas_empty(fig, df_p, tcol)
             st.plotly_chart(fig, use_container_width=True)
 
@@ -73,11 +75,13 @@ def render(limit=None):
             heat = heat.reindex(columns=hours, fill_value=0)
             # sort dates descending
             heat = heat.sort_index(ascending=False).fillna(0)
-            st.markdown('#### Heatmap — intensywność KpIndex')
+            st.markdown('#### Mapa cieplna aktywności geomagnetycznej')
             with st.expander('Opis'):
                 st.markdown('''
-                Wizualizacja średniego KpIndex w formie kolorowej mapy, 
-                gdzie intensywność koloru odpowiada sile aktywności geomagnetycznej
+                **Mapa cieplna** przedstawia średnie wartości indeksu Kp w układzie dzień-godzina. 
+                Intensywność koloru odpowiada sile aktywności geomagnetycznej - od spokojnych warunków (jasne kolory) 
+                do silnych burz geomagnetycznych (ciemne kolory). Wizualizacja pozwala łatwo identyfikować 
+                wzorce czasowe aktywności oraz okresy zwiększonej aktywności słonecznej.
                 ''')
             x_hours = [f"{int(h):02d}:00" for h in heat.columns]
             def _fmt_date(d):
@@ -87,22 +91,25 @@ def render(limit=None):
                     return str(d)
 
             y_dates = [_fmt_date(d) for d in heat.index]
-            fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina', y='Data', color='Kp'))
+            fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina UTC', y='Data', color='Indeks Kp'))
             fig2.update_xaxes(tickmode='array')
             fig2.update_yaxes(tickmode='array')
-            _set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False)
+            _set_layout(fig2, 'Mapa cieplna aktywności geomagnetycznej (dzień vs godzina)', rangeslider=False)
             st.plotly_chart(fig2, use_container_width=True)
 
             storms = df_p[df_p[ycol] >= 5]
             if not storms.empty:
-                st.markdown('#### Burze geomagnetyczne')
+                st.markdown('#### Analiza burz geomagnetycznych')
                 with st.expander('Opis'):
                     st.markdown('''
-                    Zaznacza momenty, w których Kp ≥ 5, czyli wystąpiły burze geomagnetyczne
+                    **Burze geomagnetyczne** to okresy intensywnej aktywności geomagnetycznej (Kp ≥ 5), 
+                    wywołane przez wiatr słoneczny i koronalne wyrzuty masy. Silne burze mogą powodować 
+                    zakłócenia w systemach nawigacyjnych GPS, komunikacji radiowej, sieciach energetycznych 
+                    oraz zwiększać promieniowanie kosmiczne na dużych wysokościach lotów.
                     ''')
                 fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
-                                  size=ycol, size_max=12, labels={tcol: 'Czas', ycol: 'Kp'}, hover_data=storms.columns)
-                _set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)')
+                                  size=ycol, size_max=12, labels={tcol: 'Czas', ycol: 'Indeks Kp'}, hover_data=storms.columns)
+                _set_layout(fig3, 'Epizody burz geomagnetycznych (Kp ≥ 5)')
                 st.plotly_chart(fig3, use_container_width=True)
         else:
             st.write(df_p.head())
@@ -119,15 +126,19 @@ def render(limit=None):
         if not ycol:
             nums = df_b.select_dtypes("number").columns.tolist()
             ycol = nums[0] if nums else None
-        st.markdown("#### Boulder K-index — wykres czasowy")
+        st.markdown("#### Lokalny indeks K (Boulder) — analiza czasowa")
         with st.expander('Opis'):
             st.markdown('''
-            Pokazuje lokalny indeks K (Boulder) w czasie. Może służyć do lokalnej oceny zmian pola geomagnetycznego
+            **Lokalny indeks K** z obserwatorium Boulder (NOAA) przedstawia aktywność geomagnetyczną 
+            w konkretnej lokalizacji geograficznej. W przeciwieństwie do planetarnego indeksu Kp, 
+            lokalny indeks K może wykazywać większe wahania i jest bardziej wrażliwy na lokalne 
+            warunki geomagnetyczne. Dane te są szczególnie przydatne do analizy regionalnych 
+            efektów aktywności słonecznej.
             ''')
         if tcol and ycol:
-            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'K-index'}, line_shape='spline')
+            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Indeks K'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
-            _set_layout(fig, 'Index K vs Czas')
+            _set_layout(fig, 'Lokalny indeks K (Boulder) w czasie')
             add_gray_areas_empty(fig, df_b, tcol)
             st.plotly_chart(fig, use_container_width=True)
         else:
