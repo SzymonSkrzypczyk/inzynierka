@@ -8,10 +8,15 @@ except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
 
+@st.cache_data(ttl=600)
+def _load_table_cached(name, limit):
+    return read_table(name, limit=limit)
+
+
 def render(limit=None):
     st.title('Regiony słoneczne')
     tname = find_table_like(['solar','region']) or find_table_like(['solarregions'])
-    df = read_table(tname, limit=limit) if tname else pd.DataFrame()
+    df = _load_table_cached(tname, limit) if tname else pd.DataFrame()
     if df.empty:
         st.info('Brak danych dla SolarRegions')
         return

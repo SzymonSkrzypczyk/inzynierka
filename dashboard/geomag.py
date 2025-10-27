@@ -31,12 +31,17 @@ def _detect_k_column(df):
     return nums[0] if nums else None
 
 
+@st.cache_data(ttl=600)
+def _load_table_cached(name, limit):
+    return read_table(name, limit=limit)
+
+
 def render(limit=None):
     st.title("Geomagnetyzm")
     st.subheader("Planetarny i lokalny K-index")
 
     p_table = find_table_like(["planetary", "k"]) or find_table_like(["k", "index"]) or find_table_like(["planetary","kp"])
-    df_p = read_table(p_table, limit=limit) if p_table else pd.DataFrame()
+    df_p = _load_table_cached(p_table, limit) if p_table else pd.DataFrame()
     if not df_p.empty:
         tcol = pick_time_column(df_p)
         ycol = _detect_k_column(df_p)
@@ -48,7 +53,7 @@ def render(limit=None):
             ''')
         if tcol and ycol:
             fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Kp"}, markers=True)
-            fig.update_traces(mode='lines+markers', marker=dict(size=4))
+            fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
             _set_layout(fig, "Planetarny Kp — KpIndex vs Czas")
             st.plotly_chart(fig, use_container_width=True)
 
@@ -57,7 +62,7 @@ def render(limit=None):
             df_p['hour'] = df_p['_date'].dt.hour
             pivot = df_p.groupby(['date','hour'])[ycol].mean().reset_index()
             heat = pivot.pivot(index='date', columns='hour', values=ycol)
-            # ensure hour columns are integers and include 0-23 range
+            # ensure hour columns are integers 0-23
             try:
                 heat.columns = heat.columns.astype(int)
             except Exception:
@@ -72,7 +77,6 @@ def render(limit=None):
                 Wizualizacja średniego KpIndex w formie kolorowej mapy, 
                 gdzie intensywność koloru odpowiada sile aktywności geomagnetycznej
                 ''')
-            # hours as categorical
             x_hours = [f"{int(h):02d}:00" for h in heat.columns]
             def _fmt_date(d):
                 try:
@@ -84,7 +88,6 @@ def render(limit=None):
             fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina', y='Data', color='Kp'))
             fig2.update_xaxes(tickmode='array')
             fig2.update_yaxes(tickmode='array')
-            # don't apply date rangeslider to heatmap
             _set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False)
             st.plotly_chart(fig2, use_container_width=True)
 
@@ -103,7 +106,7 @@ def render(limit=None):
             st.write(df_p.head())
 
     b_table = find_table_like(["boulder"]) or find_table_like(["boulder", "k"]) or find_table_like(["boulder","kindex"])
-    df_b = read_table(b_table, limit=limit) if b_table else pd.DataFrame()
+    df_b = _load_table_cached(b_table, limit) if b_table else pd.DataFrame()
     if not df_b.empty:
         tcol = pick_time_column(df_b)
         ycol = None
@@ -121,7 +124,7 @@ def render(limit=None):
             ''')
         if tcol and ycol:
             fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'K-index'}, line_shape='spline')
-            fig.update_traces(marker=dict(size=3))
+            fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
             _set_layout(fig, 'Index K vs Czas')
             st.plotly_chart(fig, use_container_width=True)
         else:
