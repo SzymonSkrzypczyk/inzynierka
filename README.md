@@ -189,3 +189,6 @@ https://services.swpc.noaa.gov/json/goes/primary/integral-protons-plot-1-day.jso
 - Launch Date: 25 June 2024
 - End of Life: >= 2033
 - Status: Operational
+
+
+https://www.ospo.noaa.gov/data/messages/2025/07/MSG_20250715_1910.html <- outage
