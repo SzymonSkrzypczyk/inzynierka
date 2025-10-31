@@ -48,11 +48,22 @@ def render(limit=None):
         st.subheader(f'{name} — Strumienie protonowe według energii')
         with st.expander('Opis'):
             st.markdown('''
-            **Strumienie protonowe** przedstawiają intensywność promieniowania kosmicznego pochodzącego 
-            od Słońca w różnych pasmach energetycznych. Protony o wysokiej energii mogą stanowić 
-            zagrożenie dla astronautów, satelitów i systemów elektronicznych. Wykres pokazuje 
-            zmiany strumienia w czasie dla różnych energii - od niskoenergetycznych protonów 
-            słonecznych po wysokoenergetyczne cząstki kosmiczne.
+            **Opis:** Wykres przedstawia czasowe zmiany strumienia protonów (cząstek naładowanych) 
+            pochodzących ze Słońca i przestrzeni kosmicznej w różnych pasmach energetycznych.
+            
+            **Cel wykresu:** Monitorowanie poziomów promieniowania protonowego, które może stanowić 
+            zagrożenie dla astronautów, satelitów i systemów elektronicznych.
+            
+            **Zmienne:**
+            - **Czas**: Moment pomiaru strumienia protonowego
+            - **Strumień [cm⁻²·s⁻¹]**: Liczba protonów przechodzących przez powierzchnię 1 cm² w ciągu sekundy
+            - **Energia**: Pasmo energetyczne protonów (jeśli dostępne w danych)
+            
+            **Interpretacja:**
+            - **Protony niskoenergetyczne**: Pochodzą głównie ze Słońca, związane z rozbłyskami słonecznymi
+            - **Protony wysokoenergetyczne**: Pochodzą z przestrzeni kosmicznej, mogą powodować zwiększone 
+            promieniowanie na wysokościach lotniczych
+            - **Nagłe wzrosty strumienia**: Wskazują na rozbłyski słoneczne lub koronalne wyrzuty masy
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
