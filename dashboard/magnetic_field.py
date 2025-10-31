@@ -40,11 +40,20 @@ def render(limit=None):
     st.subheader("Składniki pola magnetycznego międzyplanetarnego")
     with st.expander('Opis'):
         st.markdown('''
-        **Pole magnetyczne międzyplanetarne** mierzone przez satelitę DSCOVR w punkcie Lagrange'a L1 
-        (1,5 mln km od Ziemi w kierunku Słońca). Dane przedstawiają składniki pola magnetycznego w układzie 
-        współrzędnych GSM (Geocentric Solar Magnetospheric): Bt (całkowite), Bx, By, Bz. 
-        Szczególnie ważna jest składowa Bz - jej orientacja południowa (ujemna) sprzyja 
-        przenikaniu energii słonecznej do magnetosfery Ziemi i wywoływaniu burz geomagnetycznych.
+        **Opis:** Wykres przedstawia czasowe zmiany składników pola magnetycznego międzyplanetarnego 
+        mierzone przez satelitę DSCOVR w punkcie Lagrange'a L1 (1,5 mln km od Ziemi w kierunku Słońca).
+        
+        **Cel wykresu:** Monitorowanie warunków wiatru słonecznego i identyfikacja momentów sprzyjających 
+        wystąpieniu burz geomagnetycznych. Analiza zmian pola magnetycznego pozwala przewidzieć wpływ 
+        wiatru słonecznego na magnetosferę Ziemi.
+        
+        **Zmienne:**
+        - **Bt (całkowite) [nT]**: Całkowita wartość indukcji pola magnetycznego w układzie GSM
+        - **Bx (GSM) [nT]**: Składowa pola magnetycznego w osi X układu GSM (kierunek Słońce-Ziemia)
+        - **By (GSM) [nT]**: Składowa pola magnetycznego w osi Y układu GSM (prostopadła do płaszczyzny ekliptyki)
+        - **Bz (GSM) [nT]**: Składowa pola magnetycznego w osi Z układu GSM (prostopadła do osi Słońce-Ziemia)
+        - **Czas**: Moment pomiaru
+
         ''')
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
@@ -73,12 +82,23 @@ def render(limit=None):
         st.subheader('Rozkład statystyczny składowej Bz')
         with st.expander('Opis'):
             st.markdown('''
-            **Histogram składowej Bz** pokazuje rozkład wartości pola magnetycznego w osi Z układu GSM. 
-            Składowa Bz jest kluczowa dla procesów sprzężenia magnetosfera-wiatr słoneczny. 
-            Wartości ujemne (południowe) Bz sprzyjają efektywnemu przenikaniu energii słonecznej 
-            do magnetosfery Ziemi, podczas gdy wartości dodatnie (północne) działają ochronnie. 
-            Analiza rozkładu pozwala ocenić dominujące warunki wiatru słonecznego.
+            **Opis:** Histogram przedstawia rozkład statystyczny wartości składowej Bz pola magnetycznego 
+            międzyplanetarnego w analizowanym okresie czasowym.
+            
+            **Cel wykresu:** Ocena dominujących warunków wiatru słonecznego oraz identyfikacja częstotliwości 
+            występowania wartości Bz sprzyjających burzom geomagnetycznym. Analiza rozkładu pozwala zrozumieć 
+            charakterystyki statystyczne pola magnetycznego w długim okresie.
+            
+            **Zmienne:**
+            - **Bz (GSM) [nT]**: Wartość składowej Z pola magnetycznego w układzie współrzędnych GSM
+            - **Częstotliwość**: Liczba wystąpień danej wartości Bz w analizowanym okresie
+            
+            **Interpretacja:** 
+            - Wartości ujemne (południowe) Bz sprzyjają efektywnemu przenikaniu energii słonecznej 
+            do magnetosfery Ziemi
+            - Wartości dodatnie (północne) Bz działają ochronnie i zmniejszają efektywność sprzężenia
+            - Rozkład z przewagą wartości ujemnych wskazuje na okresy zwiększonej aktywności geomagnetycznej
             ''')
-        fig2 = px.histogram(df, x=bzg, nbins=80, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
+        fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False)
         st.plotly_chart(fig2, use_container_width=True)
