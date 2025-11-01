@@ -56,3 +56,11 @@ Rozdział 2. Architektura projektu.............................................<
 
 ​	2.4 Wybór technologii.............................................<strona>
 
+Rozdział 3. Implementacja systemu.............................................<strona>
+
+​	3.1 Moduł pozyskiwania danych.............................................<strona>
+
+​	3.2 Moduł przetwarzania danych.............................................<strona>
+
+​	3.3 Moduł wizualizacji danych.............................................<strona>
+
