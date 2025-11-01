@@ -74,5 +74,17 @@ Rozdział 4. Analiza wyników.............................................<stron
 
 ​	4.3 Ograniczenia projektu.............................................<strona>
 
-​	4.4 Porównanie z istniejącymi rozwiązaniami.............................................<strona>
+​	4.4 Porównanie z istniejącymi rozwiązaniami.............................................<strona>	
+
+Rozdział 5. Podsumowanie i wnioski.............................................<strona>
+
+​	5.1 Podsumowanie zrealizowanych celów.............................................<strona>
+
+​	5.2 Wartość naukowa pracy.............................................<strona>
+
+​	5.3 Możliwe kierunki rozwoju projektu.............................................<strona>
+
+​	5.4 Wnioski końcowe.............................................<strona>
+
+Bibliografia
 
