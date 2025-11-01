@@ -54,7 +54,9 @@ Rozdział 2. Architektura projektu.............................................<
 
 ​	2.3 Architektura systemu.............................................<strona>
 
-​	2.4 Wybór technologii.............................................<strona>
+​	2.4 Decyzje projektowe.............................................<strona>
+
+​	2.5 Wybór technologii.............................................<strona>
 
 Rozdział 3. Implementacja systemu.............................................<strona>
 
@@ -63,4 +65,14 @@ Rozdział 3. Implementacja systemu.............................................<
 ​	3.2 Moduł przetwarzania danych.............................................<strona>
 
 ​	3.3 Moduł wizualizacji danych.............................................<strona>
+
+Rozdział 4. Analiza wyników.............................................<strona>
+
+​	4.1 Charakterystyka zaimplementowanego systemu.............................................<strona>
+
+​	4.2 Przykłady analizy rzeczywistych danych.............................................<strona>
+
+​	4.3 Ograniczenia projektu.............................................<strona>
+
+​	4.4 Porównanie z istniejącymi rozwiązaniami.............................................<strona>
 
