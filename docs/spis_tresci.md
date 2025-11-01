@@ -39,3 +39,20 @@ Rozdział 1. Wprowadzenie teoretyczne...........................................
 ​		1.3b Deep Space Climate Observatory.............................................<strona>
 
 ​		1.3c NOAA Space Weather Prediction Center.............................................<strona>
+
+Rozdział 2. Architektura projektu.............................................<strona>
+
+​	2.1 Analiza wymagań funkcjonalnych.............................................<strona>
+
+​		2.1a Wymagania związane z pozyskiwaniem danych
+
+​		2.1b Wymagania związane z przechowywaniem danych
+
+​		2.1c Wymagania związane z prezentacją danych
+
+​	2.2 Analiza wymagań niefunkcjonalnych.............................................<strona>
+
+​	2.3 Architektura systemu.............................................<strona>
+
+​	2.4 Wybór technologii.............................................<strona>
+
