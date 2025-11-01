@@ -86,5 +86,5 @@ Rozdział 5. Podsumowanie i wnioski.............................................
 
 ​	5.4 Wnioski końcowe.............................................<strona>
 
-Bibliografia
+Bibliografia.............................................<strona>
 
