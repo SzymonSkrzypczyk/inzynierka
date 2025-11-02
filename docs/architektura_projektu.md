@@ -28,7 +28,7 @@ W projektowanym systemie jednym z kluczowych obszarów jest moduł pozyskiwania 
 
 W opisywanym systemie kluczowym obszarem jest sposób trwałego przechowywania pozyskanych danych. Baza danych stanowi centralny punkt aplikacji oraz integracji otrzymanych informacji .
 
-1. Struktura bazy danych PostgresSQL
+1. Struktura bazy danych PostgreSQL
 
    System powinien wykorzystywać relacyjną bazę danych PostgreSQL, ze względu na jej wysoką wydajność, powszechną adaptację oraz operowanie w modelu Opensource. Struktura bazy danych powinna zostać zaprojektowana w sposób umożliwiający przechowywanie danych pomiarowych oraz metadanych zawierających informacje odnośnie czasu pozyskania i statusu przetwarzania otrzymanych danych, w celu umożliwienia odtworzenia procesu zapisu i przechowywania danych.
 
@@ -56,7 +56,9 @@ Prezentacja danych odgrywa kluczową rolę w umożliwieniu interpretacji i anali
 
    W celu zapewnienia wysokiej jakości analizy oraz prawidłowej  interpretacji wyników, aplikacja powinna automatycznie wykrywać luki w danych  i zaznaczać je na generowanych wizualizacjach. Braki danych mogą wynikać z różnych przyczyn, takich jak np. awarie sensorów, przerwy w transmisji, czy niedostępność źródeł, które mogą dostarczać dodatkowych informacji i być wartościowe przy pełnej analizie otrzymanych wyników.
 
-   
+## 2.2 Analiza wymagań niefunkcjonalnych
+
+W niniejszym podrozdziale opisano wymagania niefunkcjonalne systemu, które określają na zdefiniowanie elementów jakościowych, które powinny zostać spełnione przez system, w celu zapewnienia wydajności, niezawodności i komfortu użytkowania. Analiza wymagań niefunkcjonalnych jest kluczowym etapem umożliwiającym identyfikacje elementów na skalowalność, użyteczność i niezawodność projektu.
 
 
 
