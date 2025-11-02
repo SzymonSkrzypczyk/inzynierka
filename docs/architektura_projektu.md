@@ -6,7 +6,7 @@ W niniejszym podrozdziale przedstawiono wymagania funkcjonalne realizowanego sys
 
 ### 2.1a Wymagania związane z pozyskiwaniem danych
 
-W projektowanym systemie jednym z kluczowych obszarów jest moduł pozyskiwania danych ze źródeł dostarczonych przez interface'y programistyczne utrzymywanych przez NOAA Space Weather Prediction Center. Ze względu na charakterystykę zadania i danych wymagane jest uwzględnienie określonych wymagań w celu zwiększenia efektywności i niezawodności gromadzenia danych.
+W projektowanym systemie jednym z kluczowych obszarów jest moduł pozyskiwania danych ze źródeł dostarczonych przez interfejsy programistyczne utrzymywanych przez NOAA Space Weather Prediction Center. Ze względu na charakterystykę zadania i danych wymagane jest uwzględnienie określonych wymagań w celu zwiększenia efektywności i niezawodności gromadzenia danych.
 
 1. Asynchroniczne pobieranie danych ze źródeł
 
@@ -60,7 +60,21 @@ Prezentacja danych odgrywa kluczową rolę w umożliwieniu interpretacji i anali
 
 W niniejszym podrozdziale opisano wymagania niefunkcjonalne systemu, które określają na zdefiniowanie elementów jakościowych, które powinny zostać spełnione przez system, w celu zapewnienia wydajności, niezawodności i komfortu użytkowania. Analiza wymagań niefunkcjonalnych jest kluczowym etapem umożliwiającym identyfikacje elementów na skalowalność, użyteczność i niezawodność projektu.
 
+1. Wydajność
 
+   System powinien gwarantować szybkie i efektywne działanie na wszystkich etapach, niezależnie od ilości danych do przetworzenia. Wysoka wydajność stanowi kluczowy czynnik umożliwiający płyną pracę aplikacji. Oczekiwana wydajność powinna zostać osiągnięta poprzez optymalizacje operacji na bazie danych, równoległe przetwarzanie danych oraz wykorzystywanie pamięci podręcznej.
+
+2. Skalowalność
+
+   System powinien gwarantować skalowalność, umożliwiającą obsługę rosnącej ilości danych bez znacznej utraty wydajności. Wysoka skalowalność pozwala na poszerzanie okna analizy przetwarzanych danych, co umożliwiające przeprowadzenie wnikliwej i szczegółowej analizy.
+
+3. Niezawodność
+
+   System powinien gwarantować wysoką niezawodność, zapewniając stabilne działanie na każdym etapie, skutecznie minimalizując ryzyko awarii. Wysoka niezawodność powinna zostać osiągnięta poprzez implementacje systemów wykrywania i logowania błędów oraz mechanizmy powtarzania nieudanych prób pozyskiwania danych. Takie rozwiązania pozwolą na utrzymanie ciągłości i integralności przetwarzanych informacji.
+
+4. Użyteczność interfejsu użytkownika
+
+​	System powinien gwarantować wysoką użytecznością interfejsu użytkownika, zapewniając spójną, intuicyjną i przejrzystą obsługę aplikacji. Wysoka 	użyteczność ułatwia wykonywanie operacji, ogranicza ryzyko błędów i przyspiesza czas potrzebny na realizacje analiz.
 
 
 
