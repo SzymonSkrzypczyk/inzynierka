@@ -2,6 +2,8 @@ W tym rozdziale opisane zostaną głównie wymagania odnośnie projektu, podjęt
 
 ## 2.1 Analiza wymagań funkcjonalnych
 
+W niniejszym podrozdziale przedstawiono wymagania funkcjonalne realizowanego systemu, które określają, jakie warunki powinny zostać spełnione, aby zapewnić wysoką jakość, niezawodność i prawidłowe funkcjonowanie systemu. Analiza wymagań funkcjonalnych jest kluczowym etapem projektowania systemu pozwalającym na zidentyfikowanie głównych obszarów projektowanego systemu.
+
 ### 2.1a Wymagania związane z pozyskiwaniem danych
 
 W projektowanym systemie jednym z kluczowych obszarów jest moduł pozyskiwania danych ze źródeł dostarczonych przez interface'y programistyczne utrzymywanych przez NOAA Space Weather Prediction Center. Ze względu na charakterystykę zadania i danych wymagane jest uwzględnienie określonych wymagań w celu zwiększenia efektywności i niezawodności gromadzenia danych.
