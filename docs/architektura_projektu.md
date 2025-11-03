@@ -16,7 +16,7 @@ W projektowanym systemie jednym z kluczowych obszarów jest moduł pozyskiwania 
 
    Podczas komunikacji z zewnętrznymi źródłami może dojść do wielu rodzajów błędów np. braku odpowiedzi serwera, zbyt długiego czasu oczekiwania na odpowiedź, czy błędnego formatu odpowiedzi. W celu zapewnienia maksymalnej niezawodności system powinien być wyposażony w automatyczny mechanizm ponawiania poboru danych w przypadku wystąpienia braku danych, uwzględniający dozwoloną liczbę ponownych zapytań oraz określony odstęp pomiędzy poszczególnymi próbami. Dodatkowo w celu umożliwienia odtworzenia całego procesu wszystkie próby oraz błędy powinny być logowane w celu dalszej analizy problemów.
 
-3.  Walidacja i normalizacja danych do wspólnego formatu 
+3. Walidacja i normalizacja danych do wspólnego formatu 
 
    Dane przychodzące są otrzymywane w formacie JSON oraz z różnorodną strukturą plików, w celu efektywnego przetwarzania danych na dalszych etapach działania systemu dane powinny zostać znormalizowane do wspólnego formatu, który umożliwi efektywną analizę i przetwarzanie. Dodatkowo wszystkie pola zagnieżdżone powinny zostać spłaszczone w celu zachowania informacji przez nie przenoszone.
 
@@ -74,7 +74,46 @@ W niniejszym podrozdziale opisano wymagania niefunkcjonalne systemu, które okre
 
 4. Użyteczność interfejsu użytkownika
 
-​	System powinien gwarantować wysoką użytecznością interfejsu użytkownika, zapewniając spójną, intuicyjną i przejrzystą obsługę aplikacji. Wysoka 	użyteczność ułatwia wykonywanie operacji, ogranicza ryzyko błędów i przyspiesza czas potrzebny na realizacje analiz.
+   System powinien gwarantować wysoką użytecznością interfejsu użytkownika, zapewniając spójną, intuicyjną i przejrzystą obsługę aplikacji. Wysoka 	użyteczność ułatwia wykonywanie operacji, ogranicza ryzyko błędów i przyspiesza czas potrzebny na realizacje analiz.
 
+## 2.3 Architektura systemu
 
+Architektura projektu została zaprojektowana w sposób modułowy, odseparowując od siebie poszczególne części, umożliwiając skalowalność oraz łatwość rozbudowy poszczególnych komponentów. Na rysunku 2.3.1 przedstawiono ogólny schemat architektury systemu.
+
+![flowchart](../sketches/flowchart.png)
+
+System składa się z sześciu głównych modułów z funkcjonalnościami:
+
+1) Źródło danych
+2) Moduł odpowiedzialny za pobierania danych ze źródła
+3) Moduł odpowiedzialny za archiwizację danych
+4) Moduł odpowiedzialny za przetwarzanie danych
+5) Moduł odpowiedzialny za dodawanie danych do bazy danych
+6) Moduł odpowiedzialny za wizualizację wyników
+
+W kolejnych podrozdziałach opisano szczegółowo budowę i sposób działania każdego z wymienionych komponentów.
+
+### 2.3.1 Źródło danych
+
+Podstawowym źródłem danych w projekcie jest interfejs programistyczny udostępniany przez NOAA Space Weather Center. Interfejs ten zapewnia dostęp do endpointów zawierających informacje dotyczące pogody kosmicznej, aktywności słońca oraz warunków geomagnetycznych Ziemi. Dane dostępne są w formacie JSON oraz są aktualizowane na bieżąco.
+
+### 2.3.2 Moduł pozyskiwania danych
+
+Moduł pobierania danych odpowiada za cykliczne pobieranea danych pochodzących z modułu źródła danych oraz za ich konwersje do formatu oczekiwanego przez dalsze etapach systemu. Moduł zapewnia jednolitość i spójność danych w całym przepływie danych przez system.
+
+### 2.3.3 Moduł archiwizacji danych
+
+Moduł archiwizacji danych odpowiada za przechowywanie przetworzonych danych, zapewniając ich dostępność w kolejnych etapach systemu. Dodatkowo moduł zapewnia funkcjonalność kopii zapasowej, zwiększając odporność na awarie i utratę danych.
+
+### 2.3.4 Moduł przetwarzania danych
+
+Moduł przetwarzania danych odpowiada za przygotowanie danych do zapisu w bazie danych oraz redukcje danych uznanych za zbędne w dalszej analizy. Moduł ten zapewnia, że dane w kolejnych etapach zawierają tylko potrzebne informacje w formacie gotowym do efektywnego wykorzystania.
+
+### 2.3.5 Moduł dodawania danych do bazy danych
+
+Moduł dodawania danych do bazy danych odpowiada za poprawny i niezawodny zapis danych do bazy danych do odpowiednich tabel wraz z zastosowaniem poprawnych typów danych. Zapewnia to niezawodne wyświetlanie danych wynikowych na etapie wizualizacji, dodatkowo moduł pełni rolę centralnego magazynu danych, które mogą być bezpośrednio wykorzystane do analizy i interpretacji.
+
+### 2.3.6 Moduł wizualizacji danych
+
+Moduł wizualizacji danych odpowiada za prezentację przetworzonych danych w formie umożliwiającej ich analizę i interpretację. Dane przedstawiane są przy pomocy różnorodnych metod wizualizacji, pozwalając na uchwycenie zależności oraz wykrywanie anomalii występujących w danych.
 
