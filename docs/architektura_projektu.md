@@ -117,3 +117,49 @@ Moduł dodawania danych do bazy danych odpowiada za poprawny i niezawodny zapis 
 
 Moduł wizualizacji danych odpowiada za prezentację przetworzonych danych w formie umożliwiającej ich analizę i interpretację. Dane przedstawiane są przy pomocy różnorodnych metod wizualizacji, pozwalając na uchwycenie zależności oraz wykrywanie anomalii występujących w danych.
 
+## 2.4 Wybór technologii
+
+Wybór odpowiednich technologii jest kluczowym etapem projekty, ponieważ od niego w dużej mierze zależy wydajność, skalowalność oraz możliwość dalszego rozwoju projektu. Wybór technologii dla tego systemu odbył się po przeanalizowaniu wymagań funkcjonalnych i niefunkcjonalnych oraz określeniu narzędzi najbardziej odpowiednich do postawionego zadania.
+
+### 2.4.1 Technologie wykorzystane w projekcie 
+
+#### Python
+
+Python został wybrany jako główny język programowania, ze względu na następujące cechy:
+
+- znaczny ekosystem bibliotek zewnętrznych do analizy i wizualizacji danych
+- łatwość implementacji oraz szybkość rozwoju prototypu
+- możliwość integracji z bazą PostgreSQL
+
+W projekcie wykorzystano następujące biblioteki zewnętrzne:
+
+- **aiohttp** - umożliwia asynchroniczne przetwarzanie żądań HTTP, przyspieszając proces pozyskiwania danych
+- **pandas** - umożliwia przetwarzanie i analizowanie danych
+- **streamlit** - umożliwia tworzenie dashboardów z wizualizacjami danych
+- **plotly** - umożliwia tworzenie interaktywnych wykresów dla przetworzonych danych
+- **SQLAlchemy** - umożliwia pobieranie danych potrzebnych do utworzenia wizualizacji
+
+#### GoLang
+
+GoLang został wybrany jako język odpowiedzialny za operacje związane z bazą danych i hurtowym przetwarzaniem danych ze względu na:
+
+- wysoką wydajność i efektywność przy przetwarzaniu dużej ilości danych
+- silne wymuszanie typów, co zmniejsza ryzyko wystąpienia błędów w kodzie
+- rozbudowany system integracji z bazami danych
+
+#### PostgreSQL
+
+PostgreSQL zostało wybrane jako główna baza danych w systemie, ze względu na:
+
+- wysoką skalowalność, zapewniającą obsługę rosnącej ilości danych
+- wysoką wydajność zapytań, zapewniającą sprawną obsługę dużej ilości danych
+- charakter otwartego opragramowania, umożliwiając elastyczne dopasowywanie systemu oraz brak dodatkowych kosztów
+
+#### Dropbox API
+
+Dropbox API zostało wybrane jako technologię archiwizacji danych, ze względu na:
+
+- integrację z systemem autentykacji OAuth 2.0, zwiększając bezpieczeństwo danych
+- automatyczne tworzenie kopii zapasowych, chroniąc przed utratą danych
+- brak kosztów, dzięki udostępnieniu darmowego planu, którego limit danych jest odpowiedni dla potrzeb systemu
+
