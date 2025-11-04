@@ -80,7 +80,7 @@ W niniejszym podrozdziale opisano wymagania niefunkcjonalne systemu, które okre
 
 Architektura projektu została zaprojektowana w sposób modułowy, odseparowując od siebie poszczególne części, umożliwiając skalowalność oraz łatwość rozbudowy poszczególnych komponentów. Na rysunku 2.3.1 przedstawiono ogólny schemat architektury systemu.
 
-![flowchart](../sketches/flowchart.png)
+![flowchart](C:\Users\SzymonSkrzypczyk\Downloads\flowchart.png)
 
 System składa się z sześciu głównych modułów z funkcjonalnościami:
 
@@ -163,3 +163,10 @@ Dropbox API zostało wybrane jako technologię archiwizacji danych, ze względu 
 - automatyczne tworzenie kopii zapasowych, chroniąc przed utratą danych
 - brak kosztów, dzięki udostępnieniu darmowego planu, którego limit danych jest odpowiedni dla potrzeb systemu
 
+## 2.5 Decyzje projektowe
+
+W trakcie projektowania systemu podjęto szereg decyzji, które miały na celu zwiększenie wydajności, uproszczenie struktury oraz optymalizację operacji wykonywanych na bazie danych.
+
+Jedną z kluczowych decyzji było ograniczenie liczby zapisywanych pól do bazy danych, pozwoliło to uprościć strukturę wynikowych tabel oraz przyspieszenie operacji przeprowadzanych na danych. 
+
+Dodatkową decyzją było ograniczenie liczby tabeli zapisywanych w bazie danych. Dzięki temu analizie podlegają jedynie dane istotne dla postawionego problemu, co pozwoliło ograniczyć zużycie przestrzeni dyskowej oraz poprawiło czytelność struktury danych.
