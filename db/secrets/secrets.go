@@ -16,6 +16,7 @@ type TokenResponse struct {
 	ExpiresIn   int    `json:"expires_in"`
 }
 
+// GetAccessToken retrieves a new access token from Dropbox using the provided app key, app secret, and refresh token.
 func GetAccessToken(appKey, appSecret, refreshToken string) (string, error) {
 	data := url.Values{}
 	data.Set("grant_type", "refresh_token")
@@ -54,6 +55,7 @@ func GetAccessToken(appKey, appSecret, refreshToken string) (string, error) {
 	return tokenResp.AccessToken, nil
 }
 
+// LoadSecrets loads Dropbox app secrets from environment variables.
 func LoadSecrets() (DropboxAppSecret, DropboxAppKey, DropboxRefreshToken string) {
 	DropboxAppKey = os.Getenv("DROPBOX_APP_KEY")
 	if DropboxAppKey == "" {
