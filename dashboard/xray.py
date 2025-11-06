@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -9,28 +10,55 @@ except Exception:
 from plot_utils import set_layout, add_gray_areas_empty
 
 
-def _classify_flux(v):
+def _classify_flux(v: float) -> str:
+    """
+    Classify solar flare based on X-ray flux value
+    Values based on https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts
+
+    :param v:
+    :type v: float
+    :return:
+    :rtype: str
+    """
     try:
         v = float(v)
     except Exception:
         return 'Unknown'
     if v <= 0:
         return 'Unknown'
-    if v >= 1e-4:
+    elif v >= 1e-4:
         return 'X'
-    if v >= 1e-5:
+    elif v >= 1e-5:
         return 'M'
-    if v >= 1e-6:
+    elif v >= 1e-6:
         return 'C'
-    return 'A/B'
+    elif v >= 1e-7:
+        return 'B'
+    return 'A'
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None):
+    """
+    Load table from database with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render solar X-ray radiation section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title('Promieniowanie rentgenowskie Słońca')
     p_tab = find_table_like(['primary','xray'])
     s_tab = find_table_like(['secondary','xray'])
@@ -96,20 +124,21 @@ def render(limit=None):
                 **Zmienne:**
                 - **Czas**: Moment pomiaru strumienia promieniowania X
                 - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
-                - **Klasa rozbłysku**: Klasyfikacja rozbłysku według intensywności (A/B, C, M, X)
+                - **Klasa rozbłysku**: Klasyfikacja rozbłysku według intensywności (A, B, C, M, X)
                 
                 **Klasyfikacja rozbłysków:**
-                - **Klasa A/B**: < 10⁻⁶ W·m⁻² (bardzo słabe, tło słoneczne)
+                - **Klasa A**: < 10⁻⁷ W·m⁻² (bardzo słabe, tło słoneczne)
+                - **Klasa B**: 10⁻⁷ – 10⁻⁶ W·m⁻² (bardzo słabe, tło słoneczne)
                 - **Klasa C**: 10⁻⁶ - 10⁻⁵ W·m⁻² (słabe, niewielki wpływ na Ziemię)
                 - **Klasa M**: 10⁻⁵ - 10⁻⁴ W·m⁻² (umiarkowane, mogą powodować krótkotrwałe zakłócenia radiowe)
-                - **Klasa X**: ≥ 10⁻⁴ W·m⁻² (silne, mogą powodować poważne zakłócenia w komunikacji 
+                - **Klasa X**: >= 10⁻⁴ W·m⁻² (silne, mogą powodować poważne zakłócenia w komunikacji 
                 radiowej, systemach nawigacyjnych i sieciach energetycznych)
                 
-                **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), A/B (brązowy), Nieznany (szary)
+                **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), B (brązowy), A (zielony), Nieznany (szary)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
             fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Strumień [W·m⁻²]'}, log_y=True,
-                              color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','A/B':'#8c564b','Unknown':'#d3d3d3'})
+                              color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
             set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych')
             add_gray_areas_empty(fig2, df, tcol)
