@@ -4,6 +4,17 @@ from plotly.graph_objects import Figure
 
 
 def set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
+    """
+    Set standard layout for plotly figure
+
+    :param fig:
+    :type fig: go.Figure
+    :param title:
+    :type title: str
+    :param rangeslider:
+    :type rangeslider: bool
+    :return:
+    """
     fig.update_layout(template='plotly_white', title={'text': title or '', 'x':0.01},
                       font=dict(family='DejaVu Sans, Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
@@ -18,6 +29,17 @@ def set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
 
 
 def add_gray_areas_empty(fig: Figure, df: pd.DataFrame, tcol: str):
+    """
+    Add gray areas to the plotly figure for time gaps in the data
+
+    :param fig:
+    :type fig: Figure
+    :param df:
+    :type df: pd.DataFrame
+    :param tcol:
+    :type tcol: str
+    :return:
+    """
     try:
         times = pd.to_datetime(df[tcol]).dropna().sort_values().reset_index(drop=True)
         gap_intervals = []

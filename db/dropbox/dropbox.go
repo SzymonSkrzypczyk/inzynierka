@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// DownloadFromDropbox downloads files from Dropbox based on the provided access token and target date.
 func DownloadFromDropbox(tempFilePath *string, accessToken, targetDate string) error {
 	config := dropbox.Config{
 		Token:    accessToken,
@@ -101,6 +102,7 @@ func DownloadFromDropbox(tempFilePath *string, accessToken, targetDate string) e
 	return nil
 }
 
+// DownloadFromDropboxWithTargetDate is a helper function that downloads files from Dropbox for a specific target date.
 func DownloadFromDropboxWithTargetDate(accessToken, targetDate string) (string, error) {
 	var tempFilePath string
 	err := DownloadFromDropbox(&tempFilePath, accessToken, targetDate)
