@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -11,12 +12,29 @@ from plot_utils import set_layout, add_gray_areas_empty
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None) -> pd.DataFrame:
+    """
+    Load table with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    :rtype: pd.DataFrame
+    """
     return read_table(name, limit=limit)
 
 
-def _label_for_col(c: str) -> str:
-    lc = c.lower()
+def _label_for_col(col_name: str) -> str:
+    """
+    Generate nice label for given column name
+
+    :param col_name:
+    :type col_name: str
+    :return:
+    """
+    lc = col_name.lower()
     if 'bt' in lc and not any(x in lc for x in ('bx','by','bz')):
         return 'Bt (całkowite) [nT]'
     if 'bx' in lc:
@@ -26,10 +44,17 @@ def _label_for_col(c: str) -> str:
     if 'bz' in lc:
         return 'Bz (GSM) [nT]'
     # fallback: prettify
-    return c.replace('_', ' ').title()
+    return col_name.replace('_', ' ').title()
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render the interplanetary magnetic field (DSCOVR) dashboard section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title("Pole magnetyczne międzyplanetarne (DSCOVR)")
     table_name = find_table_like(["dscovr", "mag"]) or find_table_like(["magnetometer"]) or find_table_like(["dscovr"])
     df = _load_table_cached(table_name, limit) if table_name else pd.DataFrame()
