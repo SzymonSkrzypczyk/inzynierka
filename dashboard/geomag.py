@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
@@ -11,6 +12,17 @@ from plot_utils import add_gray_areas_empty
 
 
 def _set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
+    """
+    Set common layout for Plotly figures
+
+    :param fig:
+    :type fig: plotly.graph_objects.Figure
+    :param title:
+    :type title: str
+    :param rangeslider:
+    :type rangeslider: bool
+    :return:
+    """
     fig.update_layout(template='plotly_white', title={'text': title, 'x':0.01},
                       font=dict(family='Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
@@ -24,7 +36,14 @@ def _set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
     return fig
 
 
-def _detect_k_column(df):
+def _detect_k_column(df: pd.DataFrame):
+    """
+    Detect K-index column in dataframe
+
+    :param df:
+    :type df: pandas.DataFrame
+    :return:
+    """
     for c in df.columns:
         if c in ("kpindex", "kp_index", "kp") or c.endswith("kpindex"):
             return c
@@ -33,11 +52,27 @@ def _detect_k_column(df):
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None):
+    """
+    Load table from database with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: int or None
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render geomagnetic K-index plots
+
+    :param limit:
+    :type limit: int or None
+    :return:
+    """
     st.title("Geomagnetyzm")
     st.subheader("Planetarny i lokalny K-index")
 
