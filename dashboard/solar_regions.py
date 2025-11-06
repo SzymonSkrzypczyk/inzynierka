@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -9,11 +10,27 @@ except Exception:
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None) -> pd.DataFrame:
+    """
+    Load table from database with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render solar regions section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title('Aktywne regiony słoneczne')
     tname = find_table_like(['solar','region']) or find_table_like(['solarregions'])
     df = _load_table_cached(tname, limit) if tname else pd.DataFrame()
