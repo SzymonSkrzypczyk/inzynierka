@@ -1,3 +1,4 @@
+from typing import Optional, Union
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -14,7 +15,15 @@ except Exception:
     from dashboard.plot_utils import set_layout, add_gray_areas_empty
 
 
-def _parse_energy_val(e):
+def _parse_energy_val(e: Union[str, float, int, None]) -> float:
+    """
+    Parse energy value from string or number
+
+    :param e:
+    :type e: Union[str, float, int, None]
+    :return:
+    :rtype: float
+    """
     if pd.isna(e):
         return np.nan
     if isinstance(e, (int, float)):
@@ -26,11 +35,27 @@ def _parse_energy_val(e):
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None):
+    """
+    Load table with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render proton radiation (integral fluxes) section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title('Promieniowanie protonowe — strumienie integralne')
     p_tab = find_table_like(['primary','integral','proton'])
     s_tab = find_table_like(['secondary','integral','proton'])
