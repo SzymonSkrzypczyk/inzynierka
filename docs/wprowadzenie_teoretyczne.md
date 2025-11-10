@@ -22,5 +22,15 @@ Monitorowanie pogody kosmicznej pełni kluczową rolę w przewidywaniu i ogranic
 
 Zjawiska słoneczne i pogoda kosmiczna mogą znacząco zaburzyć działanie technologii i infrastruktury na Ziemi. Przykładowo, burze geomagnetyczne i koronalne wyrzuty masy(CME) mogą powodować awarie satelitów, uszkadzać systemy komunikacji lub prowadzić do awarii sieci energetycznych([Dabin Xue, 2024](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024SW004055)). Zaburzenia i nietypowe zachowania spowodowane silną burzą geomagnetyczną zostały odnotowane już w XIX wieku, podczas tzw. Carrington Event, 2 Września 1859 roku. Operatorzy linii telegraficznych w Europie i Ameryce Północnej odnotowali przerwy w komunikacji, iskrzenie na liniach, a nawet kontynuowali przesyłanie wiadomości po odłączeniu zasilania, wykorzystując wyindukowany przez burze geomagnetyczną prąd([C. Muller, 2014](https://link.springer.com/article/10.1007/s11084-014-9368-3)). Przykład ten pokazuje podatność infrastruktury przewodzącej prąd na skutki ekstremalnej pogody kosmicznej.
 
+### 1.1d Aktualne wyzwania w prognozowaniu pogody kosmicznej
 
+W literaturze dotyczącej prognozowania pogody kosmicznej podkreśla się liczne wyzwania, ograniczające skuteczność jej monitorowania i prognozowania. Do głównych problemów definiowanych w literaturze należą:
+
+- Niepewność w modelach - modele fizyczne i prognostyczne przyjmują liczne przybliżenia, co prowadzi do istotnej niepewności w wynikach([S.K. Morley, 2019](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108))
+- Niewielki czas wyprzedzenia prognozy - wiele modeli działa dobrze w krótkim terminie, ale ich wydajność spada dla dłuższych okresów, ograniczając ich wydajność([S.K. Morley, 2019](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108)).
+- Problem dokładnej specyfikacji stanu wiatru słonecznego przed Ziemią - pomiary w punkcie L1 mogą nie odpowiadać dokładnie warunkom w magnetosferze Ziemi([S.K. Morley, 2019](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108)).
+- Nierównomierne rozłożenie sieci obserwacyjnej - globalna sieć obserwacyjna nie jest w pełni równomiernie rozłożona po globie, zwłaszcza w obszarach trudno dostępnych, co ogranicza zdolność do pełnego monitorowania warunków pogody kosmicznej([J.J. Love, 2017](https://agupubs.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/2017SW001665)).
+- Poprawa jakości danych - aby zwiększyć użyteczność prognoz, należy zwiększyć częstotliwość próbkowania, jakość zbieranych danych oraz minimalizowanie czasu opóźnienia([J.J. Love, 2017](https://agupubs.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/2017SW001665)).
+
+Podsumowując, prognozowanie i monitorowanie pogody kosmicznej napotyka wiele wyzwań, które ograniczają jego skuteczność. Można je jednak częściowo minimalizować poprzez odpowiednie działania, takie jak poprawa jakości i częstotliwości danych. 
 
