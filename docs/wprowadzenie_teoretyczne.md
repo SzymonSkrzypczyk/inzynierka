@@ -16,5 +16,5 @@ Pogoda kosmiczna odnosi się do dynamicznych i wysoce zmiennych warunków panuj�
 
 ### 1.1b Znaczenie monitorowania i analizy pogody kosmicznej
 
-
+Monitorowanie pogody kosmicznej pełni kluczową rolę w przewidywaniu i ograniczaniu negatywnych skutków zjawisk słonecznych i międzyplanetarnych dla technologii i infrastruktury na Ziemi. Dane pozyskiwane w czasie rzeczywistym z satelitów i systemów naziemnych umożliwiają wczesne wykrywanie zmian w wietrze słonecznym, strumieniach cząstek i innych parametrach środowiska kosmicznego. Dzięki temu możliwe jest ostrzeganie zespołów obsługujących infrastruktury krytyczne, umożliwiając podejmowanie środków zapobiegawczych. Analizowanie i przewidywanie pogody kosmicznej pozwalają na opracowywanie odpowiednich środków zaradczych([Royal Academy of Engineering, 2013](https://raeng.org.uk/media/lz2fs5ql/space_weather_full_report_final.pdf)).
 
