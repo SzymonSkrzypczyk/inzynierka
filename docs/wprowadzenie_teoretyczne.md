@@ -58,11 +58,31 @@ Rozmiar i czas trwania rozbłysków zależą od ich mocy, czas trwania rozbłysk
 
 ### 1.2b Koronalne wyrzuty masy
 
-Koronalne wyrzuty masy(ang. Coronal Mass Ejection, CME) to ogromne wyrzuty masy plazmy i pola magnetycznego z korony Słońca, które przemieszcza się w przestrzeni międzyplanetarnej. Plazma wyrzucana przez CME może mieć masę rzędu miliardów ton(tj. ~10^12kg lub więcej) i zawierać zamrożone w niej pola magnetyczne silniejsze niż tło wiatru słonecznego. Najszybsze CME skierowane w stronę Ziemi mogą do niej dotrzeć w czasie od 15 do 18 godzin i przemieszczają się z prędkością od 250 km/s do 3000 km/s, a w trakcie oddalania się od Słońca stają się coraz większe. Niektóre koronalne wyrzuty masy mogą osiągnąć rozmiar prawie ćwierć dystansu z Ziemi do Słońca([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections)).
+Koronalne wyrzuty masy(ang. Coronal Mass Ejection, CME) to ogromne wyrzuty masy plazmy i pola magnetycznego z korony Słońca, które przemieszcza się w przestrzeni międzyplanetarnej. Plazma wyrzucana przez CME może mieć masę rzędu miliardów ton(tj. ~10^12kg lub więcej) i zawierać zamrożone w niej pola magnetyczne silniejsze niż tło wiatru słonecznego. Najszybsze CME skierowane w stronę Ziemi mogą do niej dotrzeć w czasie od 15 do 18 godzin i przemieszczają się z prędkością od ~250 km/s do ~3000 km/s, a w trakcie oddalania się od Słońca stają się coraz większe. Niektóre koronalne wyrzuty masy mogą osiągnąć rozmiar prawie ćwierć dystansu z Ziemi do Słońca([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections)).
 
 Wyrzuty są istotnym składnikiem pogody kosmicznej i podczas kontaktu z Ziemskim środowiskiem magnetycznym mogą doprowadzić do poważnych konsekwencji takich jak np. tymczasowo podgrzać górną atmosferę Ziemi potencjalnie powodować utratę wysokości przez satelity, spowodować poważne burze geomagnetyczne, czy uszkadzać sieci energetyczne([Science NASA](https://science.nasa.gov/sun/solar-storms-and-flares/#coronal-mass-ejection)).
 
 Ważnymi parametrami CME są rozmiar, prędkość i kierunek, są one określane na podstawie danych z koronografów satelitarnych, które pozwalają również na określenie prawdopodobieństwa dotarcia do Ziemi i jaki może mieć efekt([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections)).
 
+### 1.2c Burze geomagnetyczne
 
+Burza geomagnetyczna to znaczne zaburzenie magnetosfery Ziemi, wynikające z efektywnego przekazania energii wiatru słonecznego do otaczającego Ziemię środowiska kosmicznego. Wynikają głownie z przedłużonych okresów wysokiej prędkości wiatru słonecznego oraz skierowanego południowo pola magnetycznego wiatru słonecznego, co sprzyja transferowi energii([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/geomagnetic-storms)).
+
+Głównymi czynnikami odpowiadającymi za powstawanie burz geomagnetycznych są koronalne wyrzuty masy(CME) oraz strumienie wiatru słonecznego dużej prędkości(HSS, high-speed solar wind streams), po spełnieniu warunku południowego pola magentycznego dochodzi do przeniesienia energii i powstania burzy([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/geomagnetic-storms)).
+
+Do skutków burz geomagnetycznych należą m.in indukowanie prądu zdolnego uszkadzać transformatory([V. D. Albertson, 1974](https://ieeexplore.ieee.org/abstract/document/4075457)), zakłócanie działania systemów nawigacyjnych([P. V. S. Rama Rao, 2009](https://angeo.copernicus.org/articles/27/2101/2009/)) oraz uszkadzanie satelitów([Space Weather Canada](https://www.spaceweather.gc.ca/tech/index-en.php#sat)).
+
+Do opisywania burz geomagnetycznych używa się indeks Kp oraz skalę G, które instytucje wykorzystują do ostrzegania przed ryzykiem występowania zaburzeń spowodowanych przez zaburzenia magnetosfery([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/geomagnetic-storms)). 
+
+- Indeks Kp przyjmuje wartości od 0 do 9, gdzie niższe wartości oznaczają spokojną magnetosferę, a wartości od 5 do 9 oznaczają burze geomagnetyczne oraz jest definiowana. 
+- Skala G służy do klasyfikacji burz geomagnetycznych. G-1 odpowiada wartości 5 dla Kp, a G-5 wartości 9([Space Weather Prediction Center](https://www.swpc.noaa.gov/noaa-scales-explanation)).
+
+| Indeks Kp | Skala G | Opis burzy  | Wpływ na technologię i infrastrukturę                        |
+| --------- | ------- | ----------- | ------------------------------------------------------------ |
+| < 5       | N/A     | Spokojna    | Brak lub minimalne                                           |
+| 5         | G-1     | Słaba       | Mały wpływ na sieci energetyczne i satelity                  |
+| 6         | G-2     | Umiarkowana | Możliwe uszkodzenia transformatorów, wpływ na predykcje orbity satelitów |
+| 7         | G-3     | Mocna       | Możliwe wywoływanie fałszywych alarmów w pewnych urządzeniach, zwiększony opór satelitów |
+| 8         | G-4     | Poważna     | Możliwe powszechne problemy z kontrolą napięcia, problemy z namierzaniem satelitów |
+| 9         | G-5     | Ekstremalna | Możliwe blackouty systemów energetycznych, problemy ze śledzeniem i komunikacją z satelitami |
 
