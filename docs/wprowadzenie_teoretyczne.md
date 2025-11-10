@@ -12,7 +12,7 @@ W podrozdziale 1.1 przestawione zostaną pojęcia związane z pogodą kosmiczną
 
 ### 1.1a Definicja pogody kosmicznej
 
-Pogoda kosmiczna odnosi się do dynamicznych i wysoce zmiennych warunków panujących w przestrzeni bliskiej Ziemi, obejmujących zjawiska zachodzące na Słońcu, w przestrzeni międzyplanetarnej i systemie magnosfera-jonosfera-termosfera. Nieporządane zmiany w tych obszarach mogą obniżyć wydajność i niezawodność systemów naziemnych i satelitów, prowadząc do poważnych problemów operacyjnych. Do najważniejszych zjawisk wpływających na pogodę kosmiczną należą m.in. promieniowanie magnetometryczne, energetyczne cząstki słoneczne, czy burze geomagnetyczne([D.N Baker, 1998](https://www.sciencedirect.com/science/article/pii/S0273117797010958))
+Pogoda kosmiczna odnosi się do dynamicznych i wysoce zmiennych warunków panujących w przestrzeni bliskiej Ziemi, obejmujących zjawiska zachodzące na Słońcu, w przestrzeni międzyplanetarnej i systemie magnosfera-jonosfera-termosfera. Niepożądane zmiany w tych obszarach mogą obniżyć wydajność i niezawodność systemów naziemnych i satelitów, prowadząc do poważnych problemów operacyjnych. Do najważniejszych zjawisk wpływających na pogodę kosmiczną należą m.in. promieniowanie magnetometryczne, energetyczne cząstki słoneczne, czy burze geomagnetyczne([D.N Baker, 1998](https://www.sciencedirect.com/science/article/pii/S0273117797010958))
 
 ### 1.1b Znaczenie monitorowania i analizy pogody kosmicznej
 
@@ -46,15 +46,23 @@ Rozbłyski słoneczne generują fale uderzeniowe, wyrzuty plazmy i cząstek ener
 
 Rozbłyski słoneczne są klasyfikowane ze względu na ich szczytową moc na poszczególne typy([Solar Center Stanford](https://solar-center.stanford.edu/sid/activities/flare.html)):
 
-| Klasa | Zakres maksymalnej mocy(W/m^2) pomiędzy 1 a 8Å (1Å = 0.1nm) | Wpływ na Ziemię                                              |
-| ----- | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| A     | *I*  < 10E-7 W/m^2                                          | Za małe, żeby wyrządzić krzywdę                              |
-| B     | 10E-7 W/m^2 <= *I*  < 10E-6 W/m^2                           | Za małe, żeby wyrządzić krzywdę                              |
-| C     | 10E-6 W/m^2 <= *I*  < 10E-5 W/m^2                           | Możliwe minimalne zaburzenia w komunikacji radiowej          |
-| M     | 10E-5 W/m^2 <= *I*  < 10E-4 W/m^2                           | Może powodować krótkie blackouty radiowe                     |
-| X     | 10E-4 W/m^2 <= *I*                                          | Może powodować długotrwałe blackouty radiowe i burze radiacyjne |
+| Klasa | Zakres maksymalnej mocy(*I*, W/m^2) pomiędzy 1 a 8Å (1Å = 0.1nm) | Wpływ na Ziemię                                              |
+| ----- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| A     | *I*  < 10E-7 W/m^2                                           | Za małe, żeby wyrządzić krzywdę                              |
+| B     | 10E-7 W/m^2 <= *I*  < 10E-6 W/m^2                            | Za małe, żeby wyrządzić krzywdę                              |
+| C     | 10E-6 W/m^2 <= *I*  < 10E-5 W/m^2                            | Możliwe minimalne zaburzenia w komunikacji radiowej          |
+| M     | 10E-5 W/m^2 <= *I*  < 10E-4 W/m^2                            | Może powodować krótkie blackouty radiowe                     |
+| X     | 10E-4 W/m^2 <= *I*                                           | Może powodować długotrwałe blackouty radiowe i burze radiacyjne |
 
 Rozmiar i czas trwania rozbłysków zależą od ich mocy, czas trwania rozbłysku to od 10^3 do 10^4 s, a ich wysokość pętli magnetycznych przyjmuje wartości od około 10^4 km do 10^5 km([K. Shibata, 2011](https://link.springer.com/article/10.12942/lrsp-2011-6)).
+
+### 1.2b Koronalne wyrzuty masy
+
+Koronalne wyrzuty masy(ang. Coronal Mass Ejection, CME) to ogromne wyrzuty masy plazmy i pola magnetycznego z korony Słońca, które przemieszcza się w przestrzeni międzyplanetarnej. Plazma wyrzucana przez CME może mieć masę rzędu miliardów ton(tj. ~10^12kg lub więcej) i zawierać zamrożone w niej pola magnetyczne silniejsze niż tło wiatru słonecznego. Najszybsze CME skierowane w stronę Ziemi mogą do niej dotrzeć w czasie od 15 do 18 godzin i przemieszczają się z prędkością od 250 km/s do 3000 km/s, a w trakcie oddalania się od Słońca stają się coraz większe. Niektóre koronalne wyrzuty masy mogą osiągnąć rozmiar prawie ćwierć dystansu z Ziemi do Słońca([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections)).
+
+Wyrzuty są istotnym składnikiem pogody kosmicznej i podczas kontaktu z Ziemskim środowiskiem magnetycznym mogą doprowadzić do poważnych konsekwencji takich jak np. tymczasowo podgrzać górną atmosferę Ziemi potencjalnie powodować utratę wysokości przez satelity, spowodować poważne burze geomagnetyczne, czy uszkadzać sieci energetyczne([Science NASA](https://science.nasa.gov/sun/solar-storms-and-flares/#coronal-mass-ejection)).
+
+Ważnymi parametrami CME są rozmiar, prędkość i kierunek, są one określane na podstawie danych z koronografów satelitarnych, które pozwalają również na określenie prawdopodobieństwa dotarcia do Ziemi i jaki może mieć efekt([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections)).
 
 
 
