@@ -34,3 +34,13 @@ W literaturze dotyczącej prognozowania pogody kosmicznej podkreśla się liczne
 
 Podsumowując, prognozowanie i monitorowanie pogody kosmicznej napotyka wiele wyzwań, które ograniczają jego skuteczność. Można je jednak częściowo minimalizować poprzez odpowiednie działania, takie jak poprawa jakości i częstotliwości danych. 
 
+## 1.2 Zjawiska pogody kosmicznej 
+
+W podrozdziale 1.2 przedstawione zostaną główne zjawiska pogody kosmicznej, które wpływają na technologię i infrastrukturę na Ziemi. Omówione zostaną kolejno: rozbłyski słoneczne, koronalne wyrzuty masy(CME), burze geomagnetyczne, protony słoneczne i cząstki energetyczne, pole magnetyczne międzyplanetarne oraz aktywne regiony słoneczne. Ich zrozumienie jest niezbędne w celu efektywnego monitorowania, pobierania i analizowania zjawisk pogody kosmicznej. 
+
+### 1.2a Rozbłyski słoneczne
+
+
+
+
+
