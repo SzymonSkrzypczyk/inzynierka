@@ -77,12 +77,30 @@ Do opisywania burz geomagnetycznych używa się indeks Kp oraz skalę G, które 
 - Indeks Kp przyjmuje wartości od 0 do 9, gdzie niższe wartości oznaczają spokojną magnetosferę, a wartości od 5 do 9 oznaczają burze geomagnetyczne oraz jest definiowana. 
 - Skala G służy do klasyfikacji burz geomagnetycznych. G-1 odpowiada wartości 5 dla Kp, a G-5 wartości 9([Space Weather Prediction Center](https://www.swpc.noaa.gov/noaa-scales-explanation)).
 
-| Indeks Kp | Skala G | Opis burzy  | Wpływ na technologię i infrastrukturę                        |
-| --------- | ------- | ----------- | ------------------------------------------------------------ |
-| < 5       | N/A     | Spokojna    | Brak lub minimalne                                           |
-| 5         | G-1     | Słaba       | Mały wpływ na sieci energetyczne i satelity                  |
-| 6         | G-2     | Umiarkowana | Możliwe uszkodzenia transformatorów, wpływ na predykcje orbity satelitów |
-| 7         | G-3     | Mocna       | Możliwe wywoływanie fałszywych alarmów w pewnych urządzeniach, zwiększony opór satelitów |
-| 8         | G-4     | Poważna     | Możliwe powszechne problemy z kontrolą napięcia, problemy z namierzaniem satelitów |
-| 9         | G-5     | Ekstremalna | Możliwe blackouty systemów energetycznych, problemy ze śledzeniem i komunikacją z satelitami |
+| Indeks Kp | Skala G | Opis burzy  | Wpływ na technologię i infrastrukturę                        | Średnia częstotliwość <br />(1 cykl = 11 lat) |
+| --------- | ------- | ----------- | ------------------------------------------------------------ | --------------------------------------------- |
+| < 5       | N/A     | Spokojna    | Brak lub minimalne                                           | N/A                                           |
+| 5         | G-1     | Słaba       | Mały wpływ na sieci energetyczne i satelity                  | 1700 na cykl                                  |
+| 6         | G-2     | Umiarkowana | Możliwe uszkodzenia transformatorów, wpływ na predykcje orbity satelitów | 600 na cykl                                   |
+| 7         | G-3     | Mocna       | Możliwe wywoływanie fałszywych alarmów w pewnych urządzeniach, zwiększony opór satelitów | 200 na cykl                                   |
+| 8         | G-4     | Poważna     | Możliwe powszechne problemy z kontrolą napięcia, problemy z namierzaniem satelitów | 100 na cykl                                   |
+| 9         | G-5     | Ekstremalna | Możliwe blackouty systemów energetycznych, problemy ze śledzeniem i komunikacją z satelitami | 4 na cykl                                     |
+
+### 1.2d Protony słoneczne i burze promieniowania słonecznego
+
+Protony słoneczne to naładowane cząstki pochodzące ze Słońca albo jego bezpośredniego otoczenia, stanowiące obok elektronów i ciężkich jonów kluczową część tzw. słonecznych cząstek energetycznych(SEP). Ich energia przyjmuje wartości od kilku keV do nawet GeV([A. Papaioanniu, 2025](https://link.springer.com/article/10.1007/s11214-025-01211-4#Sec1)). Emisje protonów na odpowiednio wysokich poziomach energetycznych przyczyniają się do powstawania burz słonecznych([Space Weather Prediction Center](https://www.swpc.noaa.gov/products/goes-proton-flux)).
+
+Burze promieniowania słonecznego powstają podczas rozległych erupcji magnetycznych, którym często towarzyszą rozbłyski słoneczne i koronalna wyrzuty masy (CME), które przyspieszają naładowane cząstki w atmosferze słonecznej do znacznych części prędkości światła. Naładowane cząstki docierają ze zróżnicowanymi rozbłyskami i energiami na różne lokalizacje geograficzne na Ziemi([UNDRR](https://www.undrr.org/understanding-disaster-risk/terminology/hips/et0104)).
+
+Do skutków emitowania słonecznych cząstek wysokoenergetycznych należą m.in: zakłócenia systemów nawigacyjnych i zakłócanie wysoko częstotliwościowej komunikacji radiowej oraz satelitarnej([Space Weather Prediction Center](https://www.swpc.noaa.gov/products/goes-proton-flux)).
+
+Do klasyfikacji burz słonecznych używa się się skali S, przyjmującej wartości od S-1, dla słabych burz słonecznych do S-5, dla ekstremalnych burz słonecznych([Space Weather Prediction Center](https://www.swpc.noaa.gov/noaa-space-weather-scales#s_scales)). Odpowiednie poziomy skali S są przydzielane na podstawie wartości pfu, czyli strumienia protonów o energii >= 10 MeV([Space Weather Prediction Center](https://www.swpc.noaa.gov/products/goes-proton-flux)).
+
+| Skala S | Opis burzy  | Wpływ na technologię i organizmy                             | strumień protonów <br />>= 10 MeV | Średnia częstotliwość (1 cykl = 11 lat) |
+| ------- | ----------- | ------------------------------------------------------------ | --------------------------------- | --------------------------------------- |
+| S-1     | Słaba       | Minimalny wpływ na komunikacje radiową                       | 10 pfu                            | 50 na cykl                              |
+| S-2     | Umiarkowana | Możliwy nieznaczna redukcja wydajności paneli słonecznych, osoby znajdujące się w wysoko lecących samolotach są wystawione na podwyższone ryzyko promieniowania | 102 pfu                           | 25 na cykl                              |
+| S-3     | Mocna       | Problemy nawigacyjne i możliwy spadek propagacji w komunikacji radiowej, astronauci wystawieni na możliwe do zmitygowania ryzyko promieniowania | 103 pfu                           | 10 na cykl                              |
+| S-4     | Poważna     | Problemy nawigacyjne i możliwe blackouty w komunikacji radiowej, niemożliwe do zmitygowania ryzyko promieniowania dla astronautów | 104 pfu                           | 3 na cykl                               |
+| S-5     | Ekstremalna | Satelity mogą stać się bezużyteczne, całkowity blackout komunikacji radiowej, osoby znajdujące się w wysoko lecących samolotach są wystawione na ryzyko promieniowania | 105 pfu                           | mniej niż 1 na cykl                     |
 

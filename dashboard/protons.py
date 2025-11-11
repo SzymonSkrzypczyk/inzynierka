@@ -53,15 +53,20 @@ def render(limit=None):
             zagrożenie dla astronautów, satelitów i systemów elektronicznych. Wykres pokazuje 
             zmiany strumienia w czasie dla różnych energii - od niskoenergetycznych protonów 
             słonecznych po wysokoenergetyczne cząstki kosmiczne.
+                        
+            **1 pfu** = 1 proton / (cm² · sr · s), gdzie:  
+            - **cm²** oznacza pole powierzchni, przez które przechodzi strumień cząstek  
+            - **s** oznacza jednostkę czasu (sekundę)  
+            - **sr** (steradian) oznacza jednostkę kąta bryłowego — stosowaną, by uwzględnić kierunkowość strumienia cząstek  
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Strumień [cm⁻² · s⁻¹ · sr⁻¹]'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
             set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True)
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Strumień [cm⁻² · s⁻¹ · sr⁻¹]'}, log_y=True, markers=True)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
             set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True)
 
