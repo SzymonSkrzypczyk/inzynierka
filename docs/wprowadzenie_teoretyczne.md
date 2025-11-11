@@ -142,3 +142,9 @@ Geostationary Operational Environmental Satellites (GOES) to wspólne przedsięw
 
 Satelity GOES-18 i GOES-19 wyposażone są w szereg instrumentów umożliwiających obserwację Ziemi (ABI, GLM) oraz pomiar aktywności słonecznej (SUVI). GOES-19 jest dodatkowo wyposażony w koronograf CCOR-1 zdolny do monitorowania CME ([SPACE OSCAR WMO](https://space.oscar.wmo.int/satelliteprogrammes/view/goes_3rd_generation)).
 
+### 1.3b Deep Space Climate Observatory
+
+Deep Space Climate Observatory (DSCOVR) to wspólna misja NOAA, NASA oraz US Air Force (USAF) zaprojektowana do zastąpienia poprzedniego systemu NASA, ACE. Głównym celem DSCOVR jest monitorowanie w czasie rzeczywistym wiatru słonecznego w celu ostrzegania przed występowaniem burz geomagnetycznych. 
+
+DSCOVR znajduje się w punkcie Lagrange'a L1 pomiędzy Ziemią i Słońcem, w odległości około 1.5 miliona kilometrów od Ziemi, czyli punkcie w którym satelita pozostaje w spoczynku względem obu ciał niebieskich. Dzięki ustawieniu w punkcie L1 satelita jest w stanie ostrzegać przed wystąpieniem burzy solarnej od 15 do 60 minut przed jej wystąpieniem na Ziemi([NASA](https://science.nasa.gov/mission/dscovr/)).
+
