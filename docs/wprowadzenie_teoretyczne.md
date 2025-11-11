@@ -131,3 +131,14 @@ Aktywne regiony słoneczne (AR) to całość obswerwowalnych zjawisk poprzedzaj�
 Regiony słoneczne są obszarami mocnego podgrzewania korony Słońca, dzięki czemu są znacznie jaśniejsze od otoczenia na koronalnych zdjęciach röntgenowskich. Pole magnetyczne w AR jest bardzo mocne, typowo przyjmuje wartości rzędu od 1000 do 3000 Gaussów([Nature Publishing Group, 2001](https://solar.physics.montana.edu/canfield/papers/EAA.2023.pdf)).
 
 Aktywne regiony słoneczne są głównym źródłem zjawisk słonecznych, od niewielkich rozjaśnień do koronalnych wyrzutów masy (CME). Poziom i typ ich aktywności zależy od etapu ewolucji AR, osiągając największy poziom w fazie wyłaniania się i następnie malejąc. Czas życia dwóch regionów może się od siebie znacząco różnić, duże regiony słoneczne mogą być wykrywalne do 10 miesięcy([Lidia van Driel-Gesztelyi, 2015](https://link.springer.com/article/10.1007/lrsp-2015-1)).
+
+## 1.3 Satelity i systemy monitorowania
+
+W podrozdziale 1.3 omówione zostaną systemy monitorowania i satelity, które umożliwiają monitorowanie i pozyskiwanie danych dotyczących pogody kosmicznej. Przedstawione zostaną kluczowe satelity oraz instytucje dostarczające dane niezbędne do analiz przeprowadzanych przez zaprojektowany system.
+
+### 1.3a Geostationary Operational Environmental Satellites
+
+Geostationary Operational Environmental Satellites (GOES) to wspólne przedsięwzięcie NOAA (National Oceanic and Atmospheric Administration) i NASA (National Aeronautics and Space Administration), mające na celu stworzenie sieci satelitów zdolnej do ciągłego dostarczania danych i obrazów dotyczących atmosfery Ziemi i zjawisk pogody kosmicznej. Satelity GOES umieszczane są na wysokości 22 236 mil nad równikiem, co pozwala na ciągłe utrzymywanie położenia nad pewnymi regionami geograficznymi, dzięki synchronizacji z prędkością obrotu Ziemi. W zaimplementowanym w pracy systemie dane są pobierane z satelitów z serii GOES-R, a dokładniej z GOES-T i GOES-RU, czyli odpowiednio GOES-18 i GOES-19([NASA](https://science.nasa.gov/mission/goes/)). 
+
+Satelity GOES-18 i GOES-19 wyposażone są w szereg instrumentów umożliwiających obserwację Ziemi (ABI, GLM) oraz pomiar aktywności słonecznej (SUVI). GOES-19 jest dodatkowo wyposażony w koronograf CCOR-1 zdolny do monitorowania CME ([SPACE OSCAR WMO](https://space.oscar.wmo.int/satelliteprogrammes/view/goes_3rd_generation)).
+
