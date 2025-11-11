@@ -30,6 +30,8 @@ Rozdział 1. Wprowadzenie teoretyczne...........................................
 
 	1.2f Aktywne regiony słoneczne.............................................<strona>
 
+    1.2g X ray(robocze)
+
 1.3 Satelity i systemy monitorowania.............................................<strona>
 
 	1.3a Geostationary Operational Environmental Satellites.............................................<strona>
