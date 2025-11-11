@@ -40,19 +40,31 @@ W podrozdziale 1.2 przedstawione zostaną główne zjawiska pogody kosmicznej, k
 
 ### 1.2a Rozbłyski słoneczne
 
-Rozbłyski słoneczne to gwałtowne uwolnienia energii magnetycznej w atmosferze Słońca, zachodzące w wyniku rekonekcji linii pola magnetycznego. Energia uwalniana podczas rozbłysku ma około 10^28 - 10^32 erg(1 erg = 1E-7 J) i przyjmuje zróżnicowane formy takie jak: energii promieniowania, kinetycznej ruchu masowego, termicznej oraz nietermicznej. 
+Rozbłyski słoneczne to gwałtowne uwolnienia energii magnetycznej w atmosferze Słońca, zachodzące w wyniku rekonekcji linii pola magnetycznego. Energia uwalniana podczas rozbłysku ma około 10^28 - 10^32 erg(1 erg = 1E-7 J) i przyjmuje zróżnicowane formy takie jak: energii promieniowania, kinetycznej ruchu masowego, termicznej oraz nietermicznej([K. Shibata, 2011](https://link.springer.com/article/10.12942/lrsp-2011-6)). 
 
 Rozbłyski słoneczne generują fale uderzeniowe, wyrzuty plazmy i cząstek energetycznych, które mogą oddziaływać na Ziemię i systemy znajdujące się w przestrzeni kosmicznej np. satelity([K. Shibata, 2011](https://link.springer.com/article/10.12942/lrsp-2011-6)). 
 
-Rozbłyski słoneczne są klasyfikowane ze względu na ich szczytową moc na poszczególne typy([Solar Center Stanford](https://solar-center.stanford.edu/sid/activities/flare.html)):
+W trakcie rozbłysków Słońce generuje promieniowanie elektromagnetyczne trwające od kilku minut do kilku godzin, promieniowanie to przemieszcza się z prędkością światła, a po dotarciu do Ziemi prowadzi do wzrostu jonizacji dolnej warstwy jonosfery po oświetlonej części Ziemi. W przypadku wystąpienia odpowiednio mocnego rozbłysku jonizacja następuje w niższej, gęstszej warstwie jonosfery w wyniku czego mogą wystąpić zakłócenia i utrata łączności radiowej dla wysokich częstotliwości([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts)).
+
+Strumień promieniowania röntgenowskiego mieszony w paśmie od 1 do 8Å stanowi podstawową miarę natężenia rozbłysku słonecznego([Space Weather Prediction Center](https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts)). Rozbłyski są klasyfikowane w oparciu o maksymalny poziom danego strumienia([Solar Center Stanford](https://solar-center.stanford.edu/sid/activities/flare.html)):
 
 | Klasa | Zakres maksymalnej mocy(*I*, W/m^2) pomiędzy 1 a 8Å (1Å = 0.1nm) | Wpływ na Ziemię                                              |
 | ----- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| A     | *I*  < 10E-7 W/m^2                                           | Za małe, żeby wyrządzić krzywdę                              |
+| A     | 10E-8 <= *I*  < 10E-7 W/m^2                                  | Za małe, żeby wyrządzić krzywdę                              |
 | B     | 10E-7 W/m^2 <= *I*  < 10E-6 W/m^2                            | Za małe, żeby wyrządzić krzywdę                              |
 | C     | 10E-6 W/m^2 <= *I*  < 10E-5 W/m^2                            | Możliwe minimalne zaburzenia w komunikacji radiowej          |
 | M     | 10E-5 W/m^2 <= *I*  < 10E-4 W/m^2                            | Może powodować krótkie blackouty radiowe                     |
 | X     | 10E-4 W/m^2 <= *I*                                           | Może powodować długotrwałe blackouty radiowe i burze radiacyjne |
+
+Na podstawie tej klasyfikacji NOAA ustanowiło klasyfikację radiowych blackoutów([Space Weather Prediction Center](https://www.swpc.noaa.gov/noaa-scales-explanation)):
+
+| Skala | Opis blackoutu | Wpływ na infrastrukturę                                      | Fizyczny pomiar, będący wielokrotnością klas rozbłysku | Średnia częstotliwość<br />(1 cykl = 11 lat) |
+| ----- | -------------- | ------------------------------------------------------------ | ------------------------------------------------------ | -------------------------------------------- |
+| R-1   | Słaby          | Słaba degradacja komunikacji radiowej wysokiej częstotliwości po oświetlonej stronie Ziemi | M1                                                     | 2000 na cykl                                 |
+| R-2   | Umiarkowany    | Ograniczony blackout komunikacji radiowej wysokiej częstotliwości po oświetlonej stronie Ziemi | M5                                                     | 350 na cykl                                  |
+| R-3   | Mocny          | Blackout komunikacji radiowej wysokiej częstotliwości na szerokim obszarze | X1                                                     | 175 na cykl                                  |
+| R-4   | Poważny        | Blackout komunikacji radiowej wysokiej częstotliwości po większości oświetlonej strony Ziemi | X10                                                    | 8 na cykl                                    |
+| R-5   | Ekstremalny    | Całkowity blackout komunikacji radiowej wysokiej częstotliwości po całej oświetlonej stronie Ziemi | X20                                                    | mniej niż jeden na cykl                      |
 
 Rozmiar i czas trwania rozbłysków zależą od ich mocy, czas trwania rozbłysku to od 10^3 do 10^4 s, a ich wysokość pętli magnetycznych przyjmuje wartości od około 10^4 km do 10^5 km([K. Shibata, 2011](https://link.springer.com/article/10.12942/lrsp-2011-6)).
 

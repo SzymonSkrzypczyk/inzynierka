@@ -37,7 +37,7 @@ def render(limit=None):
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 
-    for name, df in (('Primary', df_p), ('Secondary', df_s)):
+    for name, df in (('Główny źródło danych', df_p), ('Zapasowe źródło danych', df_s)):
         if df.empty:
             st.info(f'Brak danych: {name} X-ray')
             continue
@@ -50,7 +50,7 @@ def render(limit=None):
             st.markdown('''
             **Promieniowanie rentgenowskie Słońca** jest emitowane podczas rozbłysków słonecznych 
             i aktywności koronalnej. Wykres pokazuje strumienie promieniowania X w różnych 
-            pasmach energetycznych (Primary: 0.5-4 Å, Secondary: 1-8 Å) mierzone przez różne 
+            pasmach energetycznych (Główny: 0.5-4 Å, zastępczy: 1-8 Å) mierzone przez różne 
             satelity. Nagłe wzrosty strumienia wskazują na rozbłyski słoneczne klasy C, M lub X.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:

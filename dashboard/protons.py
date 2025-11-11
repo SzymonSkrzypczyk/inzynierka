@@ -37,7 +37,7 @@ def render(limit=None):
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 
-    for name, df in (('Primary', df_p), ('Secondary', df_s)):
+    for name, df in (('Główny źródło danych', df_p), ('Zapasowe źródło danych', df_s)):
         if df.empty:
             st.info(f'Brak danych: {name} Integral Protons')
             continue
