@@ -144,7 +144,13 @@ Satelity GOES-18 i GOES-19 wyposażone są w szereg instrumentów umożliwiając
 
 ### 1.3b Deep Space Climate Observatory
 
-Deep Space Climate Observatory (DSCOVR) to wspólna misja NOAA, NASA oraz US Air Force (USAF) zaprojektowana do zastąpienia poprzedniego systemu NASA, ACE. Głównym celem DSCOVR jest monitorowanie w czasie rzeczywistym wiatru słonecznego w celu ostrzegania przed występowaniem burz geomagnetycznych. 
+Deep Space Climate Observatory (DSCOVR) to wspólna misja NOAA, NASA oraz US Air Force (USAF) zaprojektowana do zastąpienia poprzedniego systemu NASA, ACE. Głównym celem DSCOVR jest monitorowanie w czasie rzeczywistym wiatru słonecznego w celu ostrzegania przed występowaniem burz geomagnetycznych([NASA](https://science.nasa.gov/mission/dscovr/)). 
 
 DSCOVR znajduje się w punkcie Lagrange'a L1 pomiędzy Ziemią i Słońcem, w odległości około 1.5 miliona kilometrów od Ziemi, czyli punkcie w którym satelita pozostaje w spoczynku względem obu ciał niebieskich. Dzięki ustawieniu w punkcie L1 satelita jest w stanie ostrzegać przed wystąpieniem burzy solarnej od 15 do 60 minut przed jej wystąpieniem na Ziemi([NASA](https://science.nasa.gov/mission/dscovr/)).
+
+### 1.3c NOAA Space Weather Prediction Center
+
+NOAA Space Weather Prediction Center (SWPC) to instytucja wchodząca w skład NOAA oraz NWS (National Weather Service), znajdująca się w Boulder w stanie Kolorado w USA([SWPC](https://www.swpc.noaa.gov/)). 
+
+Jej zadaniem jest monitorowanie w czasie rzeczywistym środowiska kosmicznego oraz jego wpływu na Ziemię, technologię i infrastrukturę. SWPC publikuje bieżące obserwacje i prognozy zjawisk pogody kosmicznej, oferując dane darmowe i ogólnodostępne, dzięki czemu stanowi główne źródło danych dla zaimplementowanego w pracy systemu([SWPC](https://www.swpc.noaa.gov/products-and-data)).
 
