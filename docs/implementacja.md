@@ -21,7 +21,7 @@ Moduł źródła danych obejmuje wszystkie interfejsy programistyczne udostępni
 ]
 ```
 
->  Rys 2.1.1 Przykładowy format danych JSON zwracanych przez punkt końcowy API SWPC
+>  Rys 3.1.1 Przykładowy format danych JSON zwracanych przez punkt końcowy API SWPC
 
 ## 3.2 Moduł pozyskiwania danych
 
@@ -42,7 +42,7 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
     logger.log(f"Retrieving data from URL {url}")
 ```
 
->  Rys 2.2.1 Fragment kodu definiujący funkcję asynchroniczną oraz tworzącą docelowy katalog w przypadku jego braku
+>  Rys 3.2.1 Fragment kodu definiujący funkcję asynchroniczną oraz tworzącą docelowy katalog w przypadku jego braku
 
 W dalszej części funkcji wykonywane jest odwołanie do aktualnie przetwarzanego punkt końcowego. W przypadku zwrócenia błędu przez API punkt końcowy zostaje ponownie odpytany o dane, dodatkowo wszystkie informacje o błędach zostają zapisane w celu identyfikacji potencjalnych błędów. W przypadku zwrócenia błędu jest on dodany do logów systemu, a następnie jeśli aktualna próba nie przekracza limitu dopuszczalnej ilości prób cały proces zostaje powtórzony.
 
@@ -80,7 +80,7 @@ async with aiohttp.ClientSession() as session:
             raise Exception(f"Failed to retrieve data from {url} after {MAX_RETRIES} retries")
 ```
 
-> Rys 2.2.2 Fragment kodu odpowiedzialny za asynchroniczne odwoływanie się do punktu końcowego, obsługę błędów oraz ponowne próby
+> Rys 3.2.2 Fragment kodu odpowiedzialny za asynchroniczne odwoływanie się do punktu końcowego, obsługę błędów oraz ponowne próby
 
 W dalszej części sprawdzana jest struktura zwróconych danych, a w przypadku zidentyfikowania danych zagnieżdżonych, ich odpowiedniego spłaszczenia, a następnie zapisania do odpowiedniego pliku wynikowego we wcześniej utworzonym katalogu docelowym. W celu umożliwienia ciągłego przepływu danych sprawdzana jest potencjalna zawartość pliku i w wypadku obecności zawartości jest ona dopisywana.
 
@@ -109,28 +109,137 @@ with open(filename, mode='a', newline='') as file:
     logger.log(f"Data retrieved and saved to {filename}")	
 ```
 
-> Rys 2.2.3 Fragment kodu odpowiadający za spłaszczanie oraz zapisywanie plików w katalogu docelowym
+> Rys 3.2.3 Fragment kodu odpowiadający za spłaszczanie oraz zapisywanie plików w katalogu docelowym
 
-Po integracji powyższe fragmenty umożliwiają wydajne, bezpieczne pobieranie danych pochodzących z modułu źródła danych zgodnie z wymaganiami opisanymi w poprzednim rozdziale.
+Po integracji powyższe fragmenty umożliwiają wydajne i niezawodne pobieranie danych pochodzących z modułu źródła danych zgodnie z wymaganiami opisanymi w poprzednim rozdziale.
 
-Plan +-:
+```python
+async def retrieve_all_data():
+    """
+    Retrieve all data from the URLs in NAME2URL
+    """
+    tasks = []
+    target_dir = SAVE_DIR / f"{datetime.today().date()}"
+    for target_name, url in NAME2URL.items():
+        tasks.append(retrieve_data(target_name, url, target_dir))
+    await asyncio.gather(*tasks)
+    logger.log(f"All data retrieved and saved to {target_dir}")
+```
 
-W niniejszym rozdziale przedstawiono szczegółową implementację systemu, zgodnie z architekturą opisaną w poprzednim rozdziale. Rozdział został podzielony na moduły funkcjonalne, z których każdy odpowiada za inny etap przetwarzania danych. Dla każdego modułu opisano zastosowane technologie, strukturę kodu, sposób działania oraz najważniejsze decyzje projektowe.
+> Rys 3.2.4 Fragment kodu odpowiadający za pobieranie wszystkich danych z modułu źródła danych
 
-Źródło danych
-W tym podrozdziale zostanie omówione wykorzystywane źródło danych, jego format, dostępność, sposób autoryzacji oraz ograniczenia techniczne. Zaprezentowane zostaną przykładowe dane wejściowe wykorzystywane w systemie.
+## 3.3 Moduł archiwizacji danych
 
-Moduł pobierania danych ze źródła
-Opisane zostaną mechanizmy odpowiedzialne za komunikację ze źródłem danych, stosowane biblioteki, obsługa błędów, walidacja odpowiedzi oraz harmonogram wykonywania operacji pobierania.
+W module archiwizacji danych dane pobrane w poprzednim module są pakowane i kompresowane, a następnie wysyłane do katalogu w serwisie Dropbox w celu ich archiwizacji. Serwis Dropbox jest zintegrowany z systemem uwierzytelniania OAuth 2.0, przez co wymaga token odświeżania, który należy pozyskać ręcznie, wykonując proces jednorazowo przed pierwszym uruchomieniem systemu. Token odświeżania umożliwia długotrwałą autoryzację, bez potrzeby ponownego logowania, dzięki czemu jest elementem pasującym do założeń pełnej automatyzacji procesu.
 
-Moduł archiwizacji danych
-Przedstawiona zostanie metoda przechowywania pobranych danych, format archiwów, sposób organizacji plików, mechanizmy kompresji oraz polityka dotycząca cyklu życia danych.
+```python
+def get_refresh_token(app_key, app_secret):
+    auth_flow = DropboxOAuth2FlowNoRedirect(
+        consumer_key=app_key,
+        consumer_secret=app_secret,
+        token_access_type='offline'
+    )
 
-Moduł przetwarzania danych
-Podrozdział ten zawiera opis procesu analizy i transformacji danych, wykorzystywane algorytmy, biblioteki oraz techniki filtracji, agregacji i czyszczenia danych. Omówione zostaną również optymalizacje i decyzje dotyczące wydajności.
+    authorize_url = auth_flow.start()
+    print("1. Go to: " + authorize_url)
+    print("2. Click 'Allow' (you might have to log in first).")
+    print("3. Copy the authorization code.")
 
-Moduł dodawania danych do bazy danych
-Opisany zostanie sposób komunikacji z bazą danych, struktura tabel, wykorzystane narzędzia (np. ORM), obsługa transakcji oraz mechanizmy zapewniające integralność i spójność danych.
+    auth_code = input("Enter the authorization code here: ").strip()
+    oauth_result = auth_flow.finish(auth_code)
 
-Moduł wizualizacji wyników
-W tej części zostaną przedstawione rozwiązania pozwalające na prezentację wyników przetwarzania, wykorzystywane narzędzia do wizualizacji, przygotowywane wykresy lub dashboardy oraz sposób integracji modułu z pozostałymi elementami systemu.
+    print("Access token:", oauth_result.access_token)
+    print("Refresh token:", oauth_result.refresh_token)
+    print("Expires in:", oauth_result.expires_at)
+
+    return oauth_result.refresh_token
+```
+
+> Rys 3.3.1 Fragment kodu pozyskujący token odświeżania
+
+Archiwizacja danych rozpoczyna się w po poprawnym pozyskaniu wszystkich wymaganych danych z API SWPC. Pierwszym krokiem jest kompresja i zapakowanie katalogów docelowych do formatu zip. Dodatkowo, możliwe jest usunięcie wcześniej utworzonego katalogu docelowego w celu opróżnienia przestrzeni dyskowej.
+
+```python
+def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, remove_dir: bool = True):
+    """
+    Compress the data directory into a zip file
+
+    :param target_name:
+    :param target_dir:
+    :param remove_dir:
+    :return:
+    """
+    target_dir = Path(target_dir)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    logger.log(f"Compressing data for {target_name}")
+    make_archive(
+        base_name=str(target_dir.parent / target_name),
+        format='zip',
+        root_dir=target_dir.parent,
+        base_dir=target_dir.name
+    )
+
+    if remove_dir:
+        logger.log(f"Removing directory {target_dir}")
+        rmtree(target_dir, ignore_errors=False)
+        logger.log(f"Directory {target_dir} removed")
+```
+
+Po utworzeniu archiwum zawierającego oczekiwane dane, są one wysyłane do serwisu Dropbox. W celu zapewnienia niezawodnego przesyłu danych zaimplementowane zostały systemy przetwarzania błędów oraz powtarzania procesu w przypadku błędu. Dodatkowo aby uniknąć nadmiernej liczby połączeń z serwerami Dropbox, przed każdym restartem system odczekuje wcześniej ustaloną ilość czasu.
+
+```python
+def send_to_dropbox(
+    archive_path: Union[str, Path],
+    dropbox_path: str,
+    logger: Logger
+):
+    """
+    Upload a file to Dropbox
+
+    :param archive_path: Path to the file to be uploaded
+    :param dropbox_path: Path in Dropbox where the file will be uploaded
+    :param logger: Logger instance for logging
+    """
+    dbx = dropbox.Dropbox(
+            app_secret=DROPBOX_APP_SECRET,
+            app_key=DROPBOX_APP_KEY,
+            oauth2_refresh_token=DROPBOX_REFRESH_TOKEN
+        )
+    retries = 0
+
+    with open(archive_path, "rb") as f:
+        logger.log(f"Uploading {archive_path} to Dropbox at {dropbox_path}")
+        while retries < MAX_RETRIES:
+            try:
+                dbx.files_upload(f.read(), dropbox_path, mode=WriteMode('overwrite'))
+
+                logger.log(f"Successfully uploaded {archive_path} to Dropbox at {dropbox_path}")
+                return
+            except ApiError as e:
+                logger.log_exception(f"API error: {e}")
+                retries += 1
+                logger.log(f"Sleeping for {SEND_RETRY_SLEEP_TIME} seconds before retrying")
+                sleep(SEND_RETRY_SLEEP_TIME)
+
+            except AuthError as e:
+                logger.log_exception(f"Authentication error: {e}")
+                retries += 1
+                logger.log(f"Sleeping for {SEND_RETRY_SLEEP_TIME} seconds before retrying")
+                sleep(SEND_RETRY_SLEEP_TIME)
+        else:
+            logger.log_error(f"Failed to upload {archive_path} to Dropbox after {MAX_RETRIES} retries")
+            raise Exception(f"Failed to upload {archive_path} to Dropbox after {MAX_RETRIES} retries")
+```
+
+> Rys 3.3.2 Fragment kodu przedstawiający wysyłanie danych do serwisu Dropbox
+
+Po integracji powyższe elementy umożliwiają spełnienie założeń modułu archiwizacji danych poprzez efektywne pakowanie, kompresowanie i archiwizowanie danych pobranych w poprzednim module.
+
+```python
+compress_data(target_dir.name, target_dir)
+logger.log(f"Data compressed to {target_dir}.zip")
+send_to_dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{DROPBOX_DIR}/{target_dir.name}.zip", logger)
+```
+
+> Rys 3.3.3 Fragment kodu przedstawiający integrację elementów opisywanego modułu
+
