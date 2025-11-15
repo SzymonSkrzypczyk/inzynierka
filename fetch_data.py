@@ -80,8 +80,8 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
                     logger.log(f"Sleeping for {RETRY_SLEEP_TIME} seconds before retrying")
                     await asyncio.sleep(RETRY_SLEEP_TIME)
             else:
-                logger.log_error(f"Failed to retrieve data from {url} after 3 retries")
-                raise Exception(f"Failed to retrieve data from {url} after 3 retries")
+                logger.log_error(f"Failed to retrieve data from {url} after {MAX_RETRIES} retries")
+                raise Exception(f"Failed to retrieve data from {url} after {MAX_RETRIES} retries")
 
 
 def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, remove_dir: bool = True):
