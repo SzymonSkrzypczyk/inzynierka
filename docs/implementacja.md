@@ -188,32 +188,32 @@ def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, rem
 Po utworzeniu archiwum zawierającego oczekiwane dane, są one wysyłane do serwisu Dropbox. W celu zapewnienia niezawodnego przesyłu danych zaimplementowane zostały systemy przetwarzania błędów oraz powtarzania procesu w przypadku błędu. Dodatkowo aby uniknąć nadmiernej liczby połączeń z serwerami Dropbox, przed każdym restartem system odczekuje wcześniej ustaloną ilość czasu.
 
 ```python
-def send_to_dropbox(
+def send_to_Dropbox(
     archive_path: Union[str, Path],
-    dropbox_path: str,
+    Dropbox_path: str,
     logger: Logger
 ):
     """
     Upload a file to Dropbox
 
     :param archive_path: Path to the file to be uploaded
-    :param dropbox_path: Path in Dropbox where the file will be uploaded
+    :param Dropbox_path: Path in Dropbox where the file will be uploaded
     :param logger: Logger instance for logging
     """
-    dbx = dropbox.Dropbox(
-            app_secret=DROPBOX_APP_SECRET,
-            app_key=DROPBOX_APP_KEY,
-            oauth2_refresh_token=DROPBOX_REFRESH_TOKEN
+    dbx = Dropbox.Dropbox(
+            app_secret=Dropbox_APP_SECRET,
+            app_key=Dropbox_APP_KEY,
+            oauth2_refresh_token=Dropbox_REFRESH_TOKEN
         )
     retries = 0
 
     with open(archive_path, "rb") as f:
-        logger.log(f"Uploading {archive_path} to Dropbox at {dropbox_path}")
+        logger.log(f"Uploading {archive_path} to Dropbox at {Dropbox_path}")
         while retries < MAX_RETRIES:
             try:
-                dbx.files_upload(f.read(), dropbox_path, mode=WriteMode('overwrite'))
+                dbx.files_upload(f.read(), Dropbox_path, mode=WriteMode('overwrite'))
 
-                logger.log(f"Successfully uploaded {archive_path} to Dropbox at {dropbox_path}")
+                logger.log(f"Successfully uploaded {archive_path} to Dropbox at {Dropbox_path}")
                 return
             except ApiError as e:
                 logger.log_exception(f"API error: {e}")
@@ -238,8 +238,151 @@ Po integracji powyższe elementy umożliwiają spełnienie założeń modułu ar
 ```python
 compress_data(target_dir.name, target_dir)
 logger.log(f"Data compressed to {target_dir}.zip")
-send_to_dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{DROPBOX_DIR}/{target_dir.name}.zip", logger)
+send_to_Dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{Dropbox_DIR}/{target_dir.name}.zip", logger)
 ```
 
 > Rys 3.3.3 Fragment kodu przedstawiający integrację elementów opisywanego modułu
 
+## 3.4 Moduł przetwarzania danych
+
+W module przetwarzania danych zarchiwizowane dane są pobierane z serwisu Dropbox oraz przygotowywane w celu umożliwienia ich zapisu do bazy danych. Pierwszym etapem procesu jest pobranie skompresowanego i zapakowanego archiwum zip, które jest następnie rozpakowywane. W celu umożliwienia wysokiej elastyczności system umożliwia pobranie całego zapakowanego katalogu, jak i pojedynczego pliku. Dzięki temu, możliwe jest pobranie wszystkich dostępnych archiwów przy użyciu wspólnej funkcjonalności, a także pobranie archiwum dla pojedynczej daty.
+
+```go
+if targetDate != "" {
+    listArg := files.ListFolderArg{Path: "/inzynierka"}
+    listResult, err := client.ListFolder(&listArg)
+
+    if err != nil {
+        downloadPath = "/inzynierka/" + targetDate + ".zip"
+    } else {
+        expectedZip := targetDate + ".zip"
+        found := false
+
+        for _, entry := range listResult.Entries {
+            switch e := entry.(type) {
+            case *files.FileMetadata:
+                if e.Name == expectedZip {
+                    downloadPath = "/inzynierka/" + expectedZip
+                    found = true
+                }
+            case *files.FolderMetadata:
+                if e.Name == targetDate {
+                    downloadPath = "/inzynierka/" + targetDate
+                    found = true
+                }
+            }
+        }
+
+        if !found {
+            return fmt.Errorf("target '%s' not found as ZIP or folder", targetDate)
+        }
+    }
+} else {
+    downloadPath = "/inzynierka"
+}
+```
+
+> Rys 3.4.1 Fragment kodu odpowiedzialny za określenie ścieżki pobrania danych
+
+Po ustaleniu oczekiwanej ścieżki dla danych następuje proces pobierania właściwych danych. W zależności od rodzaju ścieżki logika pobierania różni się, dla pojedynczej daty oraz dla całego katalogu archiwów. Po wywołaniu odpowiedniej metody z pakietu `github.com/Dropbox/Dropbox-sdk-go-unofficial/v6/Dropbox` dane zostają przekazane do funkcjonalności ekstrakcji zarchiwizowanych danych.
+
+```go 
+if targetDate != "" && strings.HasSuffix(downloadPath, ".zip") {
+    downloadArg := files.DownloadArg{Path: downloadPath}
+    _, content, err := client.Download(&downloadArg)
+    if err != nil {
+        return fmt.Errorf("failed to download file: %w", err)
+    }
+    defer content.Close()
+
+    *tempFilePath, err = extract.DownloadFromDropbox(content)
+    if err != nil {
+        return fmt.Errorf("failed to save file: %w", err)
+    }
+
+} else {
+    downloadArg := files.DownloadZipArg{Path: downloadPath}
+    _, content, err := client.DownloadZip(&downloadArg)
+    if err != nil {
+        return fmt.Errorf("failed to download ZIP directory: %w", err)
+    }
+    defer content.Close()
+
+    *tempFilePath, err = extract.DownloadFromDropbox(content)
+    if err != nil {
+        return fmt.Errorf("failed to save ZIP archive: %w", err)
+    }
+}
+
+```
+
+> Rys 3.4.2 Fragment kodu odpowiedzialny za pobieranie danych
+
+Pierwszym krokiem ekstrakcji danych jest przeniesienie zawartości zwróconej z wyżej wymienionego pakietu do odpowiedniego katalogu tymczasowego. W tym celu system sprawdza, czy docelowy katalog istnieje, w takim przypadku cały proces jest pomijany w celu zaoszczędzenia zasobów, lub czy docelowy katalog został przekazany jako ścieżka do pliku, w tym przypadku zostaje zwrócony błąd.
+
+```go
+if katalog_danych_istnieje:
+    przerwij przetwarzanie
+
+utwórz_plik_tymczasowy()
+zapisz_pobrane_dane_do_pliku()
+```
+
+> Rys 3.4.3 Pseudokod przedstawiający proces tworzenia i wypełniania pliku tymczasowego
+
+Kolejnym krokiem jest właściwe wypakowywanie zawartości archiwum pobranej do katalogu tymczasowego, w tym celu tworzony jest katalog docelowy ekstrakcji do którego zapisywane są kolejne odpakowane pliki. Moduł obsługuje również archiwa zagnieżdżone, co zapewnia poprawne przetwarzanie nietypowych przypadków danych wejściowych.
+
+```go
+reader, err := zip.OpenReader(zipFilePath)
+if err != nil {
+    return fmt.Errorf("unable to open ZIP archive: %w", err)
+}
+defer reader.Close()
+
+for _, f := range reader.File {
+    if f.FileInfo().IsDir() {
+        continue
+    }
+
+    src, err := f.Open()
+    if err != nil {
+        return fmt.Errorf("cannot open file '%s': %w", f.Name, err)
+    }
+    defer src.Close()
+
+    dest := filepath.Join(extractionDir, filepath.Base(f.Name))
+    dst, err := os.Create(dest)
+    if err != nil {
+        return fmt.Errorf("cannot create '%s': %w", dest, err)
+    }
+
+    io.Copy(dst, src)
+    dst.Close()
+}
+```
+
+> Rys 3.4.4 Fragment kodu odpowiedzialny za rozpakowywanie zarchiwizowanych plików do katalogu docelowego ekstrakcji
+
+Przedstawiony moduł umożliwia automatyczne pobieranie, weryfikację i ekstrakcję danych archiwalnych z serwisu Dropbox. Dzięki obsłudze zarówno pojedynczych plików, jak i całych katalogów, moduł charakteryzuje się wysoką elastyczność oraz skalowalnością w procesie pozyskiwania danych wejściowych.
+
+Plan +-:
+
+W niniejszym rozdziale przedstawiono szczegółową implementację systemu, zgodnie z architekturą opisaną w poprzednim rozdziale. Rozdział został podzielony na moduły funkcjonalne, z których każdy odpowiada za inny etap przetwarzania danych. Dla każdego modułu opisano zastosowane technologie, strukturę kodu, sposób działania oraz najważniejsze decyzje projektowe. Dodatkowo, w celu ograniczenia pobrania jednocześnie wszystkich danych definiowany jest parametr warunkujący pobranie 
+
+Źródło danych
+W tym podrozdziale zostanie omówione wykorzystywane źródło danych, jego format, dostępność, sposób autoryzacji oraz ograniczenia techniczne. Zaprezentowane zostaną przykładowe dane wejściowe wykorzystywane w systemie.
+
+Moduł pobierania danych ze źródła
+Opisane zostaną mechanizmy odpowiedzialne za komunikację ze źródłem danych, stosowane biblioteki, obsługa błędów, walidacja odpowiedzi oraz harmonogram wykonywania operacji pobierania.
+
+Moduł archiwizacji danych
+Przedstawiona zostanie metoda przechowywania pobranych danych, format archiwów, sposób organizacji plików, mechanizmy kompresji oraz polityka dotycząca cyklu życia danych.
+
+Moduł przetwarzania danych
+Podrozdział ten zawiera opis procesu analizy i transformacji danych, wykorzystywane algorytmy, biblioteki oraz techniki filtracji, agregacji i czyszczenia danych. Omówione zostaną również optymalizacje i decyzje dotyczące wydajności.
+
+Moduł dodawania danych do bazy danych
+Opisany zostanie sposób komunikacji z bazą danych, struktura tabel, wykorzystane narzędzia (np. ORM), obsługa transakcji oraz mechanizmy zapewniające integralność i spójność danych.
+
+Moduł wizualizacji wyników
+W tej części zostaną przedstawione rozwiązania pozwalające na prezentację wyników przetwarzania, wykorzystywane narzędzia do wizualizacji, przygotowywane wykresy lub dashboardy oraz sposób integracji modułu z pozostałymi elementami systemu.
