@@ -80,7 +80,7 @@ W niniejszym podrozdziale opisano wymagania niefunkcjonalne systemu, które okre
 
 Architektura projektu została zaprojektowana w sposób modułowy, odseparowując od siebie poszczególne części, umożliwiając skalowalność oraz łatwość rozbudowy poszczególnych komponentów. Na rysunku 2.3.1 przedstawiono ogólny schemat architektury systemu.
 
-![flowchart](C:\Users\SzymonSkrzypczyk\Downloads\flowchart.png)
+![flowchart](../sketches/flowchart.png)
 
 System składa się z sześciu głównych modułów z funkcjonalnościami:
 

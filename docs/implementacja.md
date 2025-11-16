@@ -420,4 +420,21 @@ w przeciwnym wypadku:
 
 > Rys 3.6.2 Pseudokod przedstawiający sposób integracji wszystkich podmodułów
 
-Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. P wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniąjąc założenia projektowe.
+Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. P wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniając założenia projektowe.
+
+## 3.7 Integracja modułów
+
+Opisane wyżej moduły zostały zintegrowane w trzy bloki:
+
+- blok zbierania danych
+- blok zapisu danych do bazy danych
+- blok wizualizacji danych
+
+Pierwszy blok zawiera moduły źródła danych, pozyskiwania danych i archiwizacji danych, natomiast drugi blok zawiera moduł przetwarzania danych i dodawania danych do bazy danych. W celu umożliwienia nieprzerwanego i niezawodnego pobierania i zapisywania danych stworzony został potok danych(ang. pipeline) działający codziennie o godzinie 18.40 czasu Polskiego, co umożliwiło ustawienie stosownego cron-jobu. Struktura potoku danych została oparta o technologię konteneryzacji (Docker) umożliwiając jej skalowanie i przenoszenie na inne platformy. Po wykonaniu dwóch pierwszych bloków na adres mailowy ustawiony w konfiguracji potoku zostaje wysłana informacja zawierająca status wykonania bloków. Jest to element monitorowania potoku, który usprawnia proces ewentualnego wykrywania błędów i restartowania potoku.
+
+![potok danych](../sketches/pipeline.png)
+
+
+> Rys 3.7.1 potok danych wykorzystywany w projekcie
+
+Ostatni blok składa się tylko z ostatniego modułu, który działa w chmurze udostępnionej przez Streamlit Community. Dzięki temu zabiegowi wizualizacja danych jest szeroko dostępna i nie wymaga żadnych ustawień z perspektywy użytkownika końcowego. Dodatkowo, konfiguracja bloku wizualizacji wymaga jedynie określenia zmiennych środowiskowych zawierających informacje odnośnie połączenia do bazy danych, a wszelkie zmiany zawartości tabel są odzwierciedlana w czasie rzeczywistym na wykresach.
