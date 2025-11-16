@@ -46,27 +46,9 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
 
 W dalszej części funkcji wykonywane jest odwołanie do aktualnie przetwarzanego punkt końcowego. W przypadku zwrócenia błędu przez API punkt końcowy zostaje ponownie odpytany o dane, dodatkowo wszystkie informacje o błędach zostają zapisane w celu identyfikacji potencjalnych błędów. W przypadku zwrócenia błędu jest on dodany do logów systemu, a następnie jeśli aktualna próba nie przekracza limitu dopuszczalnej ilości prób cały proces zostaje powtórzony.
 
-```python
-Utwórz sesję HTTP
-Dla każdego URL:
-    prób = 0
-    dopóki prób < MAX_RETRIES:
-        Spróbuj pobrać dane z punktu końcowego
-        Jeśli status odpowiedzi jest błędem (403, 500, 503):
-            zaloguj błąd
-            zwiększ próbę
-            poczekaj RETRY_SLEEP_TIME
-        Jeśli dane są puste lub nie istnieją:
-            zaloguj błąd
-            zwiększ próbę
-            poczekaj RETRY_SLEEP_TIME
-        Jeżeli dane pobrano poprawnie:
-            przerwij pętlę
-    Jeśli po MAX_RETRIES dane nie zostały pobrane:
-        zgłoś wyjątek i zaloguj niepowodzenie
-```
+![pobieranie danych](../sketches/fetch_chart_fitted.png)
 
-> Rys 3.2.2 Pseudokod przedstawiający asynchroniczne odwoływanie się do punktu końcowego, obsługę błędów oraz ponowne próby
+> Rys 3.2.2 Schemat przedstawiający pozyskiwanie danych 
 
 W dalszej części sprawdzana jest struktura zwróconych danych, a w przypadku zidentyfikowania danych zagnieżdżonych, ich odpowiedniego spłaszczenia, a następnie zapisania do odpowiedniego pliku wynikowego we wcześniej utworzonym katalogu docelowym. W celu umożliwienia ciągłego przepływu danych sprawdzana jest potencjalna zawartość pliku i w wypadku obecności zawartości jest ona dopisywana.
 
@@ -401,26 +383,11 @@ def _load_table_cached(name, limit):
 
 Każdy z podmodułów zawiera zestaw interaktywnych wykresów opisujących wybrane parametry danego zjawiska, wraz z dokładnymi opisami przedstawianych wykresów. Dzięki temu każde zjawisko może zostać dokładnie przedstawione i przeanalizowane, nawet przez osoby niezaznajomione z teoria danych zjawisk.
 
-```pseudocode
-ustaw konfigurację strony i tytuł
-wyświetl nagłówek sidebaru
+![integracja podmodułów](../sketches/dasboard_flow_chart.png)
 
-wybierz stronę z listy dostępnej na pasku bocznym
-utwórz ścieżkę do pliku strony
+> Rys 3.6.2 Schemat przedstawiający sposób integracji wszystkich podmodułów
 
-jeżeli plik istnieje:
-    uruchom podmoduł
-    jeśli istnieje funkcja render():
-        wywołaj render()
-    w przeciwnym wypadku:
-        wyświetl błąd
-w przeciwnym wypadku:
-    wyświetl błąd 
-```
-
-> Rys 3.6.2 Pseudokod przedstawiający sposób integracji wszystkich podmodułów
-
-Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. P wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniając założenia projektowe.
+Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. Po wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniając założenia projektowe.
 
 ## 3.7 Integracja modułów
 
