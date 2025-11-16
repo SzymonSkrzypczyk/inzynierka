@@ -3,17 +3,18 @@ package database
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/SzymonSkrzypczyk/db/extract"
-	"github.com/SzymonSkrzypczyk/db/utils"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/SzymonSkrzypczyk/db/extract"
+	"github.com/SzymonSkrzypczyk/db/utils"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func InitDatabase() (*gorm.DB, error) {
@@ -389,7 +390,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 			}
 
 			filesProcessed++
-			fmt.Printf("    ✓ Saved %s\n", file.Name())
+			fmt.Printf("    Saved %s\n", file.Name())
 		}
 
 		// log processing to sync the progress

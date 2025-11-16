@@ -279,24 +279,72 @@ for _, f := range reader.File {
 
 Przedstawiony moduł umożliwia automatyczne pobieranie, weryfikację i ekstrakcję danych archiwalnych z serwisu Dropbox. Dzięki obsłudze zarówno pojedynczych plików, jak i całych katalogów, moduł charakteryzuje się wysoką elastyczność oraz skalowalnością w procesie pozyskiwania danych wejściowych.
 
-Plan +-:
+## 3.5 Moduł dodawania danych do bazy danych
 
-W niniejszym rozdziale przedstawiono szczegółową implementację systemu, zgodnie z architekturą opisaną w poprzednim rozdziale. Rozdział został podzielony na moduły funkcjonalne, z których każdy odpowiada za inny etap przetwarzania danych. Dla każdego modułu opisano zastosowane technologie, strukturę kodu, sposób działania oraz najważniejsze decyzje projektowe. Dodatkowo, w celu ograniczenia pobrania jednocześnie wszystkich danych definiowany jest parametr warunkujący pobranie 
+Moduł dodawania danych do bazy danych odpowiada za przetworzenie dostępnych danych i dodanie ich do określonej przy pomocy zmiennych środowiskowych bazy danych. W systemie dane wysyłane są do bez serwerowej bazy PostgreSQL, Neon. Wszystkie tabele wykorzystywane w bazie danych zostały zdefiniowane jako modele pakietu `Gorm`, co umożliwiło dostęp do szeregu funkcjonalności ułatwiających obsługę danych. Na tym etapie zostają wybrane pliki wykorzystywane w wizualizacji danych, jedynie zdefiniowane modele trafią do bazy danych, umożliwiając ich wizualizację.
 
-Źródło danych
-W tym podrozdziale zostanie omówione wykorzystywane źródło danych, jego format, dostępność, sposób autoryzacji oraz ograniczenia techniczne. Zaprezentowane zostaną przykładowe dane wejściowe wykorzystywane w systemie.
+```go
+type BoulderKIndex1m struct {
+	ID      uint      `gorm:"primaryKey"`
+	TimeTag time.Time `gorm:"uniqueIndex;type:timestamp(0)"`
+	KIndex  float32   `gorm:"type:real"`
+}
+```
 
-Moduł pobierania danych ze źródła
-Opisane zostaną mechanizmy odpowiedzialne za komunikację ze źródłem danych, stosowane biblioteki, obsługa błędów, walidacja odpowiedzi oraz harmonogram wykonywania operacji pobierania.
+> Rys 3.5.1 Przykładowy model użyty w systemie
 
-Moduł archiwizacji danych
-Przedstawiona zostanie metoda przechowywania pobranych danych, format archiwów, sposób organizacji plików, mechanizmy kompresji oraz polityka dotycząca cyklu życia danych.
+W modelu przedstawionym na rysunku 3.5.1 zdefiniowane zostały zarówno pola, ich typy i ograniczenia nałożone na opisywaną tabelę.
 
-Moduł przetwarzania danych
-Podrozdział ten zawiera opis procesu analizy i transformacji danych, wykorzystywane algorytmy, biblioteki oraz techniki filtracji, agregacji i czyszczenia danych. Omówione zostaną również optymalizacje i decyzje dotyczące wydajności.
+Pierwszym krokiem modułu jest inicjalizacja bazy danych, która odbywa się poprzez automatyczną migrację wszystkich modeli, umożliwia to obsługę przypadków powtórnego, jak i pierwszorazowego zapisu danych, ponieważ tabele tworzone są tylko w przypadku nieistnienia tabel.
 
-Moduł dodawania danych do bazy danych
-Opisany zostanie sposób komunikacji z bazą danych, struktura tabel, wykorzystane narzędzia (np. ORM), obsługa transakcji oraz mechanizmy zapewniające integralność i spójność danych.
+```pseudocode
+ustaw DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT ze zmiennych środowiskowych lub użyj wartości domyślnych
 
-Moduł wizualizacji wyników
-W tej części zostaną przedstawione rozwiązania pozwalające na prezentację wyników przetwarzania, wykorzystywane narzędzia do wizualizacji, przygotowywane wykresy lub dashboardy oraz sposób integracji modułu z pozostałymi elementami systemu.
+połącz się z bazą danych przy użyciu DSN
+jeśli połączenie się nie powiodło:
+    zgłoś błąd
+
+wykonaj AutoMigrate dla wszystkich wymaganych tabel
+jeśli migracja się nie powiodła:
+    zgłoś błąd
+
+wyświetl komunikat o sukcesie
+zwróć obiekt bazy danych
+```
+
+> Rys 3.5.2 Pseudokod przedstawiający inicjalizację bazy danych
+
+Kolejnym krokiem opisywanego modułu jest przetworzenie danych uzyskanych dla danych dostępnych w katalogu otrzymanym w procesie ekstrakcji. Etap ten jest właściwym etapem zapisu danych, dla każdego wczytanego pliku dopasowywany zostaje odpowiedni model, który następnie jest przetwarzany i zapisywany. W celu uniknięcia duplikatów danych każda operacja zapisu niezależnie od jej wyniku wywołuje zapis informacji w oddzielnej tabeli przechowującej unikatowe rekordy dla każdego przetwarzanego dnia. Dzięki tej funkcjonalności system jest w stanie zapobiec duplikowaniu danych oraz marnowania zasobów.
+
+```pseudocode
+dla każdej daty w katalogu danych:
+
+    jeżeli data nie jest zgodna z formatem:
+        pomiń
+
+    jeżeli targetdate jest określony i nie pasuje do daty:
+        pomiń
+
+    jeżeli data została już przetworzona:
+        pomiń lub zakończ (jeśli targetdate)
+
+    dla każdego pliku csv w katalogu daty:
+        jeżeli plik jest wykluczony:
+            pomiń
+
+        właduj dane z pliku
+        zapisz dane do odpowiedniej tabeli w bazie
+
+    zapisz informację o zakończonym przetwarzaniu daty w logu
+
+    jeżeli targetdate był określony:
+        zakończ funkcję
+
+jeżeli targetdate był określony i nie znaleziono go:
+    zgłoś błąd
+```
+
+> Rys 3.5.3 Pseudokod przedstawiający przetwarzanie zapisu danych dziennych do bazy danych
+
+Przedstawiony moduł umożliwia efektywny i niezawodny zapis danych do bazy danych, a także tworzenie struktury tabel, w przypadku jego braku.
+
