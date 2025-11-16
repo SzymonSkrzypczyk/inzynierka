@@ -51,6 +51,15 @@ def _is_time_like(col: str) -> bool:
 
 
 def read_table(table_name: str, limit: Optional[int] = None, use_cache: bool = True, ttl_seconds: Optional[int] = None, force_refresh: bool = False) -> pd.DataFrame:
+    """
+    Read data from a table
+
+    :param table_name:
+    :param limit:
+    :param ttl_seconds:
+    :param force_refresh:
+    :return:
+    """
     if table_name is None:
         return pd.DataFrame()
 

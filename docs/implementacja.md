@@ -348,3 +348,76 @@ jeżeli targetdate był określony i nie znaleziono go:
 
 Przedstawiony moduł umożliwia efektywny i niezawodny zapis danych do bazy danych, a także tworzenie struktury tabel, w przypadku jego braku.
 
+## 3.6 Moduł wizualizacji danych
+
+Moduł wizualizacji danych przedstawia dane pozyskane i przetworzone w postaci interaktywnych wykresów umożliwiających analizę zjawisk pogody kosmicznej. 
+
+Moduł został podzielony na mniejsze podmoduły, każdy przedstawiający osobne zjawisko. Każdy podmoduł pobiera dane z bazy danych, które zostają zapisywane do pamięci podręcznej trzymającej pobrane dane do 10 minut. Dzięki temu zabiegowi czas ładowania wykresów i obciążenie bazy danych zostały zredukowane wpływając pozytywnie na wydajność modułu.
+
+```python
+def read_table(table_name: str, limit: int | None = None, ttl_seconds: int | None = None, force_refresh: bool = False) -> pd.DataFrame:
+    """
+    Read data from a table
+
+    :param table_name:
+    :param limit:
+    :param ttl_seconds:
+    :param force_refresh:
+    :return:
+    """
+    if not table_name:
+        return pd.DataFrame()
+
+    key = (table_name, limit)
+
+    # memory cache
+    if not force_refresh and key in _MEM_CACHE:
+        entry = _MEM_CACHE[key]
+        if ttl_seconds is None or (datetime.now() - entry['ts']).total_seconds() <= ttl_seconds:
+            return entry['df'].copy()
+
+    if engine is None:
+        raise RuntimeError("DB engine not configured")
+
+    # query data
+    q = f'SELECT * FROM "{table_name}"' + (f" LIMIT {limit}" if limit else "")
+    df = pd.read_sql(text(q), con=engine)
+    df.columns = [c.lower() for c in df.columns]
+
+    for c in df.columns:
+        if _is_time_like(c):
+            try: df[c] = pd.to_datetime(df[c])
+            except: pass
+
+    _MEM_CACHE[key] = {'ts': datetime.now(), 'df': df.copy()}
+    return df
+
+@st.cache_data(ttl=600)
+def _load_table_cached(name, limit):
+    return read_table(name, limit=limit)
+```
+
+> Rys 3.6.1 Fragment kodu przedstawiający pełną funkcjonalność ładowania danych wraz z pamięcią podręczną
+
+Każdy z podmodułów zawiera zestaw interaktywnych wykresów opisujących wybrane parametry danego zjawiska, wraz z dokładnymi opisami przedstawianych wykresów. Dzięki temu każde zjawisko może zostać dokładnie przedstawione i przeanalizowane, nawet przez osoby niezaznajomione z teoria danych zjawisk.
+
+```pseudocode
+ustaw konfigurację strony i tytuł
+wyświetl nagłówek sidebaru
+
+wybierz stronę z listy dostępnej na pasku bocznym
+utwórz ścieżkę do pliku strony
+
+jeżeli plik istnieje:
+    uruchom podmoduł
+    jeśli istnieje funkcja render():
+        wywołaj render()
+    w przeciwnym wypadku:
+        wyświetl błąd
+w przeciwnym wypadku:
+    wyświetl błąd 
+```
+
+> Rys 3.6.2 Pseudokod przedstawiający sposób integracji wszystkich podmodułów
+
+Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. P wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniąjąc założenia projektowe.

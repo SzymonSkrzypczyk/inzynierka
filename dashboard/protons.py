@@ -14,17 +14,6 @@ except Exception:
     from dashboard.plot_utils import set_layout, add_gray_areas_empty
 
 
-def _parse_energy_val(e):
-    if pd.isna(e):
-        return np.nan
-    if isinstance(e, (int, float)):
-        return float(e)
-    s = str(e)
-    m = ''.join(ch if (ch.isdigit() or ch=='.') else ' ' for ch in s)
-    parts = [p for p in m.split() if p]
-    return float(parts[0]) if parts else np.nan
-
-
 @st.cache_data(ttl=600)
 def _load_table_cached(name, limit):
     return read_table(name, limit=limit)
