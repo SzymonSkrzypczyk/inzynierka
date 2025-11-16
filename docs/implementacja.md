@@ -47,69 +47,48 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
 W dalszej części funkcji wykonywane jest odwołanie do aktualnie przetwarzanego punkt końcowego. W przypadku zwrócenia błędu przez API punkt końcowy zostaje ponownie odpytany o dane, dodatkowo wszystkie informacje o błędach zostają zapisane w celu identyfikacji potencjalnych błędów. W przypadku zwrócenia błędu jest on dodany do logów systemu, a następnie jeśli aktualna próba nie przekracza limitu dopuszczalnej ilości prób cały proces zostaje powtórzony.
 
 ```python
-async with aiohttp.ClientSession() as session:
-    async with session.get(url) as response:
-        retries = 0
-        while retries < MAX_RETRIES:
-            try:
-                if not response.ok:
-                    if response.status == 403:
-                        logger.log_error(f"Forbidden: {response.status}")
-                        raise Exception(f"Forbidden: {response.status}")
-                    elif response.status == 500:
-                        logger.log_error(f"Server error: {response.status}")
-                        raise Exception(f"Server error: {response.status}")
-                    elif response.status == 503:
-                        logger.log_error(f"Service unavailable: {response.status}")
-                        raise Exception(f"Service unavailable: {response.status}")
-
-                data = await response.json()
-
-                if data is None or not data:
-                    logger.log_error(f"No data found for the given date range")
-                    raise Exception(f"No data found for the given date range")
-
-                ...
-            except Exception as e:
-                retries += 1
-                logger.log_error(f"Error retrieving data from {url}: {e}. Retrying {retries}/3")
-                logger.log(f"Sleeping for {RETRY_SLEEP_TIME} seconds before retrying")
-                await asyncio.sleep(RETRY_SLEEP_TIME)	
-        else:
-            logger.log_error(f"Failed to retrieve data from {url} after {MAX_RETRIES} retries")
-            raise Exception(f"Failed to retrieve data from {url} after {MAX_RETRIES} retries")
+Utwórz sesję HTTP
+Dla każdego URL:
+    prób = 0
+    dopóki prób < MAX_RETRIES:
+        Spróbuj pobrać dane z punktu końcowego
+        Jeśli status odpowiedzi jest błędem (403, 500, 503):
+            zaloguj błąd
+            zwiększ próbę
+            poczekaj RETRY_SLEEP_TIME
+        Jeśli dane są puste lub nie istnieją:
+            zaloguj błąd
+            zwiększ próbę
+            poczekaj RETRY_SLEEP_TIME
+        Jeżeli dane pobrano poprawnie:
+            przerwij pętlę
+    Jeśli po MAX_RETRIES dane nie zostały pobrane:
+        zgłoś wyjątek i zaloguj niepowodzenie
 ```
 
-> Rys 3.2.2 Fragment kodu odpowiedzialny za asynchroniczne odwoływanie się do punktu końcowego, obsługę błędów oraz ponowne próby
+> Rys 3.2.2 Pseudokod przedstawiający asynchroniczne odwoływanie się do punktu końcowego, obsługę błędów oraz ponowne próby
 
 W dalszej części sprawdzana jest struktura zwróconych danych, a w przypadku zidentyfikowania danych zagnieżdżonych, ich odpowiedniego spłaszczenia, a następnie zapisania do odpowiedniego pliku wynikowego we wcześniej utworzonym katalogu docelowym. W celu umożliwienia ciągłego przepływu danych sprawdzana jest potencjalna zawartość pliku i w wypadku obecności zawartości jest ona dopisywana.
 
 ```python
-has_nested = any(isinstance(item, dict) for item in data)
-if has_nested:
-    logger.log_warning(f"Data contains nested structures, flattening the data for {target_name}")
-    # Flatten the data if it contains nested structures
-    data = [
-        {**item, **{k: v for k, v in item.items() if isinstance(v, dict)}}
-        for item in data
-    ]
+jeżeli dane zawierają zagnieżdżone słowniki:
+    zaloguj ostrzeżenie
+    spłaszcz dane
 
+# Określ nazwę pliku wynikowego w katalogu docelowym
+plik_wynikowy = target_dir / "{target_name}_{data_dzisiaj}.csv"
 
-# Append the data to a CSV file
-filename = target_dir / f"{target_name}_{datetime.today().date()}.csv"
-with open(filename, mode='a', newline='') as file:
-    writer = csv.writer(file)
-    # Write the header only if the file is empty
-    if file.tell() == 0:
-        logger.log(f"Writing header for {target_name} to {filename}")
-        writer.writerow(data[0].keys())
-    for item in data:
-        writer.writerow(item.values())
+# Otwórz plik do dopisywania
+jeżeli plik jest nowy:
+    zapisz nagłówki kolumn
 
-    logger.log(f"Data retrieved and saved to {filename}")	
+dla każdego rekordu w danych:
+    zapisz wartości rekordu do pliku
+
+zaloguj informację o zapisaniu danych do pliku
 ```
 
-> Rys 3.2.3 Fragment kodu odpowiadający za spłaszczanie oraz zapisywanie plików w katalogu docelowym
+> Rys 3.2.3 Pseudokod przedstawiający przetwarzanie i zapis danych do pliku csv
 
 Po integracji powyższe fragmenty umożliwiają wydajne i niezawodne pobieranie danych pochodzących z modułu źródła danych zgodnie z wymaganiami opisanymi w poprzednim rozdziale.
 
@@ -185,53 +164,30 @@ def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, rem
         logger.log(f"Directory {target_dir} removed")
 ```
 
+> Rys 3.2.2 Funkcja kompresująca katalog danych do formatu ZIP
+
 Po utworzeniu archiwum zawierającego oczekiwane dane, są one wysyłane do serwisu Dropbox. W celu zapewnienia niezawodnego przesyłu danych zaimplementowane zostały systemy przetwarzania błędów oraz powtarzania procesu w przypadku błędu. Dodatkowo aby uniknąć nadmiernej liczby połączeń z serwerami Dropbox, przed każdym restartem system odczekuje wcześniej ustaloną ilość czasu.
 
 ```python
-def send_to_Dropbox(
-    archive_path: Union[str, Path],
-    Dropbox_path: str,
-    logger: Logger
-):
-    """
-    Upload a file to Dropbox
+otwórz plik ZIP
+próby = 0
 
-    :param archive_path: Path to the file to be uploaded
-    :param Dropbox_path: Path in Dropbox where the file will be uploaded
-    :param logger: Logger instance for logging
-    """
-    dbx = Dropbox.Dropbox(
-            app_secret=Dropbox_APP_SECRET,
-            app_key=Dropbox_APP_KEY,
-            oauth2_refresh_token=Dropbox_REFRESH_TOKEN
-        )
-    retries = 0
+dopóki próby < MAX_RETRIES:
+    spróbuj przesłać plik do Dropbox
+    jeżeli przesył zakończony sukcesem:
+        zaloguj sukces
+        zakończ
+    jeżeli wystąpi błąd API lub uwierzytelnienia:
+        zaloguj wyjątek
+        zwiększ próby
+        poczekaj SEND_RETRY_SLEEP_TIME
 
-    with open(archive_path, "rb") as f:
-        logger.log(f"Uploading {archive_path} to Dropbox at {Dropbox_path}")
-        while retries < MAX_RETRIES:
-            try:
-                dbx.files_upload(f.read(), Dropbox_path, mode=WriteMode('overwrite'))
-
-                logger.log(f"Successfully uploaded {archive_path} to Dropbox at {Dropbox_path}")
-                return
-            except ApiError as e:
-                logger.log_exception(f"API error: {e}")
-                retries += 1
-                logger.log(f"Sleeping for {SEND_RETRY_SLEEP_TIME} seconds before retrying")
-                sleep(SEND_RETRY_SLEEP_TIME)
-
-            except AuthError as e:
-                logger.log_exception(f"Authentication error: {e}")
-                retries += 1
-                logger.log(f"Sleeping for {SEND_RETRY_SLEEP_TIME} seconds before retrying")
-                sleep(SEND_RETRY_SLEEP_TIME)
-        else:
-            logger.log_error(f"Failed to upload {archive_path} to Dropbox after {MAX_RETRIES} retries")
-            raise Exception(f"Failed to upload {archive_path} to Dropbox after {MAX_RETRIES} retries")
+jeżeli plik nie został wysłany po MAX_RETRIES:
+    zaloguj błąd
+    zgłoś wyjątek
 ```
 
-> Rys 3.3.2 Fragment kodu przedstawiający wysyłanie danych do serwisu Dropbox
+> Rys 3.3.3 Pseudokod przedstawiający proces wysyłania danych do serwisu Dropbox 
 
 Po integracji powyższe elementy umożliwiają spełnienie założeń modułu archiwizacji danych poprzez efektywne pakowanie, kompresowanie i archiwizowanie danych pobranych w poprzednim module.
 
@@ -241,7 +197,7 @@ logger.log(f"Data compressed to {target_dir}.zip")
 send_to_Dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{Dropbox_DIR}/{target_dir.name}.zip", logger)
 ```
 
-> Rys 3.3.3 Fragment kodu przedstawiający integrację elementów opisywanego modułu
+> Rys 3.3.4 Fragment kodu przedstawiający integrację elementów opisywanego modułu
 
 ## 3.4 Moduł przetwarzania danych
 
@@ -321,11 +277,12 @@ if targetDate != "" && strings.HasSuffix(downloadPath, ".zip") {
 Pierwszym krokiem ekstrakcji danych jest przeniesienie zawartości zwróconej z wyżej wymienionego pakietu do odpowiedniego katalogu tymczasowego. W tym celu system sprawdza, czy docelowy katalog istnieje, w takim przypadku cały proces jest pomijany w celu zaoszczędzenia zasobów, lub czy docelowy katalog został przekazany jako ścieżka do pliku, w tym przypadku zostaje zwrócony błąd.
 
 ```go
-if katalog_danych_istnieje:
+jesli katalog danych istnieje:
+	zaloguj wiadomość
     przerwij przetwarzanie
 
-utwórz_plik_tymczasowy()
-zapisz_pobrane_dane_do_pliku()
+utwórz plik tymczasowy
+zapisz pobrane dane do pliku tymczasowego
 ```
 
 > Rys 3.4.3 Pseudokod przedstawiający proces tworzenia i wypełniania pliku tymczasowego
