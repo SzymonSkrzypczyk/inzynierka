@@ -58,11 +58,19 @@ Rozdział 2. Architektura projektu.............................................<
 
 Rozdział 3. Implementacja systemu.............................................<strona>
 
-3.1 Moduł pozyskiwania danych.............................................<strona>
+	3.1 Moduł źródła danych.............................................<strona>
 
-3.2 Moduł przetwarzania danych.............................................<strona>
+	3.2 Moduł pozyskiwania danych.............................................<strona>
 
-3.3 Moduł wizualizacji danych.............................................<strona>
+	3.3 Moduł archiwizacji danych.............................................<strona>
+
+	3.4 Moduł przetwarzania danych.............................................<strona>
+
+	3.5 Moduł dodawania danych do bazy danych.............................................<strona>
+
+	3.6 Moduł wizualizacji danych.............................................<strona>  
+
+	3.7 Integracja modułów.............................................<strona>
 
 Rozdział 4. Analiza wyników.............................................<strona>
 
