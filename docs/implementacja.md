@@ -204,75 +204,32 @@ send_to_Dropbox(target_dir.parent / f"{target_dir.name}.zip", f"{Dropbox_DIR}/{t
 W module przetwarzania danych zarchiwizowane dane są pobierane z serwisu Dropbox oraz przygotowywane w celu umożliwienia ich zapisu do bazy danych. Pierwszym etapem procesu jest pobranie skompresowanego i zapakowanego archiwum zip, które jest następnie rozpakowywane. W celu umożliwienia wysokiej elastyczności system umożliwia pobranie całego zapakowanego katalogu, jak i pojedynczego pliku. Dzięki temu, możliwe jest pobranie wszystkich dostępnych archiwów przy użyciu wspólnej funkcjonalności, a także pobranie archiwum dla pojedynczej daty.
 
 ```go
-if targetDate != "" {
-    listArg := files.ListFolderArg{Path: "/inzynierka"}
-    listResult, err := client.ListFolder(&listArg)
-
-    if err != nil {
+jeżeli podano targetDate:
+    sprawdź zawartość katalogu "/inzynierka" w Dropbox
+    jeżeli nie można odczytać katalogu:
         downloadPath = "/inzynierka/" + targetDate + ".zip"
-    } else {
-        expectedZip := targetDate + ".zip"
-        found := false
-
-        for _, entry := range listResult.Entries {
-            switch e := entry.(type) {
-            case *files.FileMetadata:
-                if e.Name == expectedZip {
-                    downloadPath = "/inzynierka/" + expectedZip
-                    found = true
-                }
-            case *files.FolderMetadata:
-                if e.Name == targetDate {
-                    downloadPath = "/inzynierka/" + targetDate
-                    found = true
-                }
-            }
-        }
-
-        if !found {
-            return fmt.Errorf("target '%s' not found as ZIP or folder", targetDate)
-        }
-    }
-} else {
+    w przeciwnym razie:
+        sprawdź, czy istnieje plik ZIP lub folder odpowiadający targetDate
+        jeśli nie znaleziono ani pliku, ani folderu:
+            zgłoś błąd
+w przeciwnym razie:
     downloadPath = "/inzynierka"
-}
 ```
 
-> Rys 3.4.1 Fragment kodu odpowiedzialny za określenie ścieżki pobrania danych
+> Rys 3.4.1 Pseudokod przedstawiający logikę określania ścieżki pobrania danych
 
 Po ustaleniu oczekiwanej ścieżki dla danych następuje proces pobierania właściwych danych. W zależności od rodzaju ścieżki logika pobierania różni się, dla pojedynczej daty oraz dla całego katalogu archiwów. Po wywołaniu odpowiedniej metody z pakietu `github.com/Dropbox/Dropbox-sdk-go-unofficial/v6/Dropbox` dane zostają przekazane do funkcjonalności ekstrakcji zarchiwizowanych danych.
 
 ```go 
-if targetDate != "" && strings.HasSuffix(downloadPath, ".zip") {
-    downloadArg := files.DownloadArg{Path: downloadPath}
-    _, content, err := client.Download(&downloadArg)
-    if err != nil {
-        return fmt.Errorf("failed to download file: %w", err)
-    }
-    defer content.Close()
-
-    *tempFilePath, err = extract.DownloadFromDropbox(content)
-    if err != nil {
-        return fmt.Errorf("failed to save file: %w", err)
-    }
-
-} else {
-    downloadArg := files.DownloadZipArg{Path: downloadPath}
-    _, content, err := client.DownloadZip(&downloadArg)
-    if err != nil {
-        return fmt.Errorf("failed to download ZIP directory: %w", err)
-    }
-    defer content.Close()
-
-    *tempFilePath, err = extract.DownloadFromDropbox(content)
-    if err != nil {
-        return fmt.Errorf("failed to save ZIP archive: %w", err)
-    }
-}
-
+jeżeli downloadPath wskazuje plik ZIP:
+    pobierz plik ZIP z Dropbox
+    zapisz zawartość do pliku tymczasowego
+w przeciwnym razie:
+    pobierz cały katalog ZIP z Dropbox
+    zapisz zawartość do pliku tymczasowego
 ```
 
-> Rys 3.4.2 Fragment kodu odpowiedzialny za pobieranie danych
+> Rys 3.4.2 Pseudokod pokazujący logikę pobierania danych do pliku tymczasowego
 
 Pierwszym krokiem ekstrakcji danych jest przeniesienie zawartości zwróconej z wyżej wymienionego pakietu do odpowiedniego katalogu tymczasowego. W tym celu system sprawdza, czy docelowy katalog istnieje, w takim przypadku cały proces jest pomijany w celu zaoszczędzenia zasobów, lub czy docelowy katalog został przekazany jako ścieżka do pliku, w tym przypadku zostaje zwrócony błąd.
 
