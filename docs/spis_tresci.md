@@ -72,7 +72,7 @@ Rozdział 3. Implementacja systemu.............................................<
 
 	3.7 Integracja modułów.............................................<strona>
 
-Rozdział 4. Analiza wyników.............................................<strona>
+Rozdział 4. Analiza zaprojektowanego systemu.............................................<strona>
 
 4.1 Charakterystyka zaimplementowanego systemu.............................................<strona>
 
