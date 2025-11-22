@@ -52,9 +52,21 @@ Rozdział 2. Architektura projektu.............................................<
 
 2.3 Architektura systemu.............................................<strona>
 
-2.4 Decyzje projektowe.............................................<strona>
+	2.3.1 Źródło danych.............................................<strona>
 
-2.5 Wybór technologii.............................................<strona>
+	2.3.2 Moduł pozyskiwania danych.............................................<strona>
+
+	2.3.3 Moduł archiwizacji danych.............................................<strona>
+
+	2.3.4 Moduł przetwarzania danych.............................................<strona>
+
+	2.3.5 Moduł dodawania danych do bazy danych.............................................<strona>
+
+	2.3.6 Moduł wizualizacji danych.............................................<strona>
+
+2.4 Wybór technologii.............................................<strona>
+
+2.5 Decyzje projektowe.............................................<strona>
 
 Rozdział 3. Implementacja systemu.............................................<strona>
 
@@ -86,10 +98,8 @@ Rozdział 5. Podsumowanie i wnioski.............................................
 
 5.1 Podsumowanie zrealizowanych celów.............................................<strona>
 
-5.2 Wartość naukowa pracy.............................................<strona>
+5.2 Możliwe kierunki rozwoju projektu.............................................<strona>
 
-5.3 Możliwe kierunki rozwoju projektu.............................................<strona>
-
-5.4 Wnioski końcowe.............................................<strona>
+5.3 Wnioski końcowe.............................................<strona>
 
 Bibliografia.............................................<strona>
