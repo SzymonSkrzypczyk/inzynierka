@@ -104,7 +104,7 @@ W tym podrozdziale przedstawiono porównanie zaimplementowanego systemu z wybran
 
 | Kryterium                      | Systemy zewnętrzne                                           | Zaimplementowany system                                      |
 | ------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Zakres danych                  | szeroki, wychodzący poza temat pracy inżynierskiej           | zakres ograniczony do tematu pracy inżynierskiej             |
+| Zakres danych                  | szeroki, wychodzący poza temat pracy inżynierskiej           | zakres danych ograniczony do tematu pracy inżynierskiej             |
 | Wizualizacje                   | szeroki zakres wykresów, w tym animacje                      | wykresy czasowe, interaktywne, mapy ciepła                   |
 | Interaktywność                 | zależna od typu wykresu, detale dostępne po najechaniu kursorem na wykres | wysoka dla każdego typu wykresu, detale dostępne po najechaniu kursorem na wykres |
 | Predykcja                      | zaimplementowane predykcje dla np. rozbłysków słonecznych    | brak, poza zakresem opisywanej pracy                         |
