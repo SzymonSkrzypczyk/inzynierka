@@ -119,10 +119,10 @@ func ExtractZipContents(zipFilePath string, targetDate string) error {
 			return fmt.Errorf("failed to copy file %s: %v", file.Name, err)
 		}
 
-		fmt.Printf("  → Saved as: %s\n", destPath)
+		fmt.Printf("Saved as: %s\n", destPath)
 
 		if strings.HasSuffix(strings.ToLower(fileName), ".zip") {
-			fmt.Printf("  → Detected nested zip, extracting contents...\n")
+			fmt.Printf("Detected nested zip, extracting contents...\n")
 			err = extractNestedZip(destPath, extractionDir, targetDate)
 			if err != nil {
 				log.Printf("Warning: failed to extract nested zip %s: %v", fileName, err)
@@ -157,7 +157,7 @@ func extractNestedZip(zipPath, baseDataDir string, targetDate string) error {
 		return fmt.Errorf("failed to create subdirectory %s: %v", subDir, err)
 	}
 
-	fmt.Printf("    → Extracting %d files to: %s\n", len(reader.File), subDir)
+	fmt.Printf("Extracting %d files to: %s\n", len(reader.File), subDir)
 
 	for _, file := range reader.File {
 		// Skip directories
@@ -186,7 +186,7 @@ func extractNestedZip(zipPath, baseDataDir string, targetDate string) error {
 			return fmt.Errorf("failed to copy nested file %s: %v", file.Name, err)
 		}
 
-		fmt.Printf("    → %s\n", destPath)
+		fmt.Printf("%s\n", destPath)
 	}
 
 	return nil

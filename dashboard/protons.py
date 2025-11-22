@@ -62,7 +62,7 @@ def render(limit: Optional[int] = None):
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 
-    for name, df in (('Primary', df_p), ('Secondary', df_s)):
+    for name, df in (('Główny źródło danych', df_p), ('Zapasowe źródło danych', df_s)):
         if df.empty:
             st.info(f'Brak danych: {name} Integral Protons')
             continue
@@ -92,12 +92,12 @@ def render(limit: Optional[int] = None):
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'Strumień [cm⁻²·s⁻¹]'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
             set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True)
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Strumień [cm⁻²·s⁻¹]'}, log_y=True, markers=True)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
             set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True)
 
