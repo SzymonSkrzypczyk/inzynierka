@@ -98,6 +98,23 @@ W rezultacie system realizuje wszystkie przyjęte cele projektowe, jednocześnie
 
 ## 4.4 Porównanie z istniejącymi rozwiązaniami
 
-https://www.swpc.noaa.gov/communities/space-weather-enthusiasts-dashboard
+W tym podrozdziale przedstawiono porównanie zaimplementowanego systemu z wybranymi istniejącymi rozwiązaniami dostępnymi online, takimi jak dashboard [NOAA Space Weather Prediction Center](https://www.swpc.noaa.gov/communities/space-weather-enthusiasts-dashboard) oraz [SpaceWeatherLive](https://www.spaceweatherlive.com/). Celem jest porównanie podobieństw i różnic między systemami zewnętrznymi i systemem stworzonym w ramach opisywanej pracy.
 
-https://www.spaceweatherlive.com/
+### 4.4.1 Porównanie głównych obszarów
+
+| Kryterium                      | Systemy zewnętrzne                                           | Zaimplementowany system                                      |
+| ------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Zakres danych                  | szeroki, wychodzący poza temat pracy inżynierskiej           | zakres ograniczony do tematu pracy inżynierskiej             |
+| Wizualizacje                   | szeroki zakres wykresów, w tym animacje                      | wykresy czasowe, interaktywne, mapy ciepła                   |
+| Interaktywność                 | zależna od typu wykresu, detale dostępne po najechaniu kursorem na wykres | wysoka dla każdego typu wykresu, detale dostępne po najechaniu kursorem na wykres |
+| Predykcja                      | zaimplementowane predykcje dla np. rozbłysków słonecznych    | brak, poza zakresem opisywanej pracy                         |
+| Dostęp do danych historycznych | dane w większości dostępne dla ostatnich dni i godzin        | dane dostępnego dla całego okresu ich zbierania              |
+| Częstotliwość aktualizacji     | dane aktualizowane niemal w czasie rzeczywistym              | dane aktualizowane raz dziennie                              |
+
+### 4.4.2 Wnioski
+
+Porównanie z systemami zewnętrznymi pokazuje, że zaimplementowany system wyróżnia się przede wszystkim wysoką interaktywnością wykresów oraz pełnym dostępem do danych historycznych. Rozwiązania te zapewniają elastyczność i umożliwiają na szczegółową analizę danych oddalonych w czasie.
+
+W porównaniu do bardziej rozbudowanych systemów zewnętrznych, zaimplementowany system wykazuje ograniczony zakres danych oraz brak funkcji predykcyjnych i aktualizacji danych w czasie rzeczywistym. Opisane różnice są wynikiem świadomych decyzji projektowych, uwzględniających zakres pracy inżynierskiej oraz założenia przyjęte w projekcie.
+
+Ponadto, porównanie wskazuje możliwe dalsze kierunki rozwoju projektu, obejmujące między innymi wprowadzenie funkcji predykcyjnych, rozbudowanie modułu wizualizacji oraz zwiększenia częstotliwości aktualizacji.
