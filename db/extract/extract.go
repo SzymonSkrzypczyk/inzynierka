@@ -16,6 +16,7 @@ const (
 	AlreadyProcessedMessage = "Already Processed Skipping..." // Message indicating already processed data
 )
 
+// DownloadFromDropbox saves the content from Dropbox to a temporary zip file and returns its path.
 func DownloadFromDropbox(content io.Reader) (string, error) {
 	// Create a temporary directory holding the daily reports
 
@@ -59,6 +60,7 @@ func DownloadFromDropbox(content io.Reader) (string, error) {
 	return tempFilePath, nil
 }
 
+// ExtractZipContents extracts the contents of the zip file at zipFilePath.
 func ExtractZipContents(zipFilePath string, targetDate string) error {
 	if zipFilePath == AlreadyProcessedMessage {
 		fmt.Println("Data already processed, skipping zip extraction")
@@ -132,6 +134,7 @@ func ExtractZipContents(zipFilePath string, targetDate string) error {
 	return nil
 }
 
+// extractNestedZip extracts the contents of a nested zip file.
 func extractNestedZip(zipPath, baseDataDir string, targetDate string) error {
 	reader, err := zip.OpenReader(zipPath)
 	if err != nil {

@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import re
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, List
 
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -18,6 +18,10 @@ else:
 
 
 def list_public_tables():
+    """
+    List all public tables in the database
+    :return:
+    """
     if engine is None:
         return []
     with engine.connect() as conn:
@@ -25,7 +29,13 @@ def list_public_tables():
         return [r[0] for r in res.fetchall()]
 
 
-def find_table_like(keywords):
+def find_table_like(keywords: List[str]):
+    """
+    Find a table whose name contains all keywords (case insensitive)
+    :param keywords:  list of keywords
+    :type keywords: list[str]
+    :return:
+    """
     tables = list_public_tables()
     for t in tables:
         name = t.lower()
@@ -38,6 +48,13 @@ _MEM_CACHE = {}
 
 
 def clear_cache(table_name: Optional[str] = None):
+    """
+    Clear memory cache
+
+    :param table_name: table name to clear, or None to clear all
+    :type table_name: Optional[str]
+    :return:
+    """
     if table_name is None:
         _MEM_CACHE.clear()
     else:
@@ -47,17 +64,30 @@ def clear_cache(table_name: Optional[str] = None):
 
 
 def _is_time_like(col: str) -> bool:
+    """
+    Check if a column name is time-like
+
+    :param col: column name
+    :type col: str
+    :return:
+    """
     return bool(re.search(r"time|date|timetag|processedat|processed_at|observed", col))
 
 
 def read_table(table_name: str, limit: Optional[int] = None, use_cache: bool = True, ttl_seconds: Optional[int] = None, force_refresh: bool = False) -> pd.DataFrame:
     """
-    Read data from a table
+    Read a table from the database into a pandas DataFrame
 
     :param table_name:
+    :type table_name: str
     :param limit:
+    :type limit: Optional[int]
+    :param use_cache:
+    :type use_cache: bool
     :param ttl_seconds:
+    :type ttl_seconds: Optional[int]
     :param force_refresh:
+    :type force_refresh: bool
     :return:
     """
     if table_name is None:
@@ -100,6 +130,13 @@ def read_table(table_name: str, limit: Optional[int] = None, use_cache: bool = T
 
 
 def pick_time_column(df: pd.DataFrame) -> Optional[str]:
+    """
+    Pick the most likely time column from the DataFrame
+
+    :param df:
+    :type df: pd.DataFrame
+    :return:
+    """
     if df is None or df.empty:
         return None
     candidates = [c for c in df.columns if _is_time_like(c)]

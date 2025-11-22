@@ -1,3 +1,4 @@
+from typing import Optional, Union
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -14,12 +15,47 @@ except Exception:
     from dashboard.plot_utils import set_layout, add_gray_areas_empty
 
 
+def _parse_energy_val(e: Union[str, float, int, None]) -> float:
+    """
+    Parse energy value from string or number
+
+    :param e:
+    :type e: Union[str, float, int, None]
+    :return:
+    :rtype: float
+    """
+    if pd.isna(e):
+        return np.nan
+    if isinstance(e, (int, float)):
+        return float(e)
+    s = str(e)
+    m = ''.join(ch if (ch.isdigit() or ch=='.') else ' ' for ch in s)
+    parts = [p for p in m.split() if p]
+    return float(parts[0]) if parts else np.nan
+
+
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None):
+    """
+    Load table with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render proton radiation (integral fluxes) section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title('Promieniowanie protonowe — strumienie integralne')
     p_tab = find_table_like(['primary','integral','proton'])
     s_tab = find_table_like(['secondary','integral','proton'])
@@ -37,16 +73,22 @@ def render(limit=None):
         st.subheader(f'{name} — Strumienie protonowe według energii')
         with st.expander('Opis'):
             st.markdown('''
-            **Strumienie protonowe** przedstawiają intensywność promieniowania kosmicznego pochodzącego 
-            od Słońca w różnych pasmach energetycznych. Protony o wysokiej energii mogą stanowić 
-            zagrożenie dla astronautów, satelitów i systemów elektronicznych. Wykres pokazuje 
-            zmiany strumienia w czasie dla różnych energii - od niskoenergetycznych protonów 
-            słonecznych po wysokoenergetyczne cząstki kosmiczne.
-                        
-            **1 pfu** = 1 proton / (cm² · sr · s), gdzie:  
-            - **cm²** oznacza pole powierzchni, przez które przechodzi strumień cząstek  
-            - **s** oznacza jednostkę czasu (sekundę)  
-            - **sr** (steradian) oznacza jednostkę kąta bryłowego — stosowaną, by uwzględnić kierunkowość strumienia cząstek  
+            **Opis:** Wykres przedstawia czasowe zmiany strumienia protonów (cząstek naładowanych) 
+            pochodzących ze Słońca i przestrzeni kosmicznej w różnych pasmach energetycznych.
+            
+            **Cel wykresu:** Monitorowanie poziomów promieniowania protonowego, które może stanowić 
+            zagrożenie dla astronautów, satelitów i systemów elektronicznych.
+            
+            **Zmienne:**
+            - **Czas**: Moment pomiaru strumienia protonowego
+            - **Strumień [cm⁻²·s⁻¹]**: Liczba protonów przechodzących przez powierzchnię 1 cm² w ciągu sekundy
+            - **Energia**: Pasmo energetyczne protonów (jeśli dostępne w danych)
+            
+            **Interpretacja:**
+            - **Protony niskoenergetyczne**: Pochodzą głównie ze Słońca, związane z rozbłyskami słonecznymi
+            - **Protony wysokoenergetyczne**: Pochodzą z przestrzeni kosmicznej, mogą powodować zwiększone 
+            promieniowanie na wysokościach lotniczych
+            - **Nagłe wzrosty strumienia**: Wskazują na rozbłyski słoneczne lub koronalne wyrzuty masy
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]

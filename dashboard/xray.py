@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -9,28 +10,55 @@ except Exception:
 from plot_utils import set_layout, add_gray_areas_empty
 
 
-def _classify_flux(v):
+def _classify_flux(v: float) -> str:
+    """
+    Classify solar flare based on X-ray flux value
+    Values based on https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts
+
+    :param v:
+    :type v: float
+    :return:
+    :rtype: str
+    """
     try:
         v = float(v)
     except Exception:
         return 'Unknown'
     if v <= 0:
         return 'Unknown'
-    if v >= 1e-4:
+    elif v >= 1e-4:
         return 'X'
-    if v >= 1e-5:
+    elif v >= 1e-5:
         return 'M'
-    if v >= 1e-6:
+    elif v >= 1e-6:
         return 'C'
-    return 'A/B'
+    elif v >= 1e-7:
+        return 'B'
+    return 'A'
 
 
 @st.cache_data(ttl=600)
-def _load_table_cached(name, limit):
+def _load_table_cached(name: str, limit: Optional[int] = None):
+    """
+    Load table from database with caching
+
+    :param name:
+    :type name: str
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     return read_table(name, limit=limit)
 
 
-def render(limit=None):
+def render(limit: Optional[int] = None):
+    """
+    Render solar X-ray radiation section
+
+    :param limit:
+    :type limit: Optional[int]
+    :return:
+    """
     st.title('Promieniowanie rentgenowskie Słońca')
     p_tab = find_table_like(['primary','xray'])
     s_tab = find_table_like(['secondary','xray'])
@@ -48,10 +76,25 @@ def render(limit=None):
         st.subheader(f'{name} — Strumienie promieniowania X według satelity')
         with st.expander('Opis'):
             st.markdown('''
-            **Promieniowanie rentgenowskie Słońca** jest emitowane podczas rozbłysków słonecznych 
-            i aktywności koronalnej. Wykres pokazuje strumienie promieniowania X w różnych 
-            pasmach energetycznych (Główny: 0.5-4 Å, zastępczy: 1-8 Å) mierzone przez różne 
-            satelity. Nagłe wzrosty strumienia wskazują na rozbłyski słoneczne klasy C, M lub X.
+            **Opis:** Wykres liniowy przedstawiający czasowe zmiany strumienia promieniowania 
+            rentgenowskiego emitowanego przez Słońce w różnych pasmach energetycznych, mierzonego 
+            przez satelity GOES-18 i GOES-19 monitorujące aktywność słoneczną.
+            
+            **Cel wykresu:** Monitorowanie aktywności słonecznej poprzez pomiar promieniowania 
+            rentgenowskiego, które jest emitowane podczas rozbłysków słonecznych i aktywności 
+            koronalnej.
+            
+            **Zmienne:**
+            - **Czas**: Moment pomiaru strumienia promieniowania X
+            - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
+            - **Satelita**: Satelita dokonujący pomiaru
+            
+            **Pasma energetyczne:**
+            - **Primary**: Promieniowanie twarde (wysoka energia)
+            - **Secondary**: Promieniowanie miękkie (niższa energia)
+            
+            **Interpretacja:** Nagłe wzrosty strumienia wskazują na rozbłyski słoneczne. Wykres 
+            wykorzystuje skalę logarytmiczną ze względu na bardzo szeroki zakres wartości strumienia.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
             fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
@@ -71,18 +114,31 @@ def render(limit=None):
             st.subheader('Klasyfikacja rozbłysków słonecznych')
             with st.expander('Opis'):
                 st.markdown('''
-                **Klasyfikacja rozbłysków** według intensywności promieniowania X:
-                - **Klasa A/B**: < 10⁻⁶ W·m⁻² (bardzo słabe)
-                - **Klasa C**: 10⁻⁶ - 10⁻⁵ W·m⁻² (słabe)
-                - **Klasa M**: 10⁻⁵ - 10⁻⁴ W·m⁻² (umiarkowane)
-                - **Klasa X**: ≥ 10⁻⁴ W·m⁻² (silne)
+                **Opis:** Wykres punktowy przedstawiający wszystkie pomiary strumienia promieniowania 
+                rentgenowskiego sklasyfikowane według klasy rozbłysku słonecznego.
                 
-                Silne rozbłyski klasy X mogą powodować zakłócenia w komunikacji radiowej, 
-                systemach nawigacyjnych i sieciach energetycznych.
+                **Cel wykresu:** Identyfikacja i klasyfikacja rozbłysków słonecznych według ich 
+                intensywności oraz ocena ryzyka dla systemów technicznych na Ziemi i w przestrzeni 
+                kosmicznej.
+                
+                **Zmienne:**
+                - **Czas**: Moment pomiaru strumienia promieniowania X
+                - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
+                - **Klasa rozbłysku**: Klasyfikacja rozbłysku według intensywności (A, B, C, M, X)
+                
+                **Klasyfikacja rozbłysków:**
+                - **Klasa A**: < 10⁻⁷ W·m⁻² (bardzo słabe, tło słoneczne)
+                - **Klasa B**: 10⁻⁷ – 10⁻⁶ W·m⁻² (bardzo słabe, tło słoneczne)
+                - **Klasa C**: 10⁻⁶ - 10⁻⁵ W·m⁻² (słabe, niewielki wpływ na Ziemię)
+                - **Klasa M**: 10⁻⁵ - 10⁻⁴ W·m⁻² (umiarkowane, mogą powodować krótkotrwałe zakłócenia radiowe)
+                - **Klasa X**: >= 10⁻⁴ W·m⁻² (silne, mogą powodować poważne zakłócenia w komunikacji 
+                radiowej, systemach nawigacyjnych i sieciach energetycznych)
+                
+                **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), B (brązowy), A (zielony), Nieznany (szary)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
             fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Strumień [W·m⁻²]'}, log_y=True,
-                              color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','A/B':'#8c564b','Unknown':'#d3d3d3'})
+                              color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
             set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych')
             add_gray_areas_empty(fig2, df, tcol)
@@ -90,34 +146,30 @@ def render(limit=None):
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = _load_table_cached(pk_tab, limit) if pk_tab else pd.DataFrame()
-        if not df_k.empty:
-            kcol = None
-            for c in df_k.columns:
-                if c in ('kpindex','kp_index','kp') or c.endswith('kp'):
-                    kcol = c
-                    break
-            if kcol is None:
-                numcols = df_k.select_dtypes('number').columns
-                kcol = numcols[0] if len(numcols)>0 else None
-            if kcol:
-                df['date'] = pd.to_datetime(df[tcol]).dt.date
-                df_k['date'] = pd.to_datetime(df_k[pick_time_column(df_k)]).dt.date
-                mean_k = df_k.groupby('date')[kcol].mean().reset_index()
-                merged = df.merge(mean_k, on='date', how='left')
-                st.subheader('Korelacja rozbłysków z aktywnością geomagnetyczną')
-                fig3 = px.scatter(merged, x='flux', y=kcol, labels={'flux': 'Strumień [W·m⁻²]', kcol: 'Indeks Kp'},
-                                  color_discrete_sequence=['#636EFA'])
-                set_layout(fig3, 'Korelacja rozbłysków słonecznych z aktywnością geomagnetyczną')
-                st.plotly_chart(fig3, use_container_width=True)
 
         st.subheader('Rozkład statystyczny strumieni promieniowania X')
         with st.expander('Opis'):
             st.markdown('''
-            **Histogram strumieni** pokazuje rozkład wartości promieniowania rentgenowskiego 
-            w wybranym przedziale czasowym. Większość czasu Słońce emituje niskie strumienie 
-            (klasa A/B), podczas gdy silne rozbłyski (klasa X) są rzadkie ale intensywne. 
-            Analiza rozkładu pozwala ocenić ogólną aktywność słoneczną w danym okresie.
+            **Opis:** Histogram przedstawiający rozkład statystyczny wartości strumienia promieniowania 
+            rentgenowskiego w analizowanym okresie czasowym.
+            
+            **Cel wykresu:** Ocena ogólnej aktywności słonecznej oraz identyfikacja charakterystyk 
+            rozkładu strumieni promieniowania X. Analiza pozwala zrozumieć, jak często występują 
+            różne poziomy aktywności słonecznej i ocenić, czy dany okres charakteryzuje się zwiększoną 
+            aktywnością słoneczną.
+            
+            **Zmienne:**
+            - **Strumień [W·m⁻²]**: Wartość strumienia promieniowania rentgenowskiego na jednostkę powierzchni
+            - **Częstotliwość**: Liczba wystąpień danej wartości strumienia w analizowanym okresie (w skali logarytmicznej)
+            
+            **Interpretacja:**
+            - **Dominacja niskich wartości**: Większość czasu Słońce emituje niskie strumienie (klasa A/B), 
+            co jest normalnym tłem słonecznym
+            - **Rzadkie wysokie wartości**: Silne rozbłyski (klasa M i X) są rzadkie, ale intensywne, 
+            tworząc długi "ogon" rozkładu
+            - **Przesunięcie w prawo**: Rozkład z większą liczbą wyższych wartości wskazuje na okres 
+            zwiększonej aktywności słonecznej (np. maksimum cyklu słonecznego)
             ''')
-        fig4 = px.histogram(df, x='flux', nbins=80, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
+        fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'Rozkład statystyczny strumieni promieniowania X', rangeslider=False)
         st.plotly_chart(fig4, use_container_width=True)

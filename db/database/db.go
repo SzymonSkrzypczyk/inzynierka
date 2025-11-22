@@ -17,6 +17,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// InitDatabase initializes the database connection and performs auto-migration
 func InitDatabase() (*gorm.DB, error) {
 	dbHost := os.Getenv("DB_HOST")
 	if dbHost == "" {
@@ -68,6 +69,7 @@ func InitDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
+// saveDataToSpecificTable saves the parsed CSV records to the corresponding database table
 func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) error {
 	if len(records) < 2 {
 		return nil
@@ -220,6 +222,7 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 	return nil
 }
 
+// saveProtonData saves proton data to the corresponding database table
 func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 	switch {
 	case strings.Contains(dataType, "primary-integral"):
@@ -262,6 +265,7 @@ func saveProtonData(db *gorm.DB, dataType string, records [][]string) error {
 	return nil
 }
 
+// saveXrayData saves X-ray data to the corresponding database table
 func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 	switch {
 	case strings.Contains(dataType, "primary"):
@@ -300,6 +304,7 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 	return nil
 }
 
+// ProcessDailyData processes daily data files and saves them to the database
 func ProcessDailyData(db *gorm.DB, targetDate string) error {
 	fmt.Println("\n=== PROCESSING DAILY DATA TO DATABASE ===")
 

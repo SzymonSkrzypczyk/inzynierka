@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// RemoveDataDirectory deletes the specified directory and all its contents.
 func RemoveDataDirectory(directoryPath string) error {
 	err := os.RemoveAll(directoryPath)
 
@@ -20,6 +21,7 @@ func RemoveDataDirectory(directoryPath string) error {
 	return nil
 }
 
+// ParseTime attempts to parse a time string in multiple formats and returns the first successful parse.
 func ParseTime(timeStr string) (time.Time, error) {
 	formats := []string{time.RFC3339, "2006-01-02T15:04:05Z", "2006-01-02T15:04:05", "2006-01-02"}
 	for _, format := range formats {
@@ -30,6 +32,7 @@ func ParseTime(timeStr string) (time.Time, error) {
 	return time.Time{}, fmt.Errorf("unable to parse time: %s", timeStr)
 }
 
+// ParseStringPtr returns a pointer to the string if it's not empty, otherwise returns nil.
 func ParseStringPtr(s string) *string {
 	if s == "" {
 		return nil
@@ -37,6 +40,7 @@ func ParseStringPtr(s string) *string {
 	return &s
 }
 
+// ParseInt16Ptr attempts to parse a string into an int16 pointer. Returns nil if parsing fails or string is empty.
 func ParseInt16Ptr(s string) *int16 {
 	if s == "" {
 		return nil
@@ -48,6 +52,7 @@ func ParseInt16Ptr(s string) *int16 {
 	return nil
 }
 
+// ParseInt8Ptr attempts to parse a string into an int8. Returns 0 if parsing fails or string is empty.
 func ParseInt8Ptr(s string) *int8 {
 	if s == "" {
 		return nil
@@ -59,6 +64,7 @@ func ParseInt8Ptr(s string) *int8 {
 	return nil
 }
 
+// ParseInt8 attempts to parse a string into an int8. Returns 0 if parsing fails or string is empty.
 func ParseInt8(s string) int8 {
 	if s == "" {
 		return 0
