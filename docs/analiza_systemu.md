@@ -30,11 +30,41 @@ Zastosowanie bez serwerowej bazy danych w systemie umożliwiło ciągły dostęp
 
 Moduł wizualizacji umożliwia interaktywną analizę danych, w tym filtrowanie ze względu na analizowane zmienne, wybieranie określonych okien czasowych, a nawet zapisywanie wykresów do plików w formacie PNG.
 
-Podsumowując, zaimplementowany system zapewnia niezawodny i szybki przepływ danych, umożliwia ich stały dostęp, monitorowanie procesów oraz interaktywną analizę. W wyniku zastosowania modularnej struktury system może być rozszerzany poprzez dodawanie nowych modułów, np. do potoku danych.
+Podsumowując, zaimplementowany system zapewnia niezawodny i szybki przepływ danych, umożliwia ich stały dostęp, monitorowanie procesów oraz interaktywną analizę. Dzięki modularnej strukturze system może być w przyszłości rozszerzany poprzez dodawanie nowych modułów, na przykład poprzez dodanie dodatkowych modułów przetwarzania danych lub rozszerzonych funkcji wizualizacyjnych,
 
 ## 4.2 Przykłady analizy rzeczywistych danych
 
+W tym podrozdziale przedstawiono przykłady analizy danych rzeczywistych uzyskanych przy użyciu zaimplementowanego systemu. Celem jest zaprezentowanie możliwości systemu w zakresie wizualizacji danych dotyczących zjawisk pogody kosmicznej.
 
+### 4.2.1 Analiza składników pola magnetycznego międzyplanetarnego
+
+![pole magnetyczne wykres](../sketches/dscovr_plot.png)
+
+> Rys 4.2.1 Figura przedstawiająca rozkład wartości składników pola magnetycznego międzyplanetarnego w czasie
+
+Na wykresie przedstawionym na rysunku 4.2.1 zaprezentowana poszczególne składowe wartości pola magnetycznego międzyplanetarnego, barwy pomarańczowa, niebieska i różowa oznaczają kolejno składowe X, Y i Z opisywanego pola, a barwą zieloną opisane zostało całkowite pole magnetyczne międzyplanetarne. W celu analizy pojedynczych składowych możliwe jest ich wyłączenie poprzez kliknięcie w odpowiednią pozycję w legendzie figury. 
+
+W celu uzyskania szczegółowych wartości dla danego dnia należy najechać kursorem na odpowiedni dzień co spowoduje pokazanie podpisu wraz z wartościami zarejestrowanymi danego dnia.
+
+Dodatkowo, okresy braku danych zostały zaznaczone na szaro, co pozwala na ich oddzielenie od danych dostępnych do analizy. Dzięki temu można zaobserwować na przykład awarie satelity DSCOVR. Jedną z awarii widać wyraźnie na środku wykresu, rozpoczęła się ona 15 lipca i trwała aż do początku października, w tym czasie satelita nie przesyłała danych odnośnie składników pola magnetycznego międzyplanetarnego. Według raportu NOAA awaria była spowodowana anomalią w oprogramowaniu i spowodowała reset procesora satelity([NOAA, 2025](https://www.ospo.noaa.gov/data/messages/2025/07/MSG_20250715_1910.html)).
+
+### 4.2.2 Analiza wartości indeksu Kp
+
+![pole magnetyczne wykres](../sketches/kp_index.png)
+
+> Rys 4.2.2 Figura przedstawiająca wartości planetarnego indeksu Kp w czasie
+
+Na wykresie przedstawionym na rysunku 4.2.2 zaprezentowano wartości indeksu Kp, opisującego intensywność burzy geomagnetycznej, w kolejnych dniach. Wykres umożliwia analizę występowania burz geomagnetycznych o różnej skali.
+
+W celu uzyskania szczegółowych wartości dla danego dnia należy najechać kursorem na odpowiedni dzień, co spowoduje wyświetlenie podpisu wraz z wartościami indeksu zarejestrowanymi danego dnia. Na wykresie widać jeden punkt z wartością 8 indeksu Kp, oznaczający poważną burzę geomagnetyczną, do której doszło 1 czerwca 2025 roku.
+
+Dodatkowo, również na tym wykresie braki danych zostały zaznaczone kolorem szarym w celu odróżnienia ich od danych możliwych do analizy.
+
+![pole magnetyczne wykres](../sketches/geomagnetic_storm.png)
+
+>Rys 4.2.3 Figura przedstawiająca burze geomagnetyczne w czasie
+
+Dopełnieniem poprzedniego wykresu jest wykres przedstawiony na rysunku 4.2.3, który obrazuje wartości indeksu Kp, które zostały zakwalifikowane jako burze geomagnetyczne według skali podanej we wstępie pracy. Wykres umożliwia szybką klasyfikację dni z intensywnymi zjawiskami oraz ich wizualne zestawienie.
 
 ## 4.3 Ograniczenia projektu 
 
