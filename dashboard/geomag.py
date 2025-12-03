@@ -67,7 +67,7 @@ def render(limit: Optional[int] = None):
             ocenić intensywność zakłóceń geomagnetycznych na całej planecie.
             
             **Zmienne:**
-            - **Czas**: Moment pomiaru indeksu Kp
+            - **Data obserwacji**: Moment pomiaru indeksu Kp
             - **Indeks Kp**: Planetarny indeks geomagnetyczny w skali od 0 do 9
             
             **Skala Kp:**
@@ -78,9 +78,9 @@ def render(limit: Optional[int] = None):
             - **7-9**: Silna do ekstremalnej burza geomagnetyczna
             ''')
         if tcol and ycol:
-            fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Czas", ycol: "Indeks Kp"}, markers=True)
+            fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Data obserwacji", ycol: "Indeks Kp"}, markers=True)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
-            set_layout(fig, "Planetarny Kp — KpIndex vs Czas")
+            set_layout(fig, "Planetarny Kp — KpIndex vs Data obserwacji")
             add_gray_areas_empty(fig, df_p, tcol)
             st.plotly_chart(fig, use_container_width=True)
 
@@ -98,7 +98,7 @@ def render(limit: Optional[int] = None):
             heat = heat.reindex(columns=hours, fill_value=0)
             # sort dates descending
             heat = heat.sort_index(ascending=False).fillna(0)
-            st.markdown('#### Heatmap — intensywność KpIndex')
+            st.markdown('#### Heatmap — intensywność Indeks Kp')
             with st.expander('Opis'):
                 st.markdown('''
                 **Opis:** Mapa cieplna przedstawiająca średnie wartości indeksu Kp pogrupowane 
@@ -128,7 +128,7 @@ def render(limit: Optional[int] = None):
             fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina UTC', y='Data', color='Indeks Kp'))
             fig2.update_xaxes(tickmode='array')
             fig2.update_yaxes(tickmode='array')
-            set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False)
+            set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False, legend_title_text="Wartość Indeksu Kp")
             st.plotly_chart(fig2, use_container_width=True)
 
             storms = df_p[df_p[ycol] >= 5]
@@ -144,8 +144,8 @@ def render(limit: Optional[int] = None):
                     co jest istotne dla zrozumienia cykliczności aktywności geomagnetycznej.
                     
                     **Zmienne:**
-                    - **Czas**: Moment wystąpienia burzy geomagnetycznej
-                    - **Kp**: Wartość indeksu Kp podczas burzy (zawsze ≥ 5)
+                    - **Data obserwacji**: Moment wystąpienia burzy geomagnetycznej
+                    - **Indeks Kp**: Wartość indeksu Kp podczas burzy (zawsze ≥ 5)
                     - **Kolor punktu**: Odpowiada wartości Kp zgodnie z paletą kolorów 'inferno'
                     
                     **Klasyfikacja burz:**
@@ -155,8 +155,8 @@ def render(limit: Optional[int] = None):
                     - **Kp = 8-9**: Burza bardzo silna do ekstremalnej
                     ''')
                 fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
-                                  size=ycol, size_max=12, labels={tcol: 'Czas', ycol: 'Kp'}, hover_data=storms.columns)
-                set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)')
+                                  size=ycol, size_max=12, labels={tcol: 'Data obserwacji', ycol: 'Indeks Kp'}, hover_data=storms.columns)
+                set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)', legend_title_text="Wartość Indeksu Kp")
                 st.plotly_chart(fig3, use_container_width=True)
         else:
             st.write(df_p.head())
@@ -184,7 +184,7 @@ def render(limit: Optional[int] = None):
             efektów aktywności geomagnetycznej i może być bardziej wrażliwy na lokalne zakłócenia.
             
             **Zmienne:**
-            - **Czas**: Moment pomiaru indeksu K
+            - **Data obserwacji**: Moment pomiaru indeksu K
             - **Indeks K**: Lokalny indeks geomagnetyczny w skali od 0 do 9 (mierzony w Boulder)
             
             **Interpretacja:** Podobnie jak Kp, wartości K od 0-1 oznaczają spokojne warunki, podczas gdy 
@@ -192,9 +192,9 @@ def render(limit: Optional[int] = None):
             regionalne w aktywności geomagnetycznej.
             ''')
         if tcol and ycol:
-            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'Indeks K'}, line_shape='spline')
+            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'Indeks K'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
-            set_layout(fig, 'Index K vs Czas')
+            set_layout(fig, 'Index K vs Data obserwacji')
             add_gray_areas_empty(fig, df_b, tcol)
             st.plotly_chart(fig, use_container_width=True)
         else:

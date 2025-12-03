@@ -3,7 +3,12 @@ import plotly.graph_objects as go
 from plotly.graph_objects import Figure
 
 
-def set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
+def set_layout(fig: go.Figure,
+               title: str = None,
+               rangeslider: bool = True,
+               yaxis_title: str = None,
+               legend_title_text: str = None
+               ) -> go.Figure:
     """
     Set standard layout for plotly figure
 
@@ -11,6 +16,10 @@ def set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
     :type fig: go.Figure
     :param title:
     :type title: str
+    :param yaxis_title:
+    :type yaxis_title: str
+    :param legend_title_text:
+    :type legend_title_text: str
     :param rangeslider:
     :type rangeslider: bool
     :return:
@@ -19,6 +28,12 @@ def set_layout(fig: go.Figure, title: str = None, rangeslider: bool = True):
                       font=dict(family='DejaVu Sans, Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
                       hovermode='x unified')
+    if yaxis_title:
+        fig.update_yaxes(title_text=yaxis_title)
+
+    if legend_title_text:
+        fig.update_layout(legend_title_text=legend_title_text)
+
     if rangeslider:
         fig.update_layout(xaxis=dict(rangeselector=dict(buttons=[
             dict(count=1, label='1d', step='day', stepmode='backward'),

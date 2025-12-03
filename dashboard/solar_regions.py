@@ -47,33 +47,6 @@ def render(limit: Optional[int] = None):
     if date_col:
         df['observed_date'] = pd.to_datetime(df[date_col]).dt.date
 
-    # Scatter ObservedDate vs Region colored by MagClass
-    if 'observed_date' in df.columns and 'region' in df.columns:
-        st.subheader('Mapa aktywnych regionów słonecznych')
-        with st.expander('Opis'):
-            st.markdown('''
-            **Opis:** Wykres punktowy przedstawiający rozmieszczenie aktywnych regionów słonecznych w czasie, 
-            gdzie każdy punkt reprezentuje jeden aktywny region obserwowany w danym dniu.
-            
-            **Cel wykresu:** Identyfikacja i śledzenie aktywnych regionów słonecznych oraz ocena ich klasy 
-            magnetycznej. Wizualizacja pozwala zobaczyć ewolucję regionów słonecznych w czasie i zidentyfikować 
-            regiony o zwiększonym potencjale do generowania rozbłysków słonecznych i koronalnych wyrzutów masy.
-            
-            **Zmienne:**
-            - **Data obserwacji**: Data, w której region był obserwowany na powierzchni Słońca
-            - **Numer regionu**: Unikalny identyfikator aktywnego regionu słonecznego
-            - **Klasa magnetyczna**: Klasyfikacja złożoności magnetycznej regionu (β, βγ, βγδ)
-            
-            **Klasy magnetyczne:**
-            - **β**: Region z polami o przeciwnej polarności (bipolarny)
-            - **βγ**: Region z polami o przeciwnej polarności i mieszanymi polami w jednym bipolarnym kompleksie
-            - **βγδ**: Najbardziej złożony magnetycznie, mieszane pola w obszarze z plamami słonecznymi - 
-            główne źródło silnych rozbłysków i koronalnych wyrzutów masy
-            ''')
-        color = 'mag_class' if 'mag_class' in df.columns else None
-        fig = px.scatter(df, x='observed_date', y='region', color=color, labels={'observed_date':'Data obserwacji','region':'Numer regionu','mag_class':'Klasa magnetyczna'})
-        st.plotly_chart(fig, use_container_width=True)
-
     if 'area' in df.columns and 'observed_date' in df.columns:
         st.subheader('Ewolucja powierzchni aktywnych regionów')
         with st.expander('Opis'):

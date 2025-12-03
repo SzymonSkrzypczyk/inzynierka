@@ -85,7 +85,7 @@ def render(limit: Optional[int] = None):
             koronalnej.
             
             **Zmienne:**
-            - **Czas**: Moment pomiaru strumienia promieniowania X
+            - **Data obserwacji**: Moment pomiaru strumienia promieniowania X
             - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
             - **Satelita**: Satelita dokonujący pomiaru
             
@@ -97,12 +97,12 @@ def render(limit: Optional[int] = None):
             wykorzystuje skalę logarytmiczną ze względu na bardzo szeroki zakres wartości strumienia.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
-            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Czas','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
+            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
-            set_layout(fig, f'{name} — Strumienie promieniowania X według satelity')
+            set_layout(fig, f'{name} — Strumienie promieniowania X według satelity', legend_title_text="Satelita")
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Czas', ycol:'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Data obserwacji', ycol:'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.4))
             set_layout(fig, f'{name} — Strumienie promieniowania X')
 
@@ -122,7 +122,7 @@ def render(limit: Optional[int] = None):
                 kosmicznej.
                 
                 **Zmienne:**
-                - **Czas**: Moment pomiaru strumienia promieniowania X
+                - **Data obserwacji**: Moment pomiaru strumienia promieniowania X
                 - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
                 - **Klasa rozbłysku**: Klasyfikacja rozbłysku według intensywności (A, B, C, M, X)
                 
@@ -137,17 +137,17 @@ def render(limit: Optional[int] = None):
                 **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), B (brązowy), A (zielony), Nieznany (szary)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
-            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Czas','flux':'Strumień [W·m⁻²]'}, log_y=True,
+            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True,
                               color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
-            set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych')
+            set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych', legend_title_text="Klasa rozbłysku")
             add_gray_areas_empty(fig2, df, tcol)
             st.plotly_chart(fig2, use_container_width=True)
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = _load_table_cached(pk_tab, limit) if pk_tab else pd.DataFrame()
 
-        st.subheader('Rozkład statystyczny strumieni promieniowania X')
+        st.subheader('Rozkład wartości strumieni promieniowania X')
         with st.expander('Opis'):
             st.markdown('''
             **Opis:** Histogram przedstawiający rozkład statystyczny wartości strumienia promieniowania 
@@ -160,7 +160,7 @@ def render(limit: Optional[int] = None):
             
             **Zmienne:**
             - **Strumień [W·m⁻²]**: Wartość strumienia promieniowania rentgenowskiego na jednostkę powierzchni
-            - **Częstotliwość**: Liczba wystąpień danej wartości strumienia w analizowanym okresie (w skali logarytmicznej)
+            - **Liczba wartości w danym zakresie**: Liczba wystąpień danej wartości strumienia w analizowanym zakresie (w skali logarytmicznej)
             
             **Interpretacja:**
             - **Dominacja niskich wartości**: Większość czasu Słońce emituje niskie strumienie (klasa A/B), 
@@ -171,5 +171,5 @@ def render(limit: Optional[int] = None):
             zwiększonej aktywności słonecznej (np. maksimum cyklu słonecznego)
             ''')
         fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
-        set_layout(fig4, 'Rozkład statystyczny strumieni promieniowania X', rangeslider=False)
+        set_layout(fig4, 'Rozkład wartości strumieni promieniowania X', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
         st.plotly_chart(fig4, use_container_width=True)

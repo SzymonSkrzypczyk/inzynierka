@@ -80,7 +80,7 @@ def render(limit: Optional[int] = None):
             zagrożenie dla astronautów, satelitów i systemów elektronicznych.
             
             **Zmienne:**
-            - **Czas**: Moment pomiaru strumienia protonowego
+            - **Data obserwacji**: Moment pomiaru strumienia protonowego
             - **Strumień [cm⁻²·s⁻¹]**: Liczba protonów przechodzących przez powierzchnię 1 cm² w ciągu sekundy
             - **Energia**: Pasmo energetyczne protonów (jeśli dostępne w danych)
             
@@ -92,14 +92,14 @@ def render(limit: Optional[int] = None):
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Data obserwacji', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
-            set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True)
+            set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True, legend_title_text="Energia protonów")
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Czas', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
-            set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True)
+            set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True, legend_title_text="Energia protonów")
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, use_container_width=True)
