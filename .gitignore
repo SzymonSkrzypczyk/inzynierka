@@ -2,6 +2,10 @@
 noaa/__pycache__/
 data
 .env
+.local-env
 .DS_Store
 .pytest_cache
 *.log
+
+.venv
+__pycache__

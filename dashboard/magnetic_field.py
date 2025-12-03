@@ -77,21 +77,21 @@ def render(limit: Optional[int] = None):
         - **Bx (GSM) [nT]**: Składowa pola magnetycznego w osi X układu GSM (kierunek Słońce-Ziemia)
         - **By (GSM) [nT]**: Składowa pola magnetycznego w osi Y układu GSM (prostopadła do płaszczyzny ekliptyki)
         - **Bz (GSM) [nT]**: Składowa pola magnetycznego w osi Z układu GSM (prostopadła do osi Słońce-Ziemia)
-        - **Czas**: Moment pomiaru
+        - **Data obserwacji**: Moment pomiaru
 
         ''')
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
         # build nice labels mapping and rename for plotting
         name_map = {c: _label_for_col(c) for c in comps}
-        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Czas'}, color_discrete_sequence=px.colors.qualitative.Set2)
+        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Data obserwacji'}, color_discrete_sequence=px.colors.qualitative.Set2)
         # update trace names
         for tr in fig.data:
             orig = tr.name
             if orig in name_map:
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
-        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)')
+        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text="Składowe pola magnetycznego ", rangeslider=True, yaxis_title='Indukcja pola magnetycznego [nT]')
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, use_container_width=True)
@@ -116,7 +116,7 @@ def render(limit: Optional[int] = None):
             
             **Zmienne:**
             - **Bz (GSM) [nT]**: Wartość składowej Z pola magnetycznego w układzie współrzędnych GSM
-            - **Częstotliwość**: Liczba wystąpień danej wartości Bz w analizowanym okresie
+            - **Liczba wartości w danym zakresie**: Liczba wystąpień danej wartości Bz w analizowanym okresie
             
             **Interpretacja:** 
             - Wartości ujemne (południowe) Bz sprzyjają efektywnemu przenikaniu energii słonecznej 
@@ -125,5 +125,5 @@ def render(limit: Optional[int] = None):
             - Rozkład z przewagą wartości ujemnych wskazuje na okresy zwiększonej aktywności geomagnetycznej
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
-        set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False)
+        set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
         st.plotly_chart(fig2, use_container_width=True)
