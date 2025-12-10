@@ -71,3 +71,74 @@ def add_gray_areas_empty(fig: Figure, df: pd.DataFrame, tcol: str):
             fig.add_vrect(x0=start, x1=end, fillcolor='lightgrey', opacity=0.6, layer='below', line_width=0)
     except Exception:
         pass
+
+
+def get_download_config(file_name: str = "data_export"):
+    """
+    Add download button to plotly figure to download visible data as CSV
+
+    :param file_name: Name of the downloaded CSV file
+    :return: Dict to be passed as 'config' to fig.show()
+    """
+
+    js_download_handler = """
+    function(gd) {
+        var xRange = gd.layout.xaxis.range;
+        var data = gd.data;
+        var csvContent = "data:text/csv;charset=utf-8,";
+
+        // Add Header
+        csvContent += "Trace,Date,Value\\n";
+
+        // Helper to check if a date is within range
+        function isVisible(xVal) {
+            if (!xRange) return true; // No zoom, all data is visible
+            // Compare as timestamps for accuracy
+            var xTime = new Date(xVal).getTime();
+            var minTime = new Date(xRange[0]).getTime();
+            var maxTime = new Date(xRange[1]).getTime();
+            return xTime >= minTime && xTime <= maxTime;
+        }
+
+        // Iterate through all traces in the chart
+        data.forEach(function(trace) {
+            // Only export visible traces with data
+            if (trace.visible !== 'legendonly' && trace.x && trace.y) {
+                for (var i = 0; i < trace.x.length; i++) {
+                    if (isVisible(trace.x[i])) {
+                        // Clean data to ensure CSV validity
+                        var cleanName = (trace.name || "trace").replace(/,/g, "");
+                        var row = cleanName + "," + trace.x[i] + "," + trace.y[i];
+                        csvContent += row + "\\n";
+                    }
+                }
+            }
+        });
+
+        // specific trigger for download
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "%s.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    """ % file_name
+
+    icon_svg = {
+        'path': "M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z",
+        'transform': 'matrix(1 0 0 1 -2 -2)'
+    }
+
+    config = {
+        'modeBarButtonsToAdd': [
+            {
+                'name': 'Download Visible Data (CSV)',
+                'icon': icon_svg,
+                'click': js_download_handler
+            }
+        ],
+    }
+
+    return config

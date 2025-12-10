@@ -8,7 +8,7 @@ try:
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
-from plot_utils import set_layout, add_gray_areas_empty
+from plot_utils import set_layout, add_gray_areas_empty, get_download_config
 
 
 @st.cache_data(ttl=600)
@@ -58,6 +58,7 @@ def render(limit: Optional[int] = None):
     st.title("Pole magnetyczne międzyplanetarne (DSCOVR)")
     table_name = find_table_like(["dscovr", "mag"]) or find_table_like(["magnetometer"]) or find_table_like(["dscovr"])
     df = _load_table_cached(table_name, limit) if table_name else pd.DataFrame()
+    print(df)
     if df.empty:
         st.info("Brak danych magnetometru DSCOVR")
         return
@@ -126,4 +127,4 @@ def render(limit: Optional[int] = None):
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, config=get_download_config("dscovr_bz_distribution"))
