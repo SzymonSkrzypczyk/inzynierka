@@ -8,6 +8,8 @@ try:
 except Exception:
     from dashboard.db import find_table_like, read_table
 
+from plot_utils import set_layout
+
 
 @st.cache_data(ttl=600)
 def _load_table_cached(name: str, limit: Optional[int] = None) -> pd.DataFrame:
@@ -72,7 +74,8 @@ def render(limit: Optional[int] = None):
 
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Data obserwacji','area':'Średnia powierzchnia [μhem]'})
-        st.plotly_chart(fig2, use_container_width=True)
+        set_layout(fig2, rangeslider=True, tcol_data=area_ts['observed_date'])
+        st.plotly_chart(fig2, width='stretch')
 
     if 'observed_date' in df.columns:
         st.subheader('Statystyka aktywnych regionów słonecznych')
@@ -97,4 +100,4 @@ def render(limit: Optional[int] = None):
             ''')
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Data obserwacji','count':'Liczba aktywnych regionów'})
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width='stretch')

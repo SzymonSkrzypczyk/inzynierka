@@ -91,10 +91,11 @@ def render(limit: Optional[int] = None):
             if orig in name_map:
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
-        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text="Składowe pola magnetycznego ", rangeslider=True, yaxis_title='Indukcja pola magnetycznego [nT]')
+        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text="Składowe pola magnetycznego ",
+                   rangeslider=True, yaxis_title='Indukcja pola magnetycznego [nT]', tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     else:
         st.write(df.head())
 
@@ -126,4 +127,4 @@ def render(limit: Optional[int] = None):
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')

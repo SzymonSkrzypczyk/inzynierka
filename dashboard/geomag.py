@@ -80,9 +80,10 @@ def render(limit: Optional[int] = None):
         if tcol and ycol:
             fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Data obserwacji", ycol: "Indeks Kp"}, markers=True)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
-            set_layout(fig, "Planetarny Kp — KpIndex vs Data obserwacji")
+            set_layout(fig, "Planetarny Kp — KpIndex vs Data obserwacji", tcol_data=df_p[tcol],
+                       autorange=False, x_limit_min=df_p.index[0], x_limit_max=df_p.index[-1])
             add_gray_areas_empty(fig, df_p, tcol)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
             df_p['_date'] = pd.to_datetime(df_p[tcol])
             df_p['date'] = df_p['_date'].dt.date
@@ -129,7 +130,7 @@ def render(limit: Optional[int] = None):
             fig2.update_xaxes(tickmode='array')
             fig2.update_yaxes(tickmode='array')
             set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False, legend_title_text="Wartość Indeksu Kp")
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width='stretch')
 
             storms = df_p[df_p[ycol] >= 5]
             if not storms.empty:
@@ -156,8 +157,8 @@ def render(limit: Optional[int] = None):
                     ''')
                 fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
                                   size=ycol, size_max=12, labels={tcol: 'Data obserwacji', ycol: 'Indeks Kp'}, hover_data=storms.columns)
-                set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)', legend_title_text="Wartość Indeksu Kp")
-                st.plotly_chart(fig3, use_container_width=True)
+                set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)', legend_title_text="Wartość Indeksu Kp", tcol_data=df_p[tcol])
+                st.plotly_chart(fig3, width='stretch')
         else:
             st.write(df_p.head())
 
@@ -194,8 +195,8 @@ def render(limit: Optional[int] = None):
         if tcol and ycol:
             fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'Indeks K'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
-            set_layout(fig, 'Index K vs Data obserwacji')
+            set_layout(fig, 'Index K vs Data obserwacji', tcol_data=df_p[tcol])
             add_gray_areas_empty(fig, df_b, tcol)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         else:
             st.write(df_b.head())

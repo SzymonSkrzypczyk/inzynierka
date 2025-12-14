@@ -7,7 +7,11 @@ def set_layout(fig: go.Figure,
                title: str = None,
                rangeslider: bool = True,
                yaxis_title: str = None,
-               legend_title_text: str = None
+               legend_title_text: str = None,
+               tcol_data: pd.Series | None = None,
+               autorange: bool = True,
+               x_limit_min: pd.Timestamp | None = None,
+                x_limit_max: pd.Timestamp | None = None
                ) -> go.Figure:
     """
     Set standard layout for plotly figure
@@ -22,24 +26,74 @@ def set_layout(fig: go.Figure,
     :type legend_title_text: str
     :param rangeslider:
     :type rangeslider: bool
+    :param tcol_data:
+    :type tcol_data: pd.Series | None
+    :param autorange:
+    :type autorange: bool
+    :param x_limit_min:
+    :type x_limit_min: pd.Timestamp | None
+    :param x_limit_max:
+    :type x_limit_max: pd.Timestamp | None
     :return:
     """
     fig.update_layout(template='plotly_white', title={'text': title or '', 'x':0.01},
                       font=dict(family='DejaVu Sans, Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
                       hovermode='x unified')
+
+    fig.update_yaxes(autorange=autorange)
+
+    if x_limit_min is not None or x_limit_max is not None:
+        fig.update_xaxes(range=[x_limit_min, x_limit_max])
+
     if yaxis_title:
         fig.update_yaxes(title_text=yaxis_title)
 
     if legend_title_text:
         fig.update_layout(legend_title_text=legend_title_text)
 
-    if rangeslider:
-        fig.update_layout(xaxis=dict(rangeselector=dict(buttons=[
-            dict(count=1, label='1d', step='day', stepmode='backward'),
-            dict(count=7, label='7d', step='day', stepmode='backward'),
-            dict(step='all')
-        ]), rangeslider=dict(visible=True), type='date'))
+    if rangeslider and tcol_data is not None:
+        t = pd.to_datetime(tcol_data).dropna()
+
+        if not t.empty:
+            tmin = t.min()
+            tmax = t.max()
+
+            full_min = tmin - pd.Timedelta(days=1)
+            full_max = tmax + pd.Timedelta(days=1)
+
+            fig.update_xaxes(
+                type="date",
+                range=[full_min, full_max],
+                rangeselector=dict(
+                    buttons=[
+                        dict(
+                            count=1,
+                            label="1d",
+                            step="day",
+                            stepmode="backward"
+                        ),
+                        dict(
+                            count=7,
+                            label="7d",
+                            step="day",
+                            stepmode="backward"
+                        ),
+                        dict(
+                            count=1,
+                            label="1m",
+                            step="month",
+                            stepmode="backward"
+                        ),
+                        dict(
+                            label="całość",
+                            step="all"
+                        ),
+                    ]
+                ),
+                rangeslider=dict(visible=True),
+            )
+
     return fig
 
 
