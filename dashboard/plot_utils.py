@@ -146,14 +146,14 @@ def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Po
         return
 
     csv = df.to_csv(index=False)
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    full_filename = f"{filename}_{timestamp}.csv"
+    full_filename = f"{filename}.csv"
 
     st.download_button(
         label=button_label,
         data=csv,
         file_name=full_filename,
         mime="text/csv",
-        key=f"download_{filename}"
+        key=f"download_{filename}",
+        help="Kliknij, aby pobrać dane w formacie CSV użyte na wykresie.",
+        use_container_width=True
     )
