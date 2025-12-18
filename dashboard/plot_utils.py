@@ -1,3 +1,4 @@
+from datetime import datetime
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.graph_objects import Figure
@@ -151,7 +152,7 @@ def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Po
         data=csv,
         file_name=full_filename,
         mime="text/csv",
-        key=f"download_{filename}",
+        key=f"download_{filename}_{datetime.now().timestamp()}",
         help="Kliknij, aby pobrać dane w formacie CSV użyte na wykresie.",
         use_container_width=True
     )
