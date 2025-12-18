@@ -10,9 +10,9 @@ except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
 try:
-    from plot_utils import set_layout, add_gray_areas_empty
+    from plot_utils import set_layout, add_gray_areas_empty, add_download_button
 except Exception:
-    from dashboard.plot_utils import set_layout, add_gray_areas_empty
+    from dashboard.plot_utils import set_layout, add_gray_areas_empty, add_download_button
 
 
 def _parse_energy_val(e: Union[str, float, int, None]) -> float:
@@ -103,3 +103,6 @@ def render(limit: Optional[int] = None):
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, width='stretch')
+        download_df = df.copy()
+        source_suffix = "glowny" if name == 'Główny źródło danych' else "zapasowy"
+        add_download_button(download_df, f"protony_{source_suffix}", "Pobierz dane z wykresu jako CSV")

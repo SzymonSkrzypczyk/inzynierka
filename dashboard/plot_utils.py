@@ -1,6 +1,9 @@
+import io
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.graph_objects import Figure
+import streamlit as st
+from datetime import datetime
 
 
 def set_layout(fig: go.Figure,
@@ -11,7 +14,7 @@ def set_layout(fig: go.Figure,
                tcol_data: pd.Series | None = None,
                autorange: bool = True,
                x_limit_min: pd.Timestamp | None = None,
-                x_limit_max: pd.Timestamp | None = None
+               x_limit_max: pd.Timestamp | None = None
                ) -> go.Figure:
     """
     Set standard layout for plotly figure
@@ -125,3 +128,32 @@ def add_gray_areas_empty(fig: Figure, df: pd.DataFrame, tcol: str):
             fig.add_vrect(x0=start, x1=end, fillcolor='lightgrey', opacity=0.6, layer='below', line_width=0)
     except Exception:
         pass
+
+
+def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Pobierz dane jako CSV"):
+    """
+    Add a download button for DataFrame data as CSV
+    
+    :param df: DataFrame to download
+    :type df: pd.DataFrame
+    :param filename: Base filename (without extension)
+    :type filename: str
+    :param button_label: Label for the download button
+    :type button_label: str
+    :return:
+    """
+    if df is None or df.empty:
+        return
+
+    csv = df.to_csv(index=False)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    full_filename = f"{filename}_{timestamp}.csv"
+
+    st.download_button(
+        label=button_label,
+        data=csv,
+        file_name=full_filename,
+        mime="text/csv",
+        key=f"download_{filename}"
+    )

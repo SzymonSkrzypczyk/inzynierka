@@ -2,13 +2,14 @@ from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+from streamlit_plotly_events import plotly_events
 
 try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
-from plot_utils import set_layout, add_gray_areas_empty
+from plot_utils import set_layout, add_gray_areas_empty, add_download_button
 
 
 @st.cache_data(ttl=600)
@@ -96,6 +97,9 @@ def render(limit: Optional[int] = None):
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, width='stretch')
+        download_cols = [tcol] + comps if tcol and comps else df.columns.tolist()
+        download_df = df[download_cols].copy()
+        add_download_button(download_df, "pole_magnetyczne_dscovr", "Pobierz dane z wykresu jako CSV")
     else:
         st.write(df.head())
 
@@ -128,3 +132,5 @@ def render(limit: Optional[int] = None):
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
         st.plotly_chart(fig2, width='stretch')
+        download_df = df[[bzg]].copy() if bzg else df.copy()
+        add_download_button(download_df, "rozkład_bz", "Pobierz dane z wykresu jako CSV")

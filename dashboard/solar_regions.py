@@ -8,7 +8,7 @@ try:
 except Exception:
     from dashboard.db import find_table_like, read_table
 
-from plot_utils import set_layout
+from plot_utils import set_layout, add_download_button
 
 
 @st.cache_data(ttl=600)
@@ -76,6 +76,7 @@ def render(limit: Optional[int] = None):
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Data obserwacji','area':'Średnia powierzchnia [μhem]'})
         set_layout(fig2, rangeslider=True, tcol_data=area_ts['observed_date'])
         st.plotly_chart(fig2, width='stretch')
+        add_download_button(area_ts, "ewolucja_powierzchni_regionow", "Pobierz dane z wykresu jako CSV")
 
     if 'observed_date' in df.columns:
         st.subheader('Statystyka aktywnych regionów słonecznych')
@@ -101,3 +102,4 @@ def render(limit: Optional[int] = None):
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Data obserwacji','count':'Liczba aktywnych regionów'})
         st.plotly_chart(fig4, width='stretch')
+        add_download_button(counts, "statystyka_regionow_slonecznych", "Pobierz dane z wykresu jako CSV")
