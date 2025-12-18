@@ -1,9 +1,7 @@
-import io
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.graph_objects import Figure
 import streamlit as st
-from datetime import datetime
 
 
 def set_layout(fig: go.Figure,
