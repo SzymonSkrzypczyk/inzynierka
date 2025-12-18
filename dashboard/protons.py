@@ -92,12 +92,13 @@ def render(limit: Optional[int] = None):
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy', labels={tcol: 'Data obserwacji', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy',
+                          labels={tcol: 'Data obserwacji', ycol: 'Strumień protonów [pfu]', 'energy': 'Energia protonów'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
             set_layout(fig, f'{name} — Strumienie protonowe według energii', rangeslider=True, legend_title_text="Energia protonów", tcol_data=df[tcol])
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'pfu(particle flux unit)'}, log_y=True, markers=True)
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'Strumień protonów [pfu]', 'energy': 'Energia protonów'}, log_y=True, markers=True)
             fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
             set_layout(fig, f'{name} — Strumienie protonowe', rangeslider=True, legend_title_text="Energia protonów", tcol_data=df[tcol])
 
