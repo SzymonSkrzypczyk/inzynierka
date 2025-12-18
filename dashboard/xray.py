@@ -7,7 +7,7 @@ try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
-from plot_utils import set_layout, add_gray_areas_empty
+from plot_utils import set_layout, add_gray_areas_empty, add_download_button
 
 
 def _classify_flux(v: float) -> str:
@@ -99,16 +99,19 @@ def render(limit: Optional[int] = None):
         if 'satellite' in df.columns and 'flux' in df.columns:
             fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
-            set_layout(fig, f'{name} — Strumienie promieniowania X według satelity', legend_title_text="Satelita")
+            set_layout(fig, f'{name} — Strumienie promieniowania X według satelity', legend_title_text="Satelita", tcol_data=df[tcol])
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Data obserwacji', ycol:'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.4))
-            set_layout(fig, f'{name} — Strumienie promieniowania X')
+            set_layout(fig, f'{name} — Strumienie promieniowania X', tcol_data=df[tcol])
 
 
         add_gray_areas_empty(fig, df, tcol)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
+        download_df = df.copy()
+        source_suffix = "glowny" if name == 'Główny źródło danych' else "zapasowy"
+        add_download_button(download_df, f"promieniowanie_x_{source_suffix}", "Pobierz dane z wykresu jako CSV")
 
         if 'flux' in df.columns:
             st.subheader('Klasyfikacja rozbłysków słonecznych')
@@ -140,9 +143,11 @@ def render(limit: Optional[int] = None):
             fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True,
                               color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
-            set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych', legend_title_text="Klasa rozbłysku")
+            set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych', legend_title_text="Klasa rozbłysku", tcol_data=df[tcol])
             add_gray_areas_empty(fig2, df, tcol)
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width='stretch')
+            download_df = df[[tcol, 'flux', 'flare_class']].copy() if tcol and 'flux' in df.columns else df.copy()
+            add_download_button(download_df, f"klasyfikacja_rozblyskow_{source_suffix}", "Pobierz dane z wykresu jako CSV")
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = _load_table_cached(pk_tab, limit) if pk_tab else pd.DataFrame()
@@ -172,4 +177,6 @@ def render(limit: Optional[int] = None):
             ''')
         fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'Rozkład wartości strumieni promieniowania X', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width='stretch')
+        download_df = df[['flux']].copy() if 'flux' in df.columns else df.copy()
+        add_download_button(download_df, "rozkład_promieniowania_x", "Pobierz dane z wykresu jako CSV")
