@@ -1,13 +1,17 @@
+from uuid import uuid4
 from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import logging
 
 try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 from plot_utils import set_layout, add_gray_areas_empty, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 def _classify_flux(v: float) -> str:
@@ -59,124 +63,124 @@ def render(limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
-    st.title('Promieniowanie rentgenowskie Słońca')
+    logger.info(f"Rendering X-ray page (limit={limit})")
+    st.title('Solar X-Ray Radiation')
     p_tab = find_table_like(['primary','xray'])
     s_tab = find_table_like(['secondary','xray'])
+    logger.debug(f"Found primary X-ray table: {p_tab}, secondary: {s_tab}")
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 
-    for name, df in (('Główny źródło danych', df_p), ('Zapasowe źródło danych', df_s)):
+    for name, df in (('Primary Data Source', df_p), ('Secondary Data Source', df_s)):
         if df.empty:
-            st.info(f'Brak danych: {name} X-ray')
+            st.info(f'No data: {name} X-ray')
             continue
         tcol = pick_time_column(df)
         if tcol is None:
             st.write(df.head())
             continue
-        st.subheader(f'{name} — Strumienie promieniowania X według satelity')
-        with st.expander('Opis'):
+        st.subheader(f'{name} — X-Ray Fluxes by Satellite')
+        with st.expander('Description'):
             st.markdown('''
-            **Opis:** Wykres liniowy przedstawiający czasowe zmiany strumienia promieniowania 
-            rentgenowskiego emitowanego przez Słońce w różnych pasmach energetycznych, mierzonego 
-            przez satelity GOES-18 i GOES-19 monitorujące aktywność słoneczną.
+            **Description:** A line chart showing the temporal changes in X-ray flux 
+            emitted by the Sun in various energy bands, measured by satellites GOES-18 and GOES-19 
+            monitoring solar activity.
             
-            **Cel wykresu:** Monitorowanie aktywności słonecznej poprzez pomiar promieniowania 
-            rentgenowskiego, które jest emitowane podczas rozbłysków słonecznych i aktywności 
-            koronalnej.
+            **Purpose of the plot:** To monitor solar activity by measuring X-ray radiation, 
+            which is emitted during solar flares and coronal activity.
             
-            **Zmienne:**
-            - **Data obserwacji**: Moment pomiaru strumienia promieniowania X
-            - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
-            - **Satelita**: Satelita dokonujący pomiaru
+            **Variables:**
+            - **Observation date**: Time of X-ray flux measurement
+            - **Flux [W·m⁻²]**: X-ray radiation power per unit area
+            - **Satellite**: Satellite making the measurement
             
-            **Pasma energetyczne:**
-            - **Primary**: Promieniowanie twarde (wysoka energia)
-            - **Secondary**: Promieniowanie miękkie (niższa energia)
+            **Energy Bands:**
+            - **Primary**: Hard X-rays (high energy)
+            - **Secondary**: Soft X-rays (lower energy)
             
-            **Interpretacja:** Nagłe wzrosty strumienia wskazują na rozbłyski słoneczne. Wykres 
-            wykorzystuje skalę logarytmiczną ze względu na bardzo szeroki zakres wartości strumienia.
+            **Interpretation:** Sudden flux increases indicate solar flares. The chart 
+            uses a logarithmic scale due to the very wide range of flux values.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
-            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
+            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class', 'satellite': 'Satellite'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
-            set_layout(fig, f'{name} — Strumienie promieniowania X według satelity', legend_title_text="Satelita", tcol_data=df[tcol])
+            set_layout(fig, f'{name} — X-Ray Fluxes by Satellite', legend_title_text="Satellite", tcol_data=df[tcol])
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Data obserwacji', ycol:'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
+            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Observation date', ycol:'Flux [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.4))
-            set_layout(fig, f'{name} — Strumienie promieniowania X', tcol_data=df[tcol])
+            set_layout(fig, f'{name} — X-Ray Fluxes', tcol_data=df[tcol])
 
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, width='stretch')
         download_df = df.copy()
-        source_suffix = "glowny" if name == 'Główny źródło danych' else "zapasowy"
-        add_download_button(download_df, f"promieniowanie_x_{source_suffix}", "Pobierz dane z wykresu jako CSV")
+        source_suffix = "primary" if name == 'Primary Data Source' else "secondary"
+        add_download_button(download_df, f"x_ray_{source_suffix}", "Download chart data as CSV")
 
         if 'flux' in df.columns:
-            st.subheader('Klasyfikacja rozbłysków słonecznych')
-            with st.expander('Opis'):
+            st.subheader('Solar Flare Classification')
+            with st.expander('Description'):
                 st.markdown('''
-                **Opis:** Wykres punktowy przedstawiający wszystkie pomiary strumienia promieniowania 
-                rentgenowskiego sklasyfikowane według klasy rozbłysku słonecznego.
+                **Description:** A scatter plot showing all X-ray flux measurements 
+                classified by solar flare class.
                 
-                **Cel wykresu:** Identyfikacja i klasyfikacja rozbłysków słonecznych według ich 
-                intensywności oraz ocena ryzyka dla systemów technicznych na Ziemi i w przestrzeni 
-                kosmicznej.
+                **Purpose of the plot:** To identify and classify solar flares by their 
+                intensity and assess the risk for technical systems on Earth and in space.
                 
-                **Zmienne:**
-                - **Data obserwacji**: Moment pomiaru strumienia promieniowania X
-                - **Strumień [W·m⁻²]**: Moc promieniowania rentgenowskiego na jednostkę powierzchni
-                - **Klasa rozbłysku**: Klasyfikacja rozbłysku według intensywności (A, B, C, M, X)
+                **Variables:**
+                - **Observation date**: Time of X-ray flux measurement
+                - **Flux [W·m⁻²]**: X-ray radiation power per unit area
+                - **Flare Class**: Classification of the flare intensity (A, B, C, M, X)
                 
-                **Klasyfikacja rozbłysków:**
-                - **Klasa A**: < 10⁻⁷ W·m⁻² (bardzo słabe, tło słoneczne)
-                - **Klasa B**: 10⁻⁷ – 10⁻⁶ W·m⁻² (bardzo słabe, tło słoneczne)
-                - **Klasa C**: 10⁻⁶ - 10⁻⁵ W·m⁻² (słabe, niewielki wpływ na Ziemię)
-                - **Klasa M**: 10⁻⁵ - 10⁻⁴ W·m⁻² (umiarkowane, mogą powodować krótkotrwałe zakłócenia radiowe)
-                - **Klasa X**: >= 10⁻⁴ W·m⁻² (silne, mogą powodować poważne zakłócenia w komunikacji 
-                radiowej, systemach nawigacyjnych i sieciach energetycznych)
+                **Flare Classification:**
+                - **Class A**: < 10⁻⁷ W·m⁻² (very weak, solar background)
+                - **Class B**: 10⁻⁷ – 10⁻⁶ W·m⁻² (very weak, solar background)
+                - **Class C**: 10⁻⁶ - 10⁻⁵ W·m⁻² (weak, minor impact on Earth)
+                - **Class M**: 10⁻⁵ - 10⁻⁴ W·m⁻² (moderate, can cause brief radio blackouts)
+                - **Class X**: >= 10⁻⁴ W·m⁻² (strong, can cause serious radio blackouts, 
+                navigation errors, and power grid fluctuations)
                 
-                **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), B (brązowy), A (zielony), Nieznany (szary)
+                **Colors:** X (red), M (orange), C (blue), B (brown), A (green), Unknown (grey)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
-            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True,
+            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class'}, log_y=True,
                               color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
-            set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych', legend_title_text="Klasa rozbłysku", tcol_data=df[tcol])
+            set_layout(fig2, f'{name} — Solar Flare Classification', legend_title_text="Flare Class", tcol_data=df[tcol])
             add_gray_areas_empty(fig2, df, tcol)
             st.plotly_chart(fig2, width='stretch')
             download_df = df[[tcol, 'flux', 'flare_class']].copy() if tcol and 'flux' in df.columns else df.copy()
-            add_download_button(download_df, f"klasyfikacja_rozblyskow_{source_suffix}", "Pobierz dane z wykresu jako CSV")
+            add_download_button(download_df, f"flares_classification_{source_suffix}", "Download chart data as CSV")
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = _load_table_cached(pk_tab, limit) if pk_tab else pd.DataFrame()
 
-        st.subheader('Rozkład wartości strumieni promieniowania X')
-        with st.expander('Opis'):
+        st.subheader('X-Ray Flux Distribution')
+        with st.expander('Description'):
             st.markdown('''
-            **Opis:** Histogram przedstawiający rozkład statystyczny wartości strumienia promieniowania 
-            rentgenowskiego w analizowanym okresie czasowym.
+            **Description:** A histogram showing the statistical distribution of X-ray flux values 
+            over the analyzed time period.
             
-            **Cel wykresu:** Ocena ogólnej aktywności słonecznej oraz identyfikacja charakterystyk 
-            rozkładu strumieni promieniowania X. Analiza pozwala zrozumieć, jak często występują 
-            różne poziomy aktywności słonecznej i ocenić, czy dany okres charakteryzuje się zwiększoną 
-            aktywnością słoneczną.
+            **Purpose of the plot:** To assess overall solar activity and identify characteristics 
+            of the X-ray flux distribution. Analysis allows understanding how frequently 
+            different levels of solar activity occur and assessing if the period is characterized 
+            by increased solar activity.
             
-            **Zmienne:**
-            - **Strumień [W·m⁻²]**: Wartość strumienia promieniowania rentgenowskiego na jednostkę powierzchni
-            - **Liczba wartości w danym zakresie**: Liczba wystąpień danej wartości strumienia w analizowanym zakresie (w skali logarytmicznej)
+            **Variables:**
+            - **Flux [W·m⁻²]**: X-ray radiation power per unit area
+            - **Count in range**: Number of occurrences of a given flux value in the analyzed range (logarithmic scale)
             
-            **Interpretacja:**
-            - **Dominacja niskich wartości**: Większość czasu Słońce emituje niskie strumienie (klasa A/B), 
-            co jest normalnym tłem słonecznym
-            - **Rzadkie wysokie wartości**: Silne rozbłyski (klasa M i X) są rzadkie, ale intensywne, 
-            tworząc długi "ogon" rozkładu
-            - **Przesunięcie w prawo**: Rozkład z większą liczbą wyższych wartości wskazuje na okres 
-            zwiększonej aktywności słonecznej (np. maksimum cyklu słonecznego)
+            **Interpretation:**
+            - **Dominance of low values**: Most of the time the Sun emits low fluxes (class A/B), 
+            which is the normal solar background
+            - **Rare high values**: Strong flares (class M and X) are rare but intense, 
+            creating a long "tail" of the distribution
+            - **Shift to the right**: A distribution with more higher values indicates a period 
+            of increased solar activity (e.g., solar cycle maximum)
             ''')
-        fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
-        set_layout(fig4, 'Rozkład wartości strumieni promieniowania X', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
+        fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Flux [W·m⁻²]', 'count': 'count'}, log_y=True, color_discrete_sequence=['#00CC96'])
+        set_layout(fig4, 'X-Ray Flux Distribution', rangeslider=False, yaxis_title="Count in range")
         st.plotly_chart(fig4, width='stretch')
         download_df = df[['flux']].copy() if 'flux' in df.columns else df.copy()
-        add_download_button(download_df, "rozkład_promieniowania_x", "Pobierz dane z wykresu jako CSV")
+        add_download_button(download_df, f"x_ray_distribution_{str(uuid4())}", "Download chart data as CSV")
