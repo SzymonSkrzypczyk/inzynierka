@@ -168,7 +168,12 @@ def render(limit: Optional[int] = None):
                 - **Kp = 8-9**: Very strong to extreme storm
                 ''')
             fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
-                                size=ycol, size_max=12, labels={tcol: 'Observation date', ycol: 'Kp Index'}, hover_data=storms.columns)
+                              size=ycol, size_max=12, labels={tcol: 'Observation date', ycol: 'Kp Index', 'estimated_kp': 'Estimated Kp Index'},
+                              hover_data={
+                                tcol: True,
+                                ycol: True,
+                                'estimated_kp': True
+                            })
             set_layout(fig3, 'Geomagnetic storms points (Kp>=5)', legend_title_text="Kp Index values", tcol_data=df_p[tcol])
             st.plotly_chart(fig3, width='stretch')
             download_df = storms[[tcol, ycol]].copy() if tcol and ycol else storms.copy()

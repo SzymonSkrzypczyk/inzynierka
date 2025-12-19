@@ -25,6 +25,7 @@ else:
 def list_public_tables():
     """
     List all public tables in the database
+
     :return:
     """
     if engine is None:
@@ -40,6 +41,7 @@ def list_public_tables():
 def find_table_like(keywords: List[str]):
     """
     Find a table whose name contains all keywords (case insensitive)
+
     :param keywords:  list of keywords
     :type keywords: list[str]
     :return:
