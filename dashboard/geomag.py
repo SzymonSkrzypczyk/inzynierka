@@ -3,14 +3,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from babel.dates import format_datetime
-
 import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    force=True,   # IMPORTANT
-)
 
 try:
     from db import find_table_like, read_table, pick_time_column
@@ -18,6 +11,8 @@ except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
 from plot_utils import add_gray_areas_empty, set_layout, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 def _detect_k_column(df: pd.DataFrame):
@@ -57,10 +52,12 @@ def render(limit: Optional[int] = None):
     :type limit: int or None
     :return:
     """
+    logger.info(f"Rendering geomagnetyzm page (limit={limit})")
     st.title("Geomagnetyzm")
     st.subheader("Planetarny i lokalny K-index")
 
     p_table = find_table_like(["planetary", "k"]) or find_table_like(["k", "index"]) or find_table_like(["planetary","kp"])
+    logger.debug(f"Found planetary K table: {p_table}")
     df_p = _load_table_cached(p_table, limit) if p_table else pd.DataFrame()
     if not df_p.empty:
         tcol = pick_time_column(df_p)
@@ -91,6 +88,12 @@ def render(limit: Optional[int] = None):
             set_layout(fig, "Planetarny Kp — KpIndex vs Data obserwacji", tcol_data=df_p[tcol],
                        autorange=False, x_limit_min=df_p.index[0], x_limit_max=df_p.index[-1])
             add_gray_areas_empty(fig, df_p, tcol)
+
+            y_max = df_p[ycol].max()
+            fig.update_yaxes(
+                range=[0, y_max + 1]
+            )
+
             st.plotly_chart(fig, width='stretch')
             download_df = df_p[[tcol, ycol]].copy() if tcol and ycol else df_p.copy()
             add_download_button(download_df, "planetarny_kp", "Pobierz dane z wykresu jako CSV")
@@ -185,6 +188,7 @@ def render(limit: Optional[int] = None):
             st.write(df_p.head())
 
     b_table = find_table_like(["boulder"]) or find_table_like(["boulder", "k"]) or find_table_like(["boulder","kindex"])
+    logger.debug(f"Found Boulder K table: {b_table}")
     df_b = _load_table_cached(b_table, limit) if b_table else pd.DataFrame()
     if not df_b.empty:
         tcol = pick_time_column(df_b)

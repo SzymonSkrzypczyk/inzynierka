@@ -2,6 +2,7 @@ from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import logging
 
 try:
     from db import find_table_like, read_table
@@ -9,6 +10,8 @@ except Exception:
     from dashboard.db import find_table_like, read_table
 
 from plot_utils import set_layout, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 @st.cache_data(ttl=600)
@@ -33,8 +36,10 @@ def render(limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
+    logger.info(f"Rendering solar regions page (limit={limit})")
     st.title('Aktywne regiony słoneczne')
     tname = find_table_like(['solar','region']) or find_table_like(['solarregions'])
+    logger.debug(f"Found solar regions table: {tname}")
     df = _load_table_cached(tname, limit) if tname else pd.DataFrame()
     if df.empty:
         st.info('Brak danych dla SolarRegions')

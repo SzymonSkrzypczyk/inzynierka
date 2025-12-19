@@ -3,12 +3,15 @@ from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import logging
 
 try:
     from db import find_table_like, read_table, pick_time_column
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 from plot_utils import set_layout, add_gray_areas_empty, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 def _classify_flux(v: float) -> str:
@@ -60,9 +63,11 @@ def render(limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
+    logger.info(f"Rendering X-ray page (limit={limit})")
     st.title('Promieniowanie rentgenowskie Słońca')
     p_tab = find_table_like(['primary','xray'])
     s_tab = find_table_like(['secondary','xray'])
+    logger.debug(f"Found primary X-ray table: {p_tab}, secondary: {s_tab}")
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 

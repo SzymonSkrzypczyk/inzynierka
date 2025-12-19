@@ -4,6 +4,9 @@ import plotly.graph_objects as go
 from plotly.graph_objects import Figure
 import streamlit as st
 from babel.dates import format_datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def set_layout(fig: go.Figure,
@@ -39,10 +42,12 @@ def set_layout(fig: go.Figure,
     :type x_limit_max: pd.Timestamp | None
     :return:
     """
+    logger.debug(f"Setting layout for figure: title={title}, rangeslider={rangeslider}")
     fig.update_layout(template='plotly_white', title={'text': title or '', 'x':0.01},
                       font=dict(family='DejaVu Sans, Arial', size=12),
                       margin=dict(l=40, r=20, t=60, b=40),
-                      hovermode='x unified')
+                      hovermode='x unified',
+                      hoverlabel=dict(bgcolor="white", font_size=12))
 
     fig.update_yaxes(autorange=autorange)
 
@@ -61,6 +66,7 @@ def set_layout(fig: go.Figure,
         if not t.empty:
             tmin = t.min()
             tmax = t.max()
+            logger.debug(f"Formatting dates in Polish locale: range {tmin} to {tmax}")
             
             if rangeslider:
                 full_min = tmin - pd.Timedelta(days=1)
@@ -153,10 +159,12 @@ def add_gray_areas_empty(fig: Figure, df: pd.DataFrame, tcol: str):
                     end = curr - pd.Timedelta(seconds=1)
                     gap_intervals.append((start, end))
                 prev = curr
+        if gap_intervals:
+            logger.debug(f"Adding {len(gap_intervals)} gray areas for time gaps")
         for start, end in gap_intervals:
             fig.add_vrect(x0=start, x1=end, fillcolor='lightgrey', opacity=0.6, layer='below', line_width=0)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Failed to add gray areas for time gaps: {e}")
 
 
 def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Pobierz dane jako CSV"):
@@ -172,8 +180,10 @@ def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Po
     :return:
     """
     if df is None or df.empty:
+        logger.warning(f"Skipping download button for {filename} - DataFrame is empty")
         return
 
+    logger.debug(f"Creating download button for {filename} ({len(df)} rows)")
     csv = df.to_csv(index=False)
     full_filename = f"{filename}.csv"
 

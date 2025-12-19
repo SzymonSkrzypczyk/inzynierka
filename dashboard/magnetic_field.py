@@ -2,6 +2,7 @@ from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import logging
 
 try:
     from db import find_table_like, read_table, pick_time_column
@@ -9,6 +10,8 @@ except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
 from plot_utils import set_layout, add_gray_areas_empty, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 @st.cache_data(ttl=600)
@@ -55,8 +58,10 @@ def render(limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
+    logger.info(f"Rendering magnetic field page (limit={limit})")
     st.title("Pole magnetyczne międzyplanetarne (DSCOVR)")
     table_name = find_table_like(["dscovr", "mag"]) or find_table_like(["magnetometer"]) or find_table_like(["dscovr"])
+    logger.debug(f"Found magnetic field table: {table_name}")
     df = _load_table_cached(table_name, limit) if table_name else pd.DataFrame()
     if df.empty:
         st.info("Brak danych magnetometru DSCOVR")

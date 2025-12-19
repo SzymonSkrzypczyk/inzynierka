@@ -3,6 +3,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import logging
 
 try:
     from db import find_table_like, read_table, pick_time_column
@@ -13,6 +14,8 @@ try:
     from plot_utils import set_layout, add_gray_areas_empty, add_download_button
 except Exception:
     from dashboard.plot_utils import set_layout, add_gray_areas_empty, add_download_button
+
+logger = logging.getLogger(__name__)
 
 
 def _parse_energy_val(e: Union[str, float, int, None]) -> float:
@@ -56,9 +59,11 @@ def render(limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
+    logger.info(f"Rendering protons page (limit={limit})")
     st.title('Promieniowanie protonowe — strumienie integralne')
     p_tab = find_table_like(['primary','integral','proton'])
     s_tab = find_table_like(['secondary','integral','proton'])
+    logger.debug(f"Found primary proton table: {p_tab}, secondary: {s_tab}")
     df_p = _load_table_cached(p_tab, limit) if p_tab else pd.DataFrame()
     df_s = _load_table_cached(s_tab, limit) if s_tab else pd.DataFrame()
 
