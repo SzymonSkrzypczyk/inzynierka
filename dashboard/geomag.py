@@ -134,15 +134,7 @@ def render(limit: Optional[int] = None):
             x_hours = [f"{int(h):02d}:00" for h in heat.columns]
             def _fmt_date(d):
                 try:
-                    # Format date in Polish using Babel
-                    if isinstance(d, pd.Timestamp):
-                        return format_datetime(d.to_pydatetime(), "EEEE, d MMMM yyyy", locale="pl")
-                    elif hasattr(d, 'isoformat'):
-                        dt = pd.to_datetime(d).to_pydatetime()
-                        return format_datetime(dt, "EEEE, d MMMM yyyy", locale="pl")
-                    else:
-                        dt = pd.to_datetime(d).to_pydatetime()
-                        return format_datetime(dt, "EEEE, d MMMM yyyy", locale="pl")
+                    return d.isoformat()
                 except Exception:
                     return str(d)
 
