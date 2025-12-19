@@ -5,7 +5,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="Space Weather", layout="wide")
+st.set_page_config(page_title="Space Weather Analysis Dashboard", layout="wide")
 st.title("Space Weather Analysis Dashboard")
 st.sidebar.header("Options")
 

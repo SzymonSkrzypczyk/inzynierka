@@ -11,9 +11,7 @@ def set_layout(fig: go.Figure,
                yaxis_title: str = None,
                legend_title_text: str = None,
                tcol_data: pd.Series | None = None,
-               autorange: bool = True,
-               x_limit_min: pd.Timestamp | None = None,
-               x_limit_max: pd.Timestamp | None = None
+               autorange: bool = True
                ) -> go.Figure:
     """
     Set standard layout for plotly figure
@@ -32,10 +30,6 @@ def set_layout(fig: go.Figure,
     :type tcol_data: pd.Series | None
     :param autorange:
     :type autorange: bool
-    :param x_limit_min:
-    :type x_limit_min: pd.Timestamp | None
-    :param x_limit_max:
-    :type x_limit_max: pd.Timestamp | None
     :return:
     """
     fig.update_layout(template='plotly_white', title={'text': title or '', 'x': 0.01},
@@ -44,9 +38,6 @@ def set_layout(fig: go.Figure,
                       hovermode='x unified')
 
     fig.update_yaxes(autorange=autorange)
-
-    if x_limit_min is not None or x_limit_max is not None:
-        fig.update_xaxes(range=[x_limit_min, x_limit_max])
 
     if yaxis_title:
         fig.update_yaxes(title_text=yaxis_title)
@@ -63,6 +54,8 @@ def set_layout(fig: go.Figure,
 
             full_min = tmin - pd.Timedelta(days=1)
             full_max = tmax + pd.Timedelta(days=1)
+
+            fig.update_xaxes(range=[full_min, full_max])
 
             fig.update_xaxes(
                 type="date",
@@ -93,7 +86,7 @@ def set_layout(fig: go.Figure,
                         ),
                     ]
                 ),
-                rangeslider=dict(visible=True),
+                rangeslider=dict(visible=True, range=[tmin, tmax]),
             )
 
     return fig
