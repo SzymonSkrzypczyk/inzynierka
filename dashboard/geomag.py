@@ -53,8 +53,8 @@ def render(limit: Optional[int] = None):
     :return:
     """
     logger.info(f"Rendering geomagnetyzm page (limit={limit})")
-    st.title("Geomagnetyzm")
-    st.subheader("Planetarny i lokalny K-index")
+    st.title("Geomagnetism")
+    st.subheader("Planetary and Local K-index")
 
     p_table = find_table_like(["planetary", "k"]) or find_table_like(["k", "index"]) or find_table_like(["planetary","kp"])
     logger.debug(f"Found planetary K table: {p_table}")
@@ -62,120 +62,117 @@ def render(limit: Optional[int] = None):
     if not df_p.empty:
         tcol = pick_time_column(df_p)
         ycol = _detect_k_column(df_p)
-        st.markdown("#### Planetarny Kp — wykres czasowy")
-        with st.expander('Opis'):
+    st.markdown("#### Planetary Kp — Time Series")
+    with st.expander('Description'):
+        st.markdown('''
+        **Description:** A line chart showing the changes in the planetary geomagnetic index Kp over time.
+
+        **Purpose of the plot:** To monitor global geomagnetic activity and identify periods 
+        of geomagnetic storms. The Kp index is a key indicator of the state of Earth's magnetosphere and allows 
+        for assessing the intensity of geomagnetic disturbances across the planet.
+
+        **Variables:**
+        - **Observation date**: Time of Kp index measurement
+        - **Kp Index**: Planetary geomagnetic index on a scale from 0 to 9
+
+        **Kp Scale:**
+        - **0-1**: Quiet conditions
+        - **2-4**: Unsettled conditions
+        - **5**: Geomagnetic storm
+        - **6**: Moderate storm
+        - **7-9**: Strong to extreme geomagnetic storm
+        ''')
+    if tcol and ycol:
+        fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Observation date", ycol: "Kp Index"}, markers=True)
+        fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
+        set_layout(fig, "Planetary Kp — KpIndex vs Observation date", tcol_data=df_p[tcol],
+                    autorange=False, x_limit_min=df_p.index[0], x_limit_max=df_p.index[-1])
+        add_gray_areas_empty(fig, df_p, tcol)
+
+        y_max = df_p[ycol].max()
+        fig.update_yaxes(
+            range=[0, y_max + 1]
+        )
+
+        st.plotly_chart(fig, width='stretch')
+        download_df = df_p[[tcol, ycol]].copy() if tcol and ycol else df_p.copy()
+        add_download_button(download_df, "planetary_kp", "Download chart data as CSV")
+
+        df_p['_date'] = pd.to_datetime(df_p[tcol])
+        df_p['date'] = df_p['_date'].dt.date
+        df_p['hour'] = df_p['_date'].dt.hour
+        pivot = df_p.groupby(['date','hour'])[ycol].mean().reset_index()
+        heat = pivot.pivot(index='date', columns='hour', values=ycol)
+        # ensure hour columns are integers 0-23
+        try:
+            heat.columns = heat.columns.astype(int)
+        except Exception:
+            pass
+        hours = list(range(24))
+        heat = heat.reindex(columns=hours, fill_value=0)
+        # sort dates descending
+        heat = heat.sort_index(ascending=False).fillna(0)
+        st.markdown('#### Heatmap — Kp Index Intensity')
+        with st.expander('Description'):
             st.markdown('''
-            **Opis:** Wykres liniowy przedstawia zmiany planetarnego indeksu geomagnetycznego Kp w czasie.
-            
-            **Cel wykresu:** Monitorowanie globalnej aktywności geomagnetycznej i identyfikacja okresów 
-            burz geomagnetycznych. Indeks Kp jest kluczowym wskaźnikiem stanu magnetosfery Ziemi i pozwala 
-            ocenić intensywność zakłóceń geomagnetycznych na całej planecie.
-            
-            **Zmienne:**
-            - **Data obserwacji**: Moment pomiaru indeksu Kp
-            - **Indeks Kp**: Planetarny indeks geomagnetyczny w skali od 0 do 9
-            
-            **Skala Kp:**
-            - **0-1**: Spokojne warunki
-            - **2-4**: Niespokojne warunki
-            - **5**: Burza geomagnetyczna
-            - **6**: Burza umiarkowana
-            - **7-9**: Silna do ekstremalnej burza geomagnetyczna
+            **Description:** A heatmap showing the average Kp index values grouped 
+            by day and UTC hour. Color intensity corresponds to the Kp index value.
+
+            **Purpose of the plot:** To identify temporal patterns of geomagnetic activity and analyze 
+            seasonal and daily changes. The visualization allows for quick identification of days and hours 
+            with the highest geomagnetic activity.
+
+            **Variables:**
+            - **Hour UTC**: Measurement hour in the 0-23 range
+            - **Date**: Observation date
+            - **Kp Index**: Average planetary geomagnetic index value for a given hour and day
+            - **Color Intensity**: Visual representation of the Kp value (red = higher Kp, blue = lower Kp)
+
+            **Interpretation:** Red areas indicate periods of increased geomagnetic activity, 
+            while blue areas represent quieter conditions.
             ''')
-        if tcol and ycol:
-            fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Data obserwacji", ycol: "Indeks Kp"}, markers=True)
-            fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
-            set_layout(fig, "Planetarny Kp — KpIndex vs Data obserwacji", tcol_data=df_p[tcol],
-                       autorange=False, x_limit_min=df_p.index[0], x_limit_max=df_p.index[-1])
-            add_gray_areas_empty(fig, df_p, tcol)
-
-            y_max = df_p[ycol].max()
-            fig.update_yaxes(
-                range=[0, y_max + 1]
-            )
-
-            st.plotly_chart(fig, width='stretch')
-            download_df = df_p[[tcol, ycol]].copy() if tcol and ycol else df_p.copy()
-            add_download_button(download_df, "planetarny_kp", "Pobierz dane z wykresu jako CSV")
-
-            df_p['_date'] = pd.to_datetime(df_p[tcol])
-            df_p['date'] = df_p['_date'].dt.date
-            df_p['hour'] = df_p['_date'].dt.hour
-            pivot = df_p.groupby(['date','hour'])[ycol].mean().reset_index()
-            heat = pivot.pivot(index='date', columns='hour', values=ycol)
-            # ensure hour columns are integers 0-23
+        x_hours = [f"{int(h):02d}:00" for h in heat.columns]
+        def _fmt_date(d):
             try:
-                heat.columns = heat.columns.astype(int)
+                return d.isoformat()
             except Exception:
-                pass
-            hours = list(range(24))
-            heat = heat.reindex(columns=hours, fill_value=0)
-            # sort dates descending
-            heat = heat.sort_index(ascending=False).fillna(0)
-            st.markdown('#### Heatmap — intensywność Indeks Kp')
-            with st.expander('Opis'):
+                return str(d)
+
+        y_dates = [_fmt_date(d) for d in heat.index]
+        fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Hour UTC', y='Date', color='Kp Index'))
+        fig2.update_xaxes(tickmode='array')
+        fig2.update_yaxes(tickmode='array')
+        set_layout(fig2, 'Heatmap Kp (Day vs Hour)', rangeslider=False, legend_title_text="Kp Index values")
+        st.plotly_chart(fig2, width='stretch', key='kp_heatmap')
+        download_df = pivot.copy()
+        add_download_button(download_df, "kp_heatmap", "Download chart data as CSV")
+
+        storms = df_p[df_p[ycol] >= 5]
+        if not storms.empty:
+            st.markdown('#### Geomagnetic storm analysis')
+            with st.expander('Description'):
                 st.markdown('''
-                **Opis:** Mapa cieplna przedstawiająca średnie wartości indeksu Kp pogrupowane 
-                według dnia i godziny UTC. Intensywność koloru odpowiada wartości indeksu Kp.
+                **Description:** A scatter plot showing all geomagnetic storm events (Kp ≥ 5) during the analyzed time period.
                 
-                **Cel wykresu:** Identyfikacja wzorców czasowych aktywności geomagnetycznej oraz analiza 
-                sezonowych i dobowych zmian. Wizualizacja pozwala szybko zidentyfikować dni i godziny 
-                o największej aktywności geomagnetycznej.
+                **Purpose of the plot:** To identify and analyze the occurrence of geomagnetic storms and assess their intensity. The visualization allows for the frequency and temporal distribution of storms, which is important for understanding the cyclical nature of geomagnetic activity.
                 
-                **Zmienne:**
-                - **Godzina UTC**: Godzina pomiaru w zakresie 0-23
-                - **Data**: Data obserwacji
-                - **Indeks Kp**: Średnia wartość planetarnego indeksu geomagnetycznego dla danej godziny i dnia
-                - **Intensywność koloru**: Wizualna reprezentacja wartości Kp (czerwony = wyższy Kp, niebieski = niższy Kp)
+                **Variables:**
+                - **Observation date**: Time of geomagnetic storm occurrence
+                - **Kp Index**: Kp index value during the storm (always ≥ 5)
+                - **Point Color**: Corresponds to the Kp value according to the 'inferno' color palette
                 
-                **Interpretacja:** Czerwone obszary wskazują okresy zwiększonej aktywności geomagnetycznej, 
-                podczas gdy niebieskie obszary reprezentują spokojniejsze warunki.
+                **Storm Classification:**
+                - **Kp = 5**: Weak storm
+                - **Kp = 6**: Moderate storm
+                - **Kp = 7**: Strong storm
+                - **Kp = 8-9**: Very strong to extreme storm
                 ''')
-            x_hours = [f"{int(h):02d}:00" for h in heat.columns]
-            def _fmt_date(d):
-                try:
-                    return d.isoformat()
-                except Exception:
-                    return str(d)
-
-            y_dates = [_fmt_date(d) for d in heat.index]
-            fig2 = px.imshow(heat.values, x=x_hours, y=y_dates, color_continuous_scale='RdYlBu_r', aspect='auto', labels=dict(x='Godzina UTC', y='Data', color='Indeks Kp'))
-            fig2.update_xaxes(tickmode='array')
-            fig2.update_yaxes(tickmode='array')
-            set_layout(fig2, 'Heatmap Kp (dzień vs godzina)', rangeslider=False, legend_title_text="Wartość Indeksu Kp")
-            st.plotly_chart(fig2, width='stretch', key='kp_heatmap')
-            download_df = pivot.copy()
-            add_download_button(download_df, "kp_heatmap", "Pobierz dane z wykresu jako CSV")
-
-            storms = df_p[df_p[ycol] >= 5]
-            if not storms.empty:
-                st.markdown('#### Analiza burz geomagnetycznych')
-                with st.expander('Opis'):
-                    st.markdown('''
-                    **Opis:** Wykres punktowy przedstawiający wszystkie momenty, w których wystąpiły burze 
-                    geomagnetyczne (Kp ≥ 5) w analizowanym okresie czasowym.
-                    
-                    **Cel wykresu:** Identyfikacja i analiza występowania burz geomagnetycznych oraz ocena 
-                    ich intensywności. Wizualizacja pozwala zobaczyć częstotliwość i rozkład czasowy burz, 
-                    co jest istotne dla zrozumienia cykliczności aktywności geomagnetycznej.
-                    
-                    **Zmienne:**
-                    - **Data obserwacji**: Moment wystąpienia burzy geomagnetycznej
-                    - **Indeks Kp**: Wartość indeksu Kp podczas burzy (zawsze ≥ 5)
-                    - **Kolor punktu**: Odpowiada wartości Kp zgodnie z paletą kolorów 'inferno'
-                    
-                    **Klasyfikacja burz:**
-                    - **Kp = 5**: Burza słaba
-                    - **Kp = 6**: Burza umiarkowana
-                    - **Kp = 7**: Burza silna
-                    - **Kp = 8-9**: Burza bardzo silna do ekstremalnej
-                    ''')
-                fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
-                                  size=ycol, size_max=12, labels={tcol: 'Data obserwacji', ycol: 'Indeks Kp'}, hover_data=storms.columns)
-                set_layout(fig3, 'Punkty burz geomagnetycznych (Kp>=5)', legend_title_text="Wartość Indeksu Kp", tcol_data=df_p[tcol])
-                st.plotly_chart(fig3, width='stretch')
-                download_df = storms[[tcol, ycol]].copy() if tcol and ycol else storms.copy()
-                add_download_button(download_df, "burze_geomagnetyczne", "Pobierz dane z wykresu jako CSV")
+            fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
+                                size=ycol, size_max=12, labels={tcol: 'Observation date', ycol: 'Kp Index'}, hover_data=storms.columns)
+            set_layout(fig3, 'Geomagnetic storms points (Kp>=5)', legend_title_text="Kp Index values", tcol_data=df_p[tcol])
+            st.plotly_chart(fig3, width='stretch')
+            download_df = storms[[tcol, ycol]].copy() if tcol and ycol else storms.copy()
+            add_download_button(download_df, "geomagnetic_storms", "Download chart data as CSV")
         else:
             st.write(df_p.head())
 
@@ -192,31 +189,31 @@ def render(limit: Optional[int] = None):
         if not ycol:
             nums = df_b.select_dtypes("number").columns.tolist()
             ycol = nums[0] if nums else None
-        st.markdown("#### Boulder K-index — wykres czasowy")
-        with st.expander('Opis'):
+        st.markdown("#### Boulder K-index — Time Series")
+        with st.expander('Description'):
             st.markdown('''
-            **Opis:** Wykres liniowy przedstawiający zmiany lokalnego indeksu K mierzonego w obserwatorium 
-            Boulder (USA) w czasie.
-            
-            **Cel wykresu:** Lokalna ocena aktywności geomagnetycznej w regionie Boulder, która może różnić 
-            się od globalnego indeksu planetarnego Kp. Indeks lokalny K jest przydatny do analizy regionalnych 
-            efektów aktywności geomagnetycznej i może być bardziej wrażliwy na lokalne zakłócenia.
-            
-            **Zmienne:**
-            - **Data obserwacji**: Moment pomiaru indeksu K
-            - **Indeks K**: Lokalny indeks geomagnetyczny w skali od 0 do 9 (mierzony w Boulder)
-            
-            **Interpretacja:** Podobnie jak Kp, wartości K od 0-1 oznaczają spokojne warunki, podczas gdy 
-            wartości ≥ 5 wskazują na burzę geomagnetyczną. Lokalny indeks K może pokazywać różnice 
-            regionalne w aktywności geomagnetycznej.
+            **Description:** A line chart showing the changes in the local K index measured at the 
+            Boulder (USA) observatory over time.
+
+            **Purpose of the plot:** Local assessment of geomagnetic activity in the Boulder region, which may 
+            differ from the global planetary Kp index. The local K index is useful for analyzing regional 
+            effects of geomagnetic activity and can be more sensitive to local disturbances.
+
+            **Variables:**
+            - **Observation date**: Time of K index measurement
+            - **K Index**: Local geomagnetic index on a scale from 0 to 9 (measured in Boulder)
+
+            **Interpretation:** Similar to Kp, K values from 0-1 indicate quiet conditions, while 
+            values ≥ 5 indicate a geomagnetic storm. The local K index can show regional 
+            differences in geomagnetic activity.
             ''')
         if tcol and ycol:
-            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Data obserwacji', ycol: 'Indeks K'}, line_shape='spline')
+            fig = px.line(df_b.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Observation date', ycol: 'K Index'}, line_shape='spline')
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
-            set_layout(fig, 'Index K vs Data obserwacji', tcol_data=df_p[tcol])
+            set_layout(fig, 'K Index vs Observation date', tcol_data=df_p[tcol])
             add_gray_areas_empty(fig, df_b, tcol)
             st.plotly_chart(fig, width='stretch')
             download_df = df_b[[tcol, ycol]].copy() if tcol and ycol else df_b.copy()
-            add_download_button(download_df, "boulder_k_index", "Pobierz dane z wykresu jako CSV")
+            add_download_button(download_df, "boulder_k_index", "Download chart data as CSV")
         else:
             st.write(df_b.head())

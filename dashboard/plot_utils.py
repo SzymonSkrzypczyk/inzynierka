@@ -88,7 +88,7 @@ def set_layout(fig: go.Figure,
                             stepmode="backward"
                         ),
                         dict(
-                            label="całość",
+                            label="all",
                             step="all"
                         ),
                     ]
@@ -129,7 +129,7 @@ def add_gray_areas_empty(fig: Figure, df: pd.DataFrame, tcol: str):
         pass
 
 
-def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Pobierz dane jako CSV"):
+def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Download data as CSV"):
     """
     Add a download button for DataFrame data as CSV
 
@@ -153,6 +153,6 @@ def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Po
         file_name=full_filename,
         mime="text/csv",
         key=f"download_{filename}_{datetime.now().timestamp()}",
-        help="Kliknij, aby pobrać dane w formacie CSV użyte na wykresie.",
+        help="Click to download the data in CSV format used in the chart.",
         use_container_width=True
     )

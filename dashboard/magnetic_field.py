@@ -39,7 +39,7 @@ def _label_for_col(col_name: str) -> str:
     """
     lc = col_name.lower()
     if 'bt' in lc and not any(x in lc for x in ('bx','by','bz')):
-        return 'Bt (całkowite) [nT]'
+        return 'Bt (Total) [nT]'
     if 'bx' in lc:
         return 'Bx (GSM) [nT]'
     if 'by' in lc:
@@ -59,51 +59,51 @@ def render(limit: Optional[int] = None):
     :return:
     """
     logger.info(f"Rendering magnetic field page (limit={limit})")
-    st.title("Pole magnetyczne międzyplanetarne (DSCOVR)")
+    st.title("Interplanetary Magnetic Field (DSCOVR)")
     table_name = find_table_like(["dscovr", "mag"]) or find_table_like(["magnetometer"]) or find_table_like(["dscovr"])
     logger.debug(f"Found magnetic field table: {table_name}")
     df = _load_table_cached(table_name, limit) if table_name else pd.DataFrame()
     if df.empty:
-        st.info("Brak danych magnetometru DSCOVR")
+        st.info("No DSCOVR magnetometer data")
         return
     tcol = pick_time_column(df)
-    st.subheader("Składniki pola magnetycznego międzyplanetarnego")
-    with st.expander('Opis'):
+    st.subheader("Components of the Interplanetary Magnetic Field")
+    with st.expander('Description'):
         st.markdown('''
-        **Opis:** Wykres przedstawia czasowe zmiany składników pola magnetycznego międzyplanetarnego 
-        mierzone przez satelitę DSCOVR w punkcie Lagrange'a L1 (1,5 mln km od Ziemi w kierunku Słońca).
+        **Description:** A chart showing the temporal changes in the components of the interplanetary 
+        magnetic field measured by the DSCOVR satellite at the Lagrange point L1 (1.5 million km from Earth towards the Sun).
         
-        **Cel wykresu:** Monitorowanie warunków wiatru słonecznego i identyfikacja momentów sprzyjających 
-        wystąpieniu burz geomagnetycznych. Analiza zmian pola magnetycznego pozwala przewidzieć wpływ 
-        wiatru słonecznego na magnetosferę Ziemi.
+        **Purpose of the plot:** To monitor solar wind conditions and identify moments conducive 
+        to the occurrence of geomagnetic storms. Analysis of magnetic field changes allows predicting 
+        the impact of solar wind on Earth's magnetosphere.
         
-        **Zmienne:**
-        - **Bt (całkowite) [nT]**: Całkowita wartość indukcji pola magnetycznego w układzie GSM
-        - **Bx (GSM) [nT]**: Składowa pola magnetycznego w osi X układu GSM (kierunek Słońce-Ziemia)
-        - **By (GSM) [nT]**: Składowa pola magnetycznego w osi Y układu GSM (prostopadła do płaszczyzny ekliptyki)
-        - **Bz (GSM) [nT]**: Składowa pola magnetycznego w osi Z układu GSM (prostopadła do osi Słońce-Ziemia)
-        - **Data obserwacji**: Moment pomiaru
+        **Variables:**
+        - **Bt (Total) [nT]**: Total magnetic field induction value in the GSM system
+        - **Bx (GSM) [nT]**: Magnetic field component along the X axis of the GSM system (Sun-Earth direction)
+        - **By (GSM) [nT]**: Magnetic field component along the Y axis of the GSM system (perpendicular to the ecliptic plane)
+        - **Bz (GSM) [nT]**: Magnetic field component along the Z axis of the GSM system (perpendicular to the Sun-Earth axis)
+        - **Observation date**: Time of measurement
 
         ''')
     comps = [c for c in df.columns if any(x in c for x in ["bt", "bx", "by", "bz"]) ]
     if tcol and comps:
         # build nice labels mapping and rename for plotting
         name_map = {c: _label_for_col(c) for c in comps}
-        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Data obserwacji', 'variable': 'Składowa'}, color_discrete_sequence=px.colors.qualitative.Set2)
+        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Observation date', 'variable': 'Component'}, color_discrete_sequence=px.colors.qualitative.Set2)
         # update trace names
         for tr in fig.data:
             orig = tr.name
             if orig in name_map:
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
-        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text='Składowe pola magnetycznego',
-                   rangeslider=True, yaxis_title='Indukcja pola magnetycznego [nT]', tcol_data=df[tcol])
+        set_layout(fig, 'Interplanetary Magnetic Field Components (DSCOVR)', legend_title_text='Magnetic Field Components',
+                   rangeslider=True, yaxis_title='Magnetic Field Induction [nT]', tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, width='stretch')
         download_cols = [tcol] + comps if tcol and comps else df.columns.tolist()
         download_df = df[download_cols].copy()
-        add_download_button(download_df, "pole_magnetyczne_dscovr", "Pobierz dane z wykresu jako CSV")
+        add_download_button(download_df, "pole_magnetyczne_dscovr", "Download chart data as CSV")
     else:
         st.write(df.head())
 
@@ -113,28 +113,28 @@ def render(limit: Optional[int] = None):
             bzg = c
             break
     if bzg:
-        st.subheader('Rozkład statystyczny składowej Bz')
-        with st.expander('Opis'):
+        st.subheader('Statistical Distribution of Bz Component')
+        with st.expander('Description'):
             st.markdown('''
-            **Opis:** Histogram przedstawia rozkład statystyczny wartości składowej Bz pola magnetycznego 
-            międzyplanetarnego w analizowanym okresie czasowym.
+            **Description:** A histogram showing the statistical distribution of the Bz component of the 
+            interplanetary magnetic field over the analyzed time period.
             
-            **Cel wykresu:** Ocena dominujących warunków wiatru słonecznego oraz identyfikacja częstotliwości 
-            występowania wartości Bz sprzyjających burzom geomagnetycznym. Analiza rozkładu pozwala zrozumieć 
-            charakterystyki statystyczne pola magnetycznego w długim okresie.
+            **Purpose of the plot:** To assess dominant solar wind conditions and identify the frequency 
+            of Bz values conductive to geomagnetic storms. Analysis of the distribution helps understand 
+            the statistical characteristics of the magnetic field over a long period.
             
-            **Zmienne:**
-            - **Bz (GSM) [nT]**: Wartość składowej Z pola magnetycznego w układzie współrzędnych GSM
-            - **Liczba wartości w danym zakresie**: Liczba wystąpień danej wartości Bz w analizowanym okresie
+            **Variables:**
+            - **Bz (GSM) [nT]**: Value of the Z component of the magnetic field in the GSM coordinate system
+            - **Count in range**: Number of occurrences of a given Bz value in the analyzed period
             
-            **Interpretacja:** 
-            - Wartości ujemne (południowe) Bz sprzyjają efektywnemu przenikaniu energii słonecznej 
-            do magnetosfery Ziemi
-            - Wartości dodatnie (północne) Bz działają ochronnie i zmniejszają efektywność sprzężenia
-            - Rozkład z przewagą wartości ujemnych wskazuje na okresy zwiększonej aktywności geomagnetycznej
+            **Interpretation:** 
+            - Negative (southward) Bz values favor effective transfer of solar energy 
+            into Earth's magnetosphere
+            - Positive (northward) Bz values act protectively and reduce coupling efficiency
+            - A distribution with a prevalence of negative values indicates periods of increased geomagnetic activity
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
-        set_layout(fig2, 'Rozkład statystyczny składowej Bz (GSM)', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
+        set_layout(fig2, 'Statistical Distribution of Bz Component (GSM)', rangeslider=False, yaxis_title="Count in range")
         st.plotly_chart(fig2, width='stretch')
         download_df = df[[bzg]].copy() if bzg else df.copy()
-        add_download_button(download_df, "rozkład_bz", "Pobierz dane z wykresu jako CSV")
+        add_download_button(download_df, "bz_distribution", "Download chart data as CSV")
