@@ -85,7 +85,7 @@ def render(limit: Optional[int] = None):
         fig = px.line(df_p.sort_values(tcol), x=tcol, y=ycol, labels={tcol: "Observation date", ycol: "Kp Index"}, markers=True)
         fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.5))
         set_layout(fig, "Planetary Kp — KpIndex vs Observation date", tcol_data=df_p[tcol],
-                    autorange=False, x_limit_min=df_p.index[0], x_limit_max=df_p.index[-1])
+                    autorange=False)
         add_gray_areas_empty(fig, df_p, tcol)
 
         y_max = df_p[ycol].max()
