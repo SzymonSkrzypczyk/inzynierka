@@ -1,3 +1,4 @@
+from uuid import uuid4
 from typing import Optional
 import streamlit as st
 import plotly.express as px
@@ -97,7 +98,7 @@ def render(limit: Optional[int] = None):
             wykorzystuje skalę logarytmiczną ze względu na bardzo szeroki zakres wartości strumienia.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
-            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
+            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]', 'flare_class': 'Klasa rozbłysku', 'satellite': 'satelita'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
             fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
             set_layout(fig, f'{name} — Strumienie promieniowania X według satelity', legend_title_text="Satelita", tcol_data=df[tcol])
         else:
@@ -140,7 +141,7 @@ def render(limit: Optional[int] = None):
                 **Kolory:** X (czerwony), M (pomarańczowy), C (niebieski), B (brązowy), A (zielony), Nieznany (szary)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
-            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]'}, log_y=True,
+            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Data obserwacji','flux':'Strumień [W·m⁻²]', 'flare_class': 'Klasa rozbłysku'}, log_y=True,
                               color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
             fig2.update_traces(marker=dict(size=6))
             set_layout(fig2, f'{name} — Klasyfikacja rozbłysków słonecznych', legend_title_text="Klasa rozbłysku", tcol_data=df[tcol])
@@ -175,8 +176,8 @@ def render(limit: Optional[int] = None):
             - **Przesunięcie w prawo**: Rozkład z większą liczbą wyższych wartości wskazuje na okres 
             zwiększonej aktywności słonecznej (np. maksimum cyklu słonecznego)
             ''')
-        fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#00CC96'])
+        fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Strumień [W·m⁻²]', 'count': 'liczebność'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'Rozkład wartości strumieni promieniowania X', rangeslider=False, yaxis_title="Liczba wartości w danym zakresie")
         st.plotly_chart(fig4, width='stretch')
         download_df = df[['flux']].copy() if 'flux' in df.columns else df.copy()
-        add_download_button(download_df, "rozkład_promieniowania_x", "Pobierz dane z wykresu jako CSV")
+        add_download_button(download_df, f"rozkład_promieniowania_x_{str(uuid4())}", "Pobierz dane z wykresu jako CSV")

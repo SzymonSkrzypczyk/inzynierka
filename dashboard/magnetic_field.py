@@ -84,14 +84,14 @@ def render(limit: Optional[int] = None):
     if tcol and comps:
         # build nice labels mapping and rename for plotting
         name_map = {c: _label_for_col(c) for c in comps}
-        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Data obserwacji'}, color_discrete_sequence=px.colors.qualitative.Set2)
+        fig = px.line(df.sort_values(tcol), x=tcol, y=comps, labels={tcol: 'Data obserwacji', 'variable': 'Składowa'}, color_discrete_sequence=px.colors.qualitative.Set2)
         # update trace names
         for tr in fig.data:
             orig = tr.name
             if orig in name_map:
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
-        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text="Składowe pola magnetycznego ",
+        set_layout(fig, 'Składniki pola magnetycznego międzyplanetarnego (DSCOVR)', legend_title_text='Składowe pola magnetycznego',
                    rangeslider=True, yaxis_title='Indukcja pola magnetycznego [nT]', tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
