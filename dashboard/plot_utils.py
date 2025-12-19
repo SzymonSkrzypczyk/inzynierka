@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.graph_objects import Figure
 import streamlit as st
+from babel.dates import format_datetime
 
 
 def set_layout(fig: go.Figure,
@@ -54,47 +55,76 @@ def set_layout(fig: go.Figure,
     if legend_title_text:
         fig.update_layout(legend_title_text=legend_title_text)
 
-    if rangeslider and tcol_data is not None:
+    # formatting dates to use Polish locale
+    if tcol_data is not None:
         t = pd.to_datetime(tcol_data).dropna()
-
         if not t.empty:
             tmin = t.min()
             tmax = t.max()
+            
+            if rangeslider:
+                full_min = tmin - pd.Timedelta(days=1)
+                full_max = tmax + pd.Timedelta(days=1)
 
-            full_min = tmin - pd.Timedelta(days=1)
-            full_max = tmax + pd.Timedelta(days=1)
-
-            fig.update_xaxes(
-                type="date",
-                range=[full_min, full_max],
-                rangeselector=dict(
-                    buttons=[
-                        dict(
-                            count=1,
-                            label="1d",
-                            step="day",
-                            stepmode="backward"
-                        ),
-                        dict(
-                            count=7,
-                            label="7d",
-                            step="day",
-                            stepmode="backward"
-                        ),
-                        dict(
-                            count=1,
-                            label="1m",
-                            step="month",
-                            stepmode="backward"
-                        ),
-                        dict(
-                            label="całość",
-                            step="all"
-                        ),
-                    ]
-                ),
-                rangeslider=dict(visible=True),
-            )
+                fig.update_xaxes(
+                    type="date",
+                    range=[full_min, full_max],
+                    rangeselector=dict(
+                        buttons=[
+                            dict(
+                                count=1,
+                                label="1d",
+                                step="day",
+                                stepmode="backward"
+                            ),
+                            dict(
+                                count=7,
+                                label="7d",
+                                step="day",
+                                stepmode="backward"
+                            ),
+                            dict(
+                                count=1,
+                                label="1m",
+                                step="month",
+                                stepmode="backward"
+                            ),
+                            dict(
+                                label="całość",
+                                step="all"
+                            ),
+                        ]
+                    ),
+                    rangeslider=dict(visible=True),
+                )
+                try:
+                    num_ticks = 8
+                    tick_vals = pd.date_range(start=tmin, end=tmax, periods=num_ticks)
+                    tick_texts = [format_datetime(dt.to_pydatetime(), "d MMM yyyy", locale="pl") 
+                                 for dt in tick_vals]
+                    
+                    fig.update_xaxes(
+                        tickvals=tick_vals,
+                        ticktext=tick_texts,
+                        tickmode='array'
+                    )
+                except Exception:
+                    pass
+            else:
+                try:
+                    num_ticks = 8
+                    tick_vals = pd.date_range(start=tmin, end=tmax, periods=num_ticks)
+                    tick_texts = [format_datetime(dt.to_pydatetime(), "d MMM yyyy", locale="pl") 
+                                 for dt in tick_vals]
+                    
+                    fig.update_xaxes(
+                        type="date",
+                        tickvals=tick_vals,
+                        ticktext=tick_texts,
+                        tickmode='array'
+                    )
+                except Exception:
+                    fig.update_xaxes(type="date")
 
     return fig
 

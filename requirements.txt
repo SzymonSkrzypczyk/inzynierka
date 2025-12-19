@@ -10,3 +10,4 @@ streamlit
 plotly
 pandas
 sqlalchemy
+babel
