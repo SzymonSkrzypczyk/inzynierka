@@ -2,7 +2,6 @@ from typing import Optional
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from babel.dates import format_datetime
 import logging
 
 try:
