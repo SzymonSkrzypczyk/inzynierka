@@ -115,8 +115,8 @@ def render(limit: Optional[int] = None):
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, width='stretch')
         download_df = df.copy()
-        source_suffix = "glowny" if name == 'Główny źródło danych' else "zapasowy"
-        add_download_button(download_df, f"promieniowanie_x_{source_suffix}", "Download chart data as CSV")
+        source_suffix = "primary" if name == 'Primary Data Source' else "secondary"
+        add_download_button(download_df, f"x_ray_{source_suffix}", "Download chart data as CSV")
 
         if 'flux' in df.columns:
             st.subheader('Solar Flare Classification')
@@ -151,7 +151,7 @@ def render(limit: Optional[int] = None):
             add_gray_areas_empty(fig2, df, tcol)
             st.plotly_chart(fig2, width='stretch')
             download_df = df[[tcol, 'flux', 'flare_class']].copy() if tcol and 'flux' in df.columns else df.copy()
-            add_download_button(download_df, f"klasyfikacja_rozblyskow_{source_suffix}", "Download chart data as CSV")
+            add_download_button(download_df, f"flares_classification_{source_suffix}", "Download chart data as CSV")
 
         pk_tab = find_table_like(['planetary','kp']) or find_table_like(['kp','index'])
         df_k = _load_table_cached(pk_tab, limit) if pk_tab else pd.DataFrame()
@@ -183,4 +183,4 @@ def render(limit: Optional[int] = None):
         set_layout(fig4, 'X-Ray Flux Distribution', rangeslider=False, yaxis_title="Count in range")
         st.plotly_chart(fig4, width='stretch')
         download_df = df[['flux']].copy() if 'flux' in df.columns else df.copy()
-        add_download_button(download_df, f"rozkład_promieniowania_x_{str(uuid4())}", "Download chart data as CSV")
+        add_download_button(download_df, f"x_ray_distribution_{str(uuid4())}", "Download chart data as CSV")

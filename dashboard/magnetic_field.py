@@ -103,7 +103,7 @@ def render(limit: Optional[int] = None):
         st.plotly_chart(fig, width='stretch')
         download_cols = [tcol] + comps if tcol and comps else df.columns.tolist()
         download_df = df[download_cols].copy()
-        add_download_button(download_df, "pole_magnetyczne_dscovr", "Download chart data as CSV")
+        add_download_button(download_df, "magnetic_field_dscovr", "Download chart data as CSV")
     else:
         st.write(df.head())
 

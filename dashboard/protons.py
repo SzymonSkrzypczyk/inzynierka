@@ -108,7 +108,12 @@ def render(limit: Optional[int] = None):
             set_layout(fig, f'{name} — Proton Fluxes', rangeslider=True, legend_title_text="Proton Energy", tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
+        fig.update_layout(
+            hoverlabel=dict(
+                font=dict(size=10)
+            )
+        )
         st.plotly_chart(fig, width='stretch')
         download_df = df.copy()
-        source_suffix = "glowny" if name == 'Główny źródło danych' else "zapasowy"
-        add_download_button(download_df, f"protony_{source_suffix}", "Download chart data as CSV")
+        source_suffix = "primary" if name == 'Primary Data Source' else "secondary"
+        add_download_button(download_df, f"protons_{source_suffix}", "Download chart data as CSV")
