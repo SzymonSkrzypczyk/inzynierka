@@ -82,8 +82,7 @@ def set_layout(fig: go.Figure,
                         ),
                         dict(
                             label="all",
-                            step="all",
-                            range=[full_min, full_max]
+                            step="all"
                         ),
                     ]
                 ),
