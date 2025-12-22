@@ -1,0 +1,1008 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../architektura_projektu/">
+      
+      
+        <link rel="next" href="../analiza_systemu/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Implementacja - Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#31-modu-zroda-danych" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-header__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Implementacja
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-nav__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wstep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wstęp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wprowadzenie_teoretyczne/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wprowadzenie teoretyczne
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architektura_projektu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architektura projektu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementacja
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementacja
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31-modu-zroda-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Moduł źródła danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-modu-pozyskiwania-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Moduł pozyskiwania danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-modu-archiwizacji-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Moduł archiwizacji danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-modu-przetwarzania-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Moduł przetwarzania danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-modu-dodawania-danych-do-bazy-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Moduł dodawania danych do bazy danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-modu-wizualizacji-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Moduł wizualizacji danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37-integracja-moduow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 Integracja modułów
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analiza_systemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analiza systemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podsumowanie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Podsumowanie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31-modu-zroda-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Moduł źródła danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-modu-pozyskiwania-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Moduł pozyskiwania danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-modu-archiwizacji-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Moduł archiwizacji danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-modu-przetwarzania-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Moduł przetwarzania danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-modu-dodawania-danych-do-bazy-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Moduł dodawania danych do bazy danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-modu-wizualizacji-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Moduł wizualizacji danych
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37-integracja-moduow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 Integracja modułów
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Implementacja</h1>
+
+<p>W tym rozdziale przedstawiono szczegółową implementację systemu, zgodnie z architekturą opisaną w poprzednim rozdziale. Rozdział został podzielony podrozdziały odpowiadające każdemu z modułów systemu. Każdy moduł został opisany pod względem wykorzystanych technologii, struktur kodu oraz sposobu działania.</p>
+<h2 id="31-modu-zroda-danych">3.1 Moduł źródła danych</h2>
+<p>Moduł źródła danych obejmuje wszystkie interfejsy programistyczne udostępniane przez Space Weather Prediction Center, które zostały wykorzystane w projekcie. Dane są udostępniane bezpłatnie i bez mechanizmów autoryzacji umożliwiając swobodny dostęp oraz pozyskiwanie danych. Wszystkie wykorzystywane punkty końcowe API zwracają dane w formacie JSON, co umożliwia ich ustrukturyzowane przetwarzanie. Wszystkie punkty końcowe API są dostępne pod adresem <code>https://services.swpc.noaa.gov/json/</code>, gdzie dane są na bieżąco aktualizowane. Większość pobieranych danych zawiera unikatowe pola dostępne tylko dla danego punktu końcowego. Istnieje jednak zbiór pól uniwersalnych np. <code>time_tag</code>, zawierający znacznik czasu umożliwiający unikatowe zidentyfikowanie danych. W ramach systemu wykorzystywane jest 20 różnych punktów końcowych API SWPC.</p>
+<pre><code class="language-json">[
+  {
+    &quot;time_tag&quot;: &quot;2025-11-14T19:50:00Z&quot;,
+    &quot;satellite&quot;: 18,
+    &quot;flux&quot;: 647.32666015625,
+    &quot;energy&quot;: &quot;\u003E=1 MeV&quot;
+  },
+  {
+    &quot;time_tag&quot;: &quot;2025-11-14T19:50:00Z&quot;,
+    &quot;satellite&quot;: 18,
+    &quot;flux&quot;: 5.15482759475708,
+    &quot;energy&quot;: &quot;\u003E=10 MeV&quot;
+  }
+]
+</code></pre>
+<blockquote>
+<p>Rys 3.1.1 Przykładowy format danych JSON zwracanych przez punkt końcowy API SWPC</p>
+</blockquote>
+<h2 id="32-modu-pozyskiwania-danych">3.2 Moduł pozyskiwania danych</h2>
+<p>Moduł pozyskiwania danych obejmuje wszystkie operacje związane z pobieraniem danych z modułu źródła danych. W celu spełnienia wymagań systemu dotyczących wydajności oraz sposobu pozyskiwania danych, są one pobierane asynchronicznie umożliwiając niemal jednoczesne przetwarzanie wielu punktów końcowych API. Dodatkowo każda operacja jest logowana w celu umożliwienia efektywnego rozwiązywania potencjalnych błędów wykonania. Przetwarzanie danych przychodzących rozpoczyna się od przygotowania miejsca przechowywania pobranych plików, w tym celu w przypadku braku docelowego katalogu zostanie on stworzony.</p>
+<pre><code class="language-python">async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path] = SAVE_DIR):
+    &quot;&quot;&quot;
+    Retrieve a data for a specific url
+
+    :param target_name:
+    :param url:
+    :param target_dir:
+    :return:
+    &quot;&quot;&quot;
+    target_dir = Path(target_dir)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    logger.log(f&quot;Retrieving data from URL {url}&quot;)
+</code></pre>
+<blockquote>
+<p>Rys 3.2.1 Fragment kodu definiujący funkcję asynchroniczną oraz tworzącą docelowy katalog w przypadku jego braku</p>
+</blockquote>
+<p>W dalszej części funkcji wykonywane jest odwołanie do aktualnie przetwarzanego punkt końcowego. W przypadku zwrócenia błędu przez API punkt końcowy zostaje ponownie odpytany o dane, dodatkowo wszystkie informacje o błędach zostają zapisane w celu identyfikacji potencjalnych błędów. W przypadku zwrócenia błędu jest on dodany do logów systemu, a następnie jeśli aktualna próba nie przekracza limitu dopuszczalnej ilości prób cały proces zostaje powtórzony.</p>
+<p><img alt="pobieranie danych" src="../sketches/fetch_chart_fitted.png" /></p>
+<blockquote>
+<p>Rys 3.2.2 Schemat przedstawiający pozyskiwanie danych </p>
+</blockquote>
+<p>W dalszej części sprawdzana jest struktura zwróconych danych, a w przypadku zidentyfikowania danych zagnieżdżonych, ich odpowiedniego spłaszczenia, a następnie zapisania do odpowiedniego pliku wynikowego we wcześniej utworzonym katalogu docelowym. W celu umożliwienia ciągłego przepływu danych sprawdzana jest potencjalna zawartość pliku i w wypadku obecności zawartości jest ona dopisywana.</p>
+<pre><code class="language-python">jeżeli dane zawierają zagnieżdżone słowniki:
+    zaloguj ostrzeżenie
+    spłaszcz dane
+
+# Określ nazwę pliku wynikowego w katalogu docelowym
+plik_wynikowy = target_dir / &quot;{target_name}_{data_dzisiaj}.csv&quot;
+
+# Otwórz plik do dopisywania
+jeżeli plik jest nowy:
+    zapisz nagłówki kolumn
+
+dla każdego rekordu w danych:
+    zapisz wartości rekordu do pliku
+
+zaloguj informację o zapisaniu danych do pliku
+</code></pre>
+<blockquote>
+<p>Rys 3.2.3 Pseudokod przedstawiający przetwarzanie i zapis danych do pliku csv</p>
+</blockquote>
+<p>Po integracji powyższe fragmenty umożliwiają wydajne i niezawodne pobieranie danych pochodzących z modułu źródła danych zgodnie z wymaganiami opisanymi w poprzednim rozdziale.</p>
+<pre><code class="language-python">async def retrieve_all_data():
+    &quot;&quot;&quot;
+    Retrieve all data from the URLs in NAME2URL
+    &quot;&quot;&quot;
+    tasks = []
+    target_dir = SAVE_DIR / f&quot;{datetime.today().date()}&quot;
+    for target_name, url in NAME2URL.items():
+        tasks.append(retrieve_data(target_name, url, target_dir))
+    await asyncio.gather(*tasks)
+    logger.log(f&quot;All data retrieved and saved to {target_dir}&quot;)
+</code></pre>
+<blockquote>
+<p>Rys 3.2.4 Fragment kodu odpowiadający za pobieranie wszystkich danych z modułu źródła danych</p>
+</blockquote>
+<h2 id="33-modu-archiwizacji-danych">3.3 Moduł archiwizacji danych</h2>
+<p>W module archiwizacji danych dane pobrane w poprzednim module są pakowane i kompresowane, a następnie wysyłane do katalogu w serwisie Dropbox w celu ich archiwizacji. Serwis Dropbox jest zintegrowany z systemem uwierzytelniania OAuth 2.0, przez co wymaga token odświeżania, który należy pozyskać ręcznie, wykonując proces jednorazowo przed pierwszym uruchomieniem systemu. Token odświeżania umożliwia długotrwałą autoryzację, bez potrzeby ponownego logowania, dzięki czemu jest elementem pasującym do założeń pełnej automatyzacji procesu.</p>
+<pre><code class="language-python">def get_refresh_token(app_key, app_secret):
+    auth_flow = DropboxOAuth2FlowNoRedirect(
+        consumer_key=app_key,
+        consumer_secret=app_secret,
+        token_access_type='offline'
+    )
+
+    authorize_url = auth_flow.start()
+    print(&quot;1. Go to: &quot; + authorize_url)
+    print(&quot;2. Click 'Allow' (you might have to log in first).&quot;)
+    print(&quot;3. Copy the authorization code.&quot;)
+
+    auth_code = input(&quot;Enter the authorization code here: &quot;).strip()
+    oauth_result = auth_flow.finish(auth_code)
+
+    print(&quot;Access token:&quot;, oauth_result.access_token)
+    print(&quot;Refresh token:&quot;, oauth_result.refresh_token)
+    print(&quot;Expires in:&quot;, oauth_result.expires_at)
+
+    return oauth_result.refresh_token
+</code></pre>
+<blockquote>
+<p>Rys 3.3.1 Fragment kodu pozyskujący token odświeżania</p>
+</blockquote>
+<p>Archiwizacja danych rozpoczyna się w po poprawnym pozyskaniu wszystkich wymaganych danych z API SWPC. Pierwszym krokiem jest kompresja i zapakowanie katalogów docelowych do formatu zip. Dodatkowo, możliwe jest usunięcie wcześniej utworzonego katalogu docelowego w celu opróżnienia przestrzeni dyskowej.</p>
+<pre><code class="language-python">def compress_data(target_name: str, target_dir: Union[str, Path] = SAVE_DIR, remove_dir: bool = True):
+    &quot;&quot;&quot;
+    Compress the data directory into a zip file
+
+    :param target_name:
+    :param target_dir:
+    :param remove_dir:
+    :return:
+    &quot;&quot;&quot;
+    target_dir = Path(target_dir)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    logger.log(f&quot;Compressing data for {target_name}&quot;)
+    make_archive(
+        base_name=str(target_dir.parent / target_name),
+        format='zip',
+        root_dir=target_dir.parent,
+        base_dir=target_dir.name
+    )
+
+    if remove_dir:
+        logger.log(f&quot;Removing directory {target_dir}&quot;)
+        rmtree(target_dir, ignore_errors=False)
+        logger.log(f&quot;Directory {target_dir} removed&quot;)
+</code></pre>
+<blockquote>
+<p>Rys 3.2.2 Funkcja kompresująca katalog danych do formatu ZIP</p>
+</blockquote>
+<p>Po utworzeniu archiwum zawierającego oczekiwane dane, są one wysyłane do serwisu Dropbox. W celu zapewnienia niezawodnego przesyłu danych zaimplementowane zostały systemy przetwarzania błędów oraz powtarzania procesu w przypadku błędu. Dodatkowo aby uniknąć nadmiernej liczby połączeń z serwerami Dropbox, przed każdym restartem system odczekuje wcześniej ustaloną ilość czasu.</p>
+<pre><code class="language-python">otwórz plik ZIP
+próby = 0
+
+dopóki próby &lt; MAX_RETRIES:
+    spróbuj przesłać plik do Dropbox
+    jeżeli przesył zakończony sukcesem:
+        zaloguj sukces
+        zakończ
+    jeżeli wystąpi błąd API lub uwierzytelnienia:
+        zaloguj wyjątek
+        zwiększ próby
+        poczekaj SEND_RETRY_SLEEP_TIME
+
+jeżeli plik nie został wysłany po MAX_RETRIES:
+    zaloguj błąd
+    zgłoś wyjątek
+</code></pre>
+<blockquote>
+<p>Rys 3.3.3 Pseudokod przedstawiający proces wysyłania danych do serwisu Dropbox </p>
+</blockquote>
+<p>Po integracji powyższe elementy umożliwiają spełnienie założeń modułu archiwizacji danych poprzez efektywne pakowanie, kompresowanie i archiwizowanie danych pobranych w poprzednim module.</p>
+<pre><code class="language-python">compress_data(target_dir.name, target_dir)
+logger.log(f&quot;Data compressed to {target_dir}.zip&quot;)
+send_to_Dropbox(target_dir.parent / f&quot;{target_dir.name}.zip&quot;, f&quot;{Dropbox_DIR}/{target_dir.name}.zip&quot;, logger)
+</code></pre>
+<blockquote>
+<p>Rys 3.3.4 Fragment kodu przedstawiający integrację elementów opisywanego modułu</p>
+</blockquote>
+<h2 id="34-modu-przetwarzania-danych">3.4 Moduł przetwarzania danych</h2>
+<p>W module przetwarzania danych zarchiwizowane dane są pobierane z serwisu Dropbox oraz przygotowywane w celu umożliwienia ich zapisu do bazy danych. Pierwszym etapem procesu jest pobranie skompresowanego i zapakowanego archiwum zip, które jest następnie rozpakowywane. W celu umożliwienia wysokiej elastyczności system umożliwia pobranie całego zapakowanego katalogu, jak i pojedynczego pliku. Dzięki temu, możliwe jest pobranie wszystkich dostępnych archiwów przy użyciu wspólnej funkcjonalności, a także pobranie archiwum dla pojedynczej daty.</p>
+<pre><code class="language-go">jeżeli podano targetDate:
+    sprawdź zawartość katalogu &quot;/inzynierka&quot; w Dropbox
+    jeżeli nie można odczytać katalogu:
+        downloadPath = &quot;/inzynierka/&quot; + targetDate + &quot;.zip&quot;
+    w przeciwnym razie:
+        sprawdź, czy istnieje plik ZIP lub folder odpowiadający targetDate
+        jeśli nie znaleziono ani pliku, ani folderu:
+            zgłoś błąd
+w przeciwnym razie:
+    downloadPath = &quot;/inzynierka&quot;
+</code></pre>
+<blockquote>
+<p>Rys 3.4.1 Pseudokod przedstawiający logikę określania ścieżki pobrania danych</p>
+</blockquote>
+<p>Po ustaleniu oczekiwanej ścieżki dla danych następuje proces pobierania właściwych danych. W zależności od rodzaju ścieżki logika pobierania różni się, dla pojedynczej daty oraz dla całego katalogu archiwów. Po wywołaniu odpowiedniej metody z pakietu <code>github.com/Dropbox/Dropbox-sdk-go-unofficial/v6/Dropbox</code> dane zostają przekazane do funkcjonalności ekstrakcji zarchiwizowanych danych.</p>
+<pre><code class="language-go">jeżeli downloadPath wskazuje plik ZIP:
+    pobierz plik ZIP z Dropbox
+    zapisz zawartość do pliku tymczasowego
+w przeciwnym razie:
+    pobierz cały katalog ZIP z Dropbox
+    zapisz zawartość do pliku tymczasowego
+</code></pre>
+<blockquote>
+<p>Rys 3.4.2 Pseudokod pokazujący logikę pobierania danych do pliku tymczasowego</p>
+</blockquote>
+<p>Pierwszym krokiem ekstrakcji danych jest przeniesienie zawartości zwróconej z wyżej wymienionego pakietu do odpowiedniego katalogu tymczasowego. W tym celu system sprawdza, czy docelowy katalog istnieje, w takim przypadku cały proces jest pomijany w celu zaoszczędzenia zasobów, lub czy docelowy katalog został przekazany jako ścieżka do pliku, w tym przypadku zostaje zwrócony błąd.</p>
+<pre><code class="language-go">jesli katalog danych istnieje:
+    zaloguj wiadomość
+    przerwij przetwarzanie
+
+utwórz plik tymczasowy
+zapisz pobrane dane do pliku tymczasowego
+</code></pre>
+<blockquote>
+<p>Rys 3.4.3 Pseudokod przedstawiający proces tworzenia i wypełniania pliku tymczasowego</p>
+</blockquote>
+<p>Kolejnym krokiem jest właściwe wypakowywanie zawartości archiwum pobranej do katalogu tymczasowego, w tym celu tworzony jest katalog docelowy ekstrakcji do którego zapisywane są kolejne odpakowane pliki. Moduł obsługuje również archiwa zagnieżdżone, co zapewnia poprawne przetwarzanie nietypowych przypadków danych wejściowych.</p>
+<pre><code class="language-go">reader, err := zip.OpenReader(zipFilePath)
+if err != nil {
+    return fmt.Errorf(&quot;unable to open ZIP archive: %w&quot;, err)
+}
+defer reader.Close()
+
+for _, f := range reader.File {
+    if f.FileInfo().IsDir() {
+        continue
+    }
+
+    src, err := f.Open()
+    if err != nil {
+        return fmt.Errorf(&quot;cannot open file '%s': %w&quot;, f.Name, err)
+    }
+    defer src.Close()
+
+    dest := filepath.Join(extractionDir, filepath.Base(f.Name))
+    dst, err := os.Create(dest)
+    if err != nil {
+        return fmt.Errorf(&quot;cannot create '%s': %w&quot;, dest, err)
+    }
+
+    io.Copy(dst, src)
+    dst.Close()
+}
+</code></pre>
+<blockquote>
+<p>Rys 3.4.4 Fragment kodu odpowiedzialny za rozpakowywanie zarchiwizowanych plików do katalogu docelowego ekstrakcji</p>
+</blockquote>
+<p>Przedstawiony moduł umożliwia automatyczne pobieranie, weryfikację i ekstrakcję danych archiwalnych z serwisu Dropbox. Dzięki obsłudze zarówno pojedynczych plików, jak i całych katalogów, moduł charakteryzuje się wysoką elastyczność oraz skalowalnością w procesie pozyskiwania danych wejściowych.</p>
+<h2 id="35-modu-dodawania-danych-do-bazy-danych">3.5 Moduł dodawania danych do bazy danych</h2>
+<p>Moduł dodawania danych do bazy danych odpowiada za przetworzenie dostępnych danych i dodanie ich do określonej przy pomocy zmiennych środowiskowych bazy danych. W systemie dane wysyłane są do bez serwerowej bazy PostgreSQL, Neon. Wszystkie tabele wykorzystywane w bazie danych zostały zdefiniowane jako modele pakietu <code>Gorm</code>, co umożliwiło dostęp do szeregu funkcjonalności ułatwiających obsługę danych. Na tym etapie zostają wybrane pliki wykorzystywane w wizualizacji danych, jedynie zdefiniowane modele trafią do bazy danych, umożliwiając ich wizualizację.</p>
+<pre><code class="language-go">type BoulderKIndex1m struct {
+    ID      uint      `gorm:&quot;primaryKey&quot;`
+    TimeTag time.Time `gorm:&quot;uniqueIndex;type:timestamp(0)&quot;`
+    KIndex  float32   `gorm:&quot;type:real&quot;`
+}
+</code></pre>
+<blockquote>
+<p>Rys 3.5.1 Przykładowy model użyty w systemie</p>
+</blockquote>
+<p>W modelu przedstawionym na rysunku 3.5.1 zdefiniowane zostały zarówno pola, ich typy i ograniczenia nałożone na opisywaną tabelę.</p>
+<p>Pierwszym krokiem modułu jest inicjalizacja bazy danych, która odbywa się poprzez automatyczną migrację wszystkich modeli, umożliwia to obsługę przypadków powtórnego, jak i pierwszorazowego zapisu danych, ponieważ tabele tworzone są tylko w przypadku nieistnienia tabel.</p>
+<pre><code class="language-pseudocode">ustaw DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT ze zmiennych środowiskowych lub użyj wartości domyślnych
+
+połącz się z bazą danych przy użyciu DSN
+jeśli połączenie się nie powiodło:
+    zgłoś błąd
+
+wykonaj AutoMigrate dla wszystkich wymaganych tabel
+jeśli migracja się nie powiodła:
+    zgłoś błąd
+
+wyświetl komunikat o sukcesie
+zwróć obiekt bazy danych
+</code></pre>
+<blockquote>
+<p>Rys 3.5.2 Pseudokod przedstawiający inicjalizację bazy danych</p>
+</blockquote>
+<p>Kolejnym krokiem opisywanego modułu jest przetworzenie danych uzyskanych dla danych dostępnych w katalogu otrzymanym w procesie ekstrakcji. Etap ten jest właściwym etapem zapisu danych, dla każdego wczytanego pliku dopasowywany zostaje odpowiedni model, który następnie jest przetwarzany i zapisywany. W celu uniknięcia duplikatów danych każda operacja zapisu niezależnie od jej wyniku wywołuje zapis informacji w oddzielnej tabeli przechowującej unikatowe rekordy dla każdego przetwarzanego dnia. Dzięki tej funkcjonalności system jest w stanie zapobiec duplikowaniu danych oraz marnowania zasobów.</p>
+<pre><code class="language-pseudocode">dla każdej daty w katalogu danych:
+
+    jeżeli data nie jest zgodna z formatem:
+        pomiń
+
+    jeżeli targetdate jest określony i nie pasuje do daty:
+        pomiń
+
+    jeżeli data została już przetworzona:
+        pomiń lub zakończ (jeśli targetdate)
+
+    dla każdego pliku csv w katalogu daty:
+        jeżeli plik jest wykluczony:
+            pomiń
+
+        właduj dane z pliku
+        zapisz dane do odpowiedniej tabeli w bazie
+
+    zapisz informację o zakończonym przetwarzaniu daty w logu
+
+    jeżeli targetdate był określony:
+        zakończ funkcję
+
+jeżeli targetdate był określony i nie znaleziono go:
+    zgłoś błąd
+</code></pre>
+<blockquote>
+<p>Rys 3.5.3 Pseudokod przedstawiający przetwarzanie zapisu danych dziennych do bazy danych</p>
+</blockquote>
+<p>Przedstawiony moduł umożliwia efektywny i niezawodny zapis danych do bazy danych, a także tworzenie struktury tabel, w przypadku jego braku.</p>
+<h2 id="36-modu-wizualizacji-danych">3.6 Moduł wizualizacji danych</h2>
+<p>Moduł wizualizacji danych przedstawia dane pozyskane i przetworzone w postaci interaktywnych wykresów umożliwiających analizę zjawisk pogody kosmicznej. </p>
+<p>Moduł został podzielony na mniejsze podmoduły, każdy przedstawiający osobne zjawisko. Każdy podmoduł pobiera dane z bazy danych, które zostają zapisywane do pamięci podręcznej trzymającej pobrane dane do 10 minut. Dzięki temu zabiegowi czas ładowania wykresów i obciążenie bazy danych zostały zredukowane wpływając pozytywnie na wydajność modułu.</p>
+<pre><code class="language-python">def read_table(table_name: str, limit: int | None = None, ttl_seconds: int | None = None, force_refresh: bool = False) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;
+    Read data from a table
+
+    :param table_name:
+    :param limit:
+    :param ttl_seconds:
+    :param force_refresh:
+    :return:
+    &quot;&quot;&quot;
+    if not table_name:
+        return pd.DataFrame()
+
+    key = (table_name, limit)
+
+    # memory cache
+    if not force_refresh and key in _MEM_CACHE:
+        entry = _MEM_CACHE[key]
+        if ttl_seconds is None or (datetime.now() - entry['ts']).total_seconds() &lt;= ttl_seconds:
+            return entry['df'].copy()
+
+    if engine is None:
+        raise RuntimeError(&quot;DB engine not configured&quot;)
+
+    # query data
+    q = f'SELECT * FROM &quot;{table_name}&quot;' + (f&quot; LIMIT {limit}&quot; if limit else &quot;&quot;)
+    df = pd.read_sql(text(q), con=engine)
+    df.columns = [c.lower() for c in df.columns]
+
+    for c in df.columns:
+        if _is_time_like(c):
+            try: df[c] = pd.to_datetime(df[c])
+            except: pass
+
+    _MEM_CACHE[key] = {'ts': datetime.now(), 'df': df.copy()}
+    return df
+
+@st.cache_data(ttl=600)
+def _load_table_cached(name, limit):
+    return read_table(name, limit=limit)
+</code></pre>
+<blockquote>
+<p>Rys 3.6.1 Fragment kodu przedstawiający pełną funkcjonalność ładowania danych wraz z pamięcią podręczną</p>
+</blockquote>
+<p>Każdy z podmodułów zawiera zestaw interaktywnych wykresów opisujących wybrane parametry danego zjawiska, wraz z dokładnymi opisami przedstawianych wykresów. Dzięki temu każde zjawisko może zostać dokładnie przedstawione i przeanalizowane, nawet przez osoby niezaznajomione z teoria danych zjawisk.</p>
+<p><img alt="integracja podmodułów" src="../sketches/dasboard_flow_chart.png" /></p>
+<blockquote>
+<p>Rys 3.6.2 Schemat przedstawiający sposób integracji wszystkich podmodułów</p>
+</blockquote>
+<p>Na rysunku 3.6.2 przedstawiono metodę integracji poszczególnych podmodułów. Po wybraniu danego zjawiska pogody kosmicznej z paska bocznego generowana jest strona zawierająca wszystkie elementy potrzebne do analizy wybranego zjawiska. W przypadku braku wybranego zjawiska na stronie pojawi się komunikat z błędem. Opisany sposób integracji pozwala na jednoczesne przetwarzanie jednej tabeli, co przekładana się na zwiększoną wydajność i dostępność spełniając założenia projektowe.</p>
+<h2 id="37-integracja-moduow">3.7 Integracja modułów</h2>
+<p>Opisane wyżej moduły zostały zintegrowane w trzy bloki:</p>
+<ul>
+<li>blok zbierania danych</li>
+<li>blok zapisu danych do bazy danych</li>
+<li>blok wizualizacji danych</li>
+</ul>
+<p>Pierwszy blok zawiera moduły źródła danych, pozyskiwania danych i archiwizacji danych, natomiast drugi blok zawiera moduł przetwarzania danych i dodawania danych do bazy danych. W celu umożliwienia nieprzerwanego i niezawodnego pobierania i zapisywania danych stworzony został potok danych(ang. pipeline) działający codziennie o godzinie 18.40 czasu Polskiego, co umożliwiło ustawienie stosownego cron-jobu. Struktura potoku danych została oparta o technologię konteneryzacji (Docker) umożliwiając jej skalowanie i przenoszenie na inne platformy. Po wykonaniu dwóch pierwszych bloków na adres mailowy ustawiony w konfiguracji potoku zostaje wysłana informacja zawierająca status wykonania bloków. Jest to element monitorowania potoku, który usprawnia proces ewentualnego wykrywania błędów i restartowania potoku.</p>
+<p><img alt="potok danych" src="../sketches/pipeline.png" /></p>
+<blockquote>
+<p>Rys 3.7.1 potok danych wykorzystywany w projekcie</p>
+</blockquote>
+<p>Ostatni blok składa się tylko z ostatniego modułu, który działa w chmurze udostępnionej przez Streamlit Community. Dzięki temu zabiegowi wizualizacja danych jest szeroko dostępna i nie wymaga żadnych ustawień z perspektywy użytkownika końcowego. Dodatkowo, konfiguracja bloku wizualizacji wymaga jedynie określenia zmiennych środowiskowych zawierających informacje odnośnie połączenia do bazy danych, a wszelkie zmiany zawartości tabel są odzwierciedlana w czasie rzeczywistym na wykresach.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

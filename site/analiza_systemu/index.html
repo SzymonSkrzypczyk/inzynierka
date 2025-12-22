@@ -1,0 +1,886 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../implementacja/">
+      
+      
+        <link rel="next" href="../podsumowanie/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Analiza systemu - Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-analiza-zaprojektowanego-systemu" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-header__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Analiza systemu
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-nav__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wstep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wstęp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wprowadzenie_teoretyczne/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wprowadzenie teoretyczne
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architektura_projektu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architektura projektu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implementacja/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementacja
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analiza systemu
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analiza systemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-charakterystyka-zaimplementowanego-systemu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Charakterystyka zaimplementowanego systemu
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-przykady-analizy-rzeczywistych-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Przykłady analizy rzeczywistych danych
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Przykłady analizy rzeczywistych danych">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421-analiza-skadnikow-pola-magnetycznego-miedzyplanetarnego" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 Analiza składników pola magnetycznego międzyplanetarnego
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-analiza-wartosci-indeksu-kp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 Analiza wartości indeksu Kp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-ograniczenia-projektu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Ograniczenia projektu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Ograniczenia projektu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-ograniczenia-zwiazane-z-danymi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 Ograniczenia związane z danymi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-ograniczenia-techniczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 Ograniczenia techniczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-ograniczenia-projektowe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 Ograniczenia projektowe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-porownanie-z-istniejacymi-rozwiazaniami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Porównanie z istniejącymi rozwiązaniami
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Porównanie z istniejącymi rozwiązaniami">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441-porownanie-gownych-obszarow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 Porównanie głównych obszarów
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442-wnioski" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 Wnioski
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podsumowanie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Podsumowanie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-charakterystyka-zaimplementowanego-systemu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Charakterystyka zaimplementowanego systemu
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-przykady-analizy-rzeczywistych-danych" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Przykłady analizy rzeczywistych danych
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Przykłady analizy rzeczywistych danych">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421-analiza-skadnikow-pola-magnetycznego-miedzyplanetarnego" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 Analiza składników pola magnetycznego międzyplanetarnego
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-analiza-wartosci-indeksu-kp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 Analiza wartości indeksu Kp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-ograniczenia-projektu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Ograniczenia projektu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Ograniczenia projektu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-ograniczenia-zwiazane-z-danymi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 Ograniczenia związane z danymi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-ograniczenia-techniczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 Ograniczenia techniczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-ograniczenia-projektowe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 Ograniczenia projektowe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-porownanie-z-istniejacymi-rozwiazaniami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Porównanie z istniejącymi rozwiązaniami
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Porównanie z istniejącymi rozwiązaniami">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441-porownanie-gownych-obszarow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 Porównanie głównych obszarów
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442-wnioski" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 Wnioski
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>W tym rozdziale przedstawiono szczegółową analizę działania projektu, w tym omówienie  przykładowych wykresów zawierających rzeczywiste dane przetworzone przez system. W końcowej części rozdziału zaprezentowano również ograniczenia projektu oraz dokonano porównania z innymi istniejącymi systemami analizy pogody kosmicznej.</p>
+<h1 id="4-analiza-zaprojektowanego-systemu">4. Analiza zaprojektowanego systemu</h1>
+<h2 id="41-charakterystyka-zaimplementowanego-systemu">4.1 Charakterystyka zaimplementowanego systemu</h2>
+<p>W tym podrozdziale omówione zostaną cechy systemu zaimplementowanego w trzecim rozdziale i według założeń z drugiego rozdziału. Szczególny nacisk położono na umożliwienie niezawodnego przepływu danych oraz ich natychmiastową dostępność w module wizualizacji.</p>
+<p>Opisywany system powstał w wyniku integracji poszczególnych modułów w trzy bloki, które dodatkowo współpracują ze sobą umożliwia szybki, w pełni opisany i klarowny proces przepływ danych. Dane pochodzące z zewnętrznego interfejsu programistycznego są przetwarzane codziennie niemal bez problemów, co świadczy o niezawodności projektu. Zgrupowanie wszystkich modułów poza modułem wizualizacji w połączone ze sobą przez potok danych bloki umożliwiło usprawnienie przepływu danych.</p>
+<p><img alt="github action" src="../sketches/github_action.png" /></p>
+<blockquote>
+<p>Rys 4.1.1 Potok danych zaimplementowany przy pomocy Github Actions</p>
+</blockquote>
+<p>Dzięki podzieleniu przetwarzania na trzy bloki funkcjonalności i zakres poszczególnych bloków pozwolił na zamknięte przetwarzanie, które nie wpływa na procesy poza zakresem danego bloku. Role bloków rozkładają się w następujący sposób:</p>
+<ul>
+<li>blok zbierania danych - odpowiada za pobranie i archiwizację danych</li>
+<li>blok zapisu danych do bazy danych - odpowiada za przygotowanie danych oraz ich zapis w bazie danych</li>
+<li>blok wizualizacji danych - odpowiada za przygotowanie interaktywnych wykresów</li>
+</ul>
+<p>Dane po każdym z opisanych bloków znajdują się w chmurze umożliwiając stały dostęp i ich przetwarzanie. Dodatkowo, zapobiega to sytuacji, w której jeden z etapów systemu próbuje uzyskać dane, które nie są aktualnie dostępne. Ponieważ każdy etap przetwarzania ma zaimplementowaną obsługę błędów potencjalne błędy nie powodują natychmiastowego zatrzymania całego systemu, a jedynie podjęcie ponownej próby przeprowadzenia danej operacji.</p>
+<p>System jest w całości zautomatyzowany, dzięki użyciu technologii chmurowych. Ich wysoka dostępność i odseparowanie warstwy przetwarzania systemu od kodu, umożliwiają nieprzerwane przetwarzanie z ustaloną częstotliwością. Zastosowanie Github Actions jako głównego narzędzia do stworzenia potoku danych, umożliwiło odseparowanie odpowiedzialności za przepływ danych od użytkownika oraz umożliwiło codzienne przetwarzanie danych o tej samej porze wzmacniając jednolitość danych.</p>
+<p>W wyniku optymalizacji procesów zastosowanych w potoku danych przetwarzanie danych trwa nie więcej niż 4 minuty nawet w przypadku ponawiania operacji w wyniku błędów. Zapisywane archiwa mają rozmiar około 500 KB dla każdego dziennego pomiaru, umożliwiając ich efektywne przechowywanie oraz szybki dostęp do danych historycznych.</p>
+<p>Każdy etap przetwarzania jest wyposażony w mechanizmy logowania i monitorowania umożliwiając szybkie i sprawne wykrywanie i analizowanie błędów potencjalnie występujących w projekcie oraz umożliwia obserwowanie przepływu danych przez system.</p>
+<p>Zastosowanie bez serwerowej bazy danych w systemie umożliwiło ciągły dostęp do zapisanych danych oraz wymusiło przechowywanie tabel wymaganych w dalszej analizie, bez nadmiarowych szczegółów.</p>
+<p>Moduł wizualizacji umożliwia interaktywną analizę danych, w tym filtrowanie ze względu na analizowane zmienne, wybieranie określonych okien czasowych, a nawet zapisywanie wykresów do plików w formacie PNG.</p>
+<p>Podsumowując, zaimplementowany system zapewnia niezawodny i szybki przepływ danych, umożliwia ich stały dostęp, monitorowanie procesów oraz interaktywną analizę. Dzięki modularnej strukturze system może być w przyszłości rozszerzany poprzez dodawanie nowych modułów, na przykład poprzez dodanie dodatkowych modułów przetwarzania danych lub rozszerzonych funkcji wizualizacyjnych,</p>
+<h2 id="42-przykady-analizy-rzeczywistych-danych">4.2 Przykłady analizy rzeczywistych danych</h2>
+<p>W tym podrozdziale przedstawiono przykłady analizy danych rzeczywistych uzyskanych przy użyciu zaimplementowanego systemu. Celem jest zaprezentowanie możliwości systemu w zakresie wizualizacji danych dotyczących zjawisk pogody kosmicznej.</p>
+<h3 id="421-analiza-skadnikow-pola-magnetycznego-miedzyplanetarnego">4.2.1 Analiza składników pola magnetycznego międzyplanetarnego</h3>
+<p><img alt="pole magnetyczne wykres" src="../sketches/dscovr_plot.png" /></p>
+<blockquote>
+<p>Rys 4.2.1 Figura przedstawiająca rozkład wartości składników pola magnetycznego międzyplanetarnego w czasie</p>
+</blockquote>
+<p>Na wykresie przedstawionym na rysunku 4.2.1 zaprezentowana poszczególne składowe wartości pola magnetycznego międzyplanetarnego, barwy pomarańczowa, niebieska i różowa oznaczają kolejno składowe X, Y i Z opisywanego pola, a barwą zieloną opisane zostało całkowite pole magnetyczne międzyplanetarne. W celu analizy pojedynczych składowych możliwe jest ich wyłączenie poprzez kliknięcie w odpowiednią pozycję w legendzie figury. </p>
+<p>W celu uzyskania szczegółowych wartości dla danego dnia należy najechać kursorem na odpowiedni dzień co spowoduje pokazanie podpisu wraz z wartościami zarejestrowanymi danego dnia.</p>
+<p>Dodatkowo, okresy braku danych zostały zaznaczone na szaro, co pozwala na ich oddzielenie od danych dostępnych do analizy. Dzięki temu można zaobserwować na przykład awarie satelity DSCOVR. Jedną z awarii widać wyraźnie na środku wykresu, rozpoczęła się ona 15 lipca i trwała aż do początku października, w tym czasie satelita nie przesyłała danych odnośnie składników pola magnetycznego międzyplanetarnego. Według raportu NOAA awaria była spowodowana anomalią w oprogramowaniu i spowodowała reset procesora satelity(<a href="https://www.ospo.noaa.gov/data/messages/2025/07/MSG_20250715_1910.html">NOAA, 2025</a>).</p>
+<h3 id="422-analiza-wartosci-indeksu-kp">4.2.2 Analiza wartości indeksu Kp</h3>
+<p><img alt="pole magnetyczne wykres" src="../sketches/kp_index.png" /></p>
+<blockquote>
+<p>Rys 4.2.2 Figura przedstawiająca wartości planetarnego indeksu Kp w czasie</p>
+</blockquote>
+<p>Na wykresie przedstawionym na rysunku 4.2.2 zaprezentowano wartości indeksu Kp, opisującego intensywność burzy geomagnetycznej, w kolejnych dniach. Wykres umożliwia analizę występowania burz geomagnetycznych o różnej skali.</p>
+<p>W celu uzyskania szczegółowych wartości dla danego dnia należy najechać kursorem na odpowiedni dzień, co spowoduje wyświetlenie podpisu wraz z wartościami indeksu zarejestrowanymi danego dnia. Na wykresie widać jeden punkt z wartością 8 indeksu Kp, oznaczający poważną burzę geomagnetyczną, do której doszło 1 czerwca 2025 roku.</p>
+<p>Dodatkowo, również na tym wykresie braki danych zostały zaznaczone kolorem szarym w celu odróżnienia ich od danych możliwych do analizy.</p>
+<p><img alt="pole magnetyczne wykres" src="../sketches/geomagnetic_storm.png" /></p>
+<blockquote>
+<p>Rys 4.2.3 Figura przedstawiająca burze geomagnetyczne w czasie</p>
+</blockquote>
+<p>Dopełnieniem poprzedniego wykresu jest wykres przedstawiony na rysunku 4.2.3, który obrazuje wartości indeksu Kp, które zostały zakwalifikowane jako burze geomagnetyczne według skali podanej we wstępie pracy. Wykres umożliwia szybką klasyfikację dni z intensywnymi zjawiskami oraz ich wizualne zestawienie.</p>
+<h2 id="43-ograniczenia-projektu">4.3 Ograniczenia projektu</h2>
+<p>Zaprojektowany system posiada pewne ograniczenia wynikające zarówno z przyjętej architektury, jak i charakterystyki zastosowanych źródeł danych. Ograniczenia te wpływają na projekt w takich obszarach, jak dostępność danych, ilość przetworzonych danych, czy zakres przeprowadzonej analizy. Świadomość tych ograniczeń pozwala na poprawną interpretację wyników oraz wskazuje na potencjalne kierunki rozwoju. </p>
+<p>Poniżej omówiono główne ograniczenia systemu w kontekście danych, funkcjonalności oraz jego zastosowania.</p>
+<h3 id="431-ograniczenia-zwiazane-z-danymi">4.3.1 Ograniczenia związane z danymi</h3>
+<p>Dane wykorzystywane przez system pochodzą z jednego źródła danych,  co naraża go na potencjalne braki danych spowodowane awarią interfejsu programistycznego SWPC. Wystąpienie problemów w module źródła danych może prowadzić do nieciągłości w danych, a w rezultacie do ograniczenia możliwości analitycznych systemu.</p>
+<p>Dodatkowym celowym ograniczeniem jest pobieranie danych raz dziennie o tej samej porze. Rozwiązanie to zapewnia spójność danych i umożliwia przeprowadzanie porównywalnych analiz między poszczególnymi dniami. Jednocześnie prowadzi do zawężenia zakresu danych dostępnych dla systemu, potencjalnego powodując pomijanie istotnych dla danych zjawisk danych.</p>
+<h3 id="432-ograniczenia-techniczne">4.3.2 Ograniczenia techniczne</h3>
+<p>System posiada również ograniczenia techniczne, które wpływają na sposób jego działania oraz zakres dostępnych funkcjonalności. Ich źródłem są przede wszystkim zastosowane narzędzia oraz infrastruktura, w szczególności baza danych.</p>
+<p>Najpoważniejszym ograniczeniem w tym obszarze jest limit przepływu danych narzucony przez dostawcę bazy danych, wynikający z użycia darmowego planu usługowego. Wymusiło to zastosowanie ograniczenie ilości wykorzystywanych tabel, w celu nie przekroczenia dozwolonego limitu. Pomimo mniejszego znaczenia usuniętych tabel dla analizy zjawisk pogody kosmicznej, wraz z ich utratą ograniczono  w pewnym stopniu analizę zjawisk o mniejszym priorytecie.</p>
+<p>W rezultacie system działa poprawnie w ramach przyjętych założeń, jednak pełniejsza analiza byłaby możliwa po rozszerzeniu zasobów np. poprzez użycie płatnego planu usługowego.</p>
+<h3 id="433-ograniczenia-projektowe">4.3.3 Ograniczenia projektowe</h3>
+<p>Ograniczenia projektowe wynikają z podjętych na etapie planowania decyzji projektowych oraz sposobu ich realizacji. Ograniczenia te zostały świadomie przyjęte, aby zapewnić spójność architektury i implementacji projektu w ramach pracy inżynierskiej.</p>
+<p>Pierwszym istotnym ograniczeniem projektowym było zawężenie funkcjonalności systemu do wybranych zjawisk pogody kosmicznej. Projekt nie obejmuje wszystkich dostępnych metryk i informacji, a jedynie te uznane za najbardziej istotnych dla przyjętych celów projektu oraz efektywnego przeprowadzanie analizy.</p>
+<p>Kolejnym ograniczeniem jest rezygnacja z implementacji metod opartych na uczeniu maszynowym. Choć ogranicza to możliwości przeprowadzenie zaawansowanych analiz predykcyjnych, system nadal umożliwia rzetelną i efektywną analizę danych poprzez dostępne interaktywne metody wizualizacyjne.</p>
+<p>W rezultacie system realizuje wszystkie przyjęte cele projektowe, jednocześnie wskazując potencjalne obszary rozwoju projektu o nowe funkcjonalności.</p>
+<h2 id="44-porownanie-z-istniejacymi-rozwiazaniami">4.4 Porównanie z istniejącymi rozwiązaniami</h2>
+<p>W tym podrozdziale przedstawiono porównanie zaimplementowanego systemu z wybranymi istniejącymi rozwiązaniami dostępnymi online, takimi jak dashboard <a href="https://www.swpc.noaa.gov/communities/space-weather-enthusiasts-dashboard">NOAA Space Weather Prediction Center</a> oraz <a href="https://www.spaceweatherlive.com/">SpaceWeatherLive</a>. Celem jest porównanie podobieństw i różnic między systemami zewnętrznymi i systemem stworzonym w ramach opisywanej pracy.</p>
+<h3 id="441-porownanie-gownych-obszarow">4.4.1 Porównanie głównych obszarów</h3>
+<table>
+<thead>
+<tr>
+<th>Kryterium</th>
+<th>Systemy zewnętrzne</th>
+<th>Zaimplementowany system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zakres danych</td>
+<td>szeroki, wychodzący poza temat pracy inżynierskiej</td>
+<td>zakres danych ograniczony do tematu pracy inżynierskiej</td>
+</tr>
+<tr>
+<td>Wizualizacje</td>
+<td>szeroki zakres wykresów, w tym animacje</td>
+<td>wykresy czasowe, interaktywne, mapy ciepła</td>
+</tr>
+<tr>
+<td>Interaktywność</td>
+<td>zależna od typu wykresu, detale dostępne po najechaniu kursorem na wykres</td>
+<td>wysoka dla każdego typu wykresu, detale dostępne po najechaniu kursorem na wykres</td>
+</tr>
+<tr>
+<td>Predykcja</td>
+<td>zaimplementowane predykcje dla np. rozbłysków słonecznych</td>
+<td>brak, poza zakresem opisywanej pracy</td>
+</tr>
+<tr>
+<td>Dostęp do danych historycznych</td>
+<td>dane w większości dostępne dla ostatnich dni i godzin</td>
+<td>dane dostępnego dla całego okresu ich zbierania</td>
+</tr>
+<tr>
+<td>Częstotliwość aktualizacji</td>
+<td>dane aktualizowane niemal w czasie rzeczywistym</td>
+<td>dane aktualizowane raz dziennie</td>
+</tr>
+</tbody>
+</table>
+<h3 id="442-wnioski">4.4.2 Wnioski</h3>
+<p>Porównanie z systemami zewnętrznymi pokazuje, że zaimplementowany system wyróżnia się przede wszystkim wysoką interaktywnością wykresów oraz pełnym dostępem do danych historycznych. Rozwiązania te zapewniają elastyczność i umożliwiają na szczegółową analizę danych oddalonych w czasie.</p>
+<p>W porównaniu do bardziej rozbudowanych systemów zewnętrznych, zaimplementowany system wykazuje ograniczony zakres danych oraz brak funkcji predykcyjnych i aktualizacji danych w czasie rzeczywistym. Opisane różnice są wynikiem świadomych decyzji projektowych, uwzględniających zakres pracy inżynierskiej oraz założenia przyjęte w projekcie.</p>
+<p>Ponadto, porównanie wskazuje możliwe dalsze kierunki rozwoju projektu, obejmujące między innymi wprowadzenie funkcji predykcyjnych, rozbudowanie modułu wizualizacji oraz zwiększenia częstotliwości aktualizacji.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
