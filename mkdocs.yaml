@@ -1,0 +1,10 @@
+site_name: Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+nav:
+  - Wstęp: wstep.md
+  - Wprowadzenie teoretyczne: wprowadzenie_teoretyczne.md
+  - Architektura projektu: architektura_projektu.md
+  - Implementacja: implementacja.md
+  - Analiza systemu: analiza_systemu.md
+  - Podsumowanie: podsumowanie.md
+theme:
+  name: material
