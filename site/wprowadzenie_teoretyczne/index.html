@@ -1,0 +1,1143 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../wstep/">
+      
+      
+        <link rel="next" href="../architektura_projektu/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Wprowadzenie teoretyczne - Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-wprowadzenie-teoretyczne" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-header__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wprowadzenie teoretyczne
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" class="md-nav__button md-logo" aria-label="Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automatyczne pobieranie, przetwarzanie i wizualizowanie wybranych parametrów pogody kosmicznej
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wstep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wstęp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wprowadzenie teoretyczne
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wprowadzenie teoretyczne
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-wprowadzenie" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Wprowadzenie
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 Wprowadzenie">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11a-definicja-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1a Definicja pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11b-znaczenie-monitorowania-i-analizy-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1b Znaczenie monitorowania i analizy pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11c-wpyw-zjawisk-sonecznych-na-technologie-i-infrastrukture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1c Wpływ zjawisk słonecznych na technologię i infrastrukturę
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11d-aktualne-wyzwania-w-prognozowaniu-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1d Aktualne wyzwania w prognozowaniu pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-zjawiska-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Zjawiska pogody kosmicznej
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 Zjawiska pogody kosmicznej">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12a-rozbyski-soneczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2a Rozbłyski słoneczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12b-koronalne-wyrzuty-masy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2b Koronalne wyrzuty masy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12c-burze-geomagnetyczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2c Burze geomagnetyczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12d-protony-soneczne-i-burze-promieniowania-sonecznego" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2d Protony słoneczne i burze promieniowania słonecznego
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12e-pole-magnetyczne-miedzyplanetarne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2e Pole magnetyczne międzyplanetarne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12f-aktywne-regiony-soneczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2f Aktywne regiony słoneczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-satelity-i-systemy-monitorowania" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Satelity i systemy monitorowania
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 Satelity i systemy monitorowania">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#13a-geostationary-operational-environmental-satellites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3a Geostationary Operational Environmental Satellites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13b-deep-space-climate-observatory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3b Deep Space Climate Observatory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13c-noaa-space-weather-prediction-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3c NOAA Space Weather Prediction Center
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architektura_projektu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architektura projektu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implementacja/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementacja
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analiza_systemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analiza systemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../podsumowanie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Podsumowanie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-wprowadzenie" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Wprowadzenie
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 Wprowadzenie">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11a-definicja-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1a Definicja pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11b-znaczenie-monitorowania-i-analizy-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1b Znaczenie monitorowania i analizy pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11c-wpyw-zjawisk-sonecznych-na-technologie-i-infrastrukture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1c Wpływ zjawisk słonecznych na technologię i infrastrukturę
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11d-aktualne-wyzwania-w-prognozowaniu-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1d Aktualne wyzwania w prognozowaniu pogody kosmicznej
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-zjawiska-pogody-kosmicznej" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Zjawiska pogody kosmicznej
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 Zjawiska pogody kosmicznej">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12a-rozbyski-soneczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2a Rozbłyski słoneczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12b-koronalne-wyrzuty-masy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2b Koronalne wyrzuty masy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12c-burze-geomagnetyczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2c Burze geomagnetyczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12d-protony-soneczne-i-burze-promieniowania-sonecznego" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2d Protony słoneczne i burze promieniowania słonecznego
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12e-pole-magnetyczne-miedzyplanetarne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2e Pole magnetyczne międzyplanetarne
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12f-aktywne-regiony-soneczne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2f Aktywne regiony słoneczne
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-satelity-i-systemy-monitorowania" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Satelity i systemy monitorowania
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 Satelity i systemy monitorowania">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#13a-geostationary-operational-environmental-satellites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3a Geostationary Operational Environmental Satellites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13b-deep-space-climate-observatory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3b Deep Space Climate Observatory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13c-noaa-space-weather-prediction-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3c NOAA Space Weather Prediction Center
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>W niniejszym rozdziale przedstawione zostaną podstawy teoretyczne dotyczące pogody kosmicznej, umożliwiające zrozumienie zagadnień i zjawisk omawianych w dalszej części pracy. Rozdział rozpoczyna się od definicji pogody kosmicznej, omówienia znaczenia jej monitorowania oraz wpływu zjawisk pochodzących ze Słońca na technologię i infrastrukturę. Dodatkowo przedstawione zostaną aktualne wyzwania w obserwacji i analizie pogody kosmicznej.</p>
+<p>Następnie opisane zostaną główne zjawiska pogody kosmicznej, a rozdział zakończy się omówieniem systemów satelitarnych i centrów monitorowania, stanowiących źródło danych wykorzystywanych w analizie pogody kosmicznej.</p>
+<p>Wiedza zawarta w tym rozdziale stanowi fundament do opracowania systemu automatycznego pobierania, analizowania i wizualizowania wybranych parametrów pogody kosmicznej stanowiącego główny cel niniejszej pracy. </p>
+<h1 id="1-wprowadzenie-teoretyczne">1. Wprowadzenie teoretyczne</h1>
+<h2 id="11-wprowadzenie">1.1 Wprowadzenie</h2>
+<p>W podrozdziale 1.1 przestawione zostaną pojęcia związane z pogodą kosmiczną oraz jej znaczenie w kontekście jej monitorowania i analizy. Omówione zostaną kluczowe aspekty umożliwiające zrozumienie zjawisk zachodzących na Słońcu i w przestrzeni międzyplanetarnej oraz ich wpływu na technologię i infrastrukturę na Ziemi. Wiedza zawarta w tym podrozdziale stanowi podstawę do omawiania poszczególnych zjawisk pogody kosmicznej w dalszej części tego rozdziału.</p>
+<h3 id="11a-definicja-pogody-kosmicznej">1.1a Definicja pogody kosmicznej</h3>
+<p>Pogoda kosmiczna odnosi się do dynamicznych i wysoce zmiennych warunków panujących w przestrzeni bliskiej Ziemi, obejmujących zjawiska zachodzące na Słońcu, w przestrzeni międzyplanetarnej i systemie magnosfera-jonosfera-termosfera. Niepożądane zmiany w tych obszarach mogą obniżyć wydajność i niezawodność systemów naziemnych i satelitów, prowadząc do poważnych problemów operacyjnych. Do najważniejszych zjawisk wpływających na pogodę kosmiczną należą m.in. promieniowanie magnetometryczne, energetyczne cząstki słoneczne, czy burze geomagnetyczne(<a href="https://www.sciencedirect.com/science/article/pii/S0273117797010958">D.N Baker, 1998</a>)</p>
+<h3 id="11b-znaczenie-monitorowania-i-analizy-pogody-kosmicznej">1.1b Znaczenie monitorowania i analizy pogody kosmicznej</h3>
+<p>Monitorowanie pogody kosmicznej pełni kluczową rolę w przewidywaniu i ograniczaniu negatywnych skutków zjawisk słonecznych i międzyplanetarnych dla technologii i infrastruktury na Ziemi. Dane pozyskiwane w czasie rzeczywistym z satelitów i systemów naziemnych umożliwiają wczesne wykrywanie zmian w wietrze słonecznym, strumieniach cząstek i innych parametrach środowiska kosmicznego. Dzięki temu możliwe jest ostrzeganie zespołów obsługujących infrastruktury krytyczne, umożliwiając podejmowanie środków zapobiegawczych. Analizowanie i przewidywanie pogody kosmicznej pozwalają na opracowywanie odpowiednich środków zaradczych(<a href="https://raeng.org.uk/media/lz2fs5ql/space_weather_full_report_final.pdf">Royal Academy of Engineering, 2013</a>).</p>
+<h3 id="11c-wpyw-zjawisk-sonecznych-na-technologie-i-infrastrukture">1.1c Wpływ zjawisk słonecznych na technologię i infrastrukturę</h3>
+<p>Zjawiska słoneczne i pogoda kosmiczna mogą znacząco zaburzyć działanie technologii i infrastruktury na Ziemi. Przykładowo, burze geomagnetyczne i koronalne wyrzuty masy(CME) mogą powodować awarie satelitów, uszkadzać systemy komunikacji lub prowadzić do awarii sieci energetycznych(<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024SW004055">Dabin Xue, 2024</a>). Zaburzenia i nietypowe zachowania spowodowane silną burzą geomagnetyczną zostały odnotowane już w XIX wieku, podczas tzw. Carrington Event, 2 Września 1859 roku. Operatorzy linii telegraficznych w Europie i Ameryce Północnej odnotowali przerwy w komunikacji, iskrzenie na liniach, a nawet kontynuowali przesyłanie wiadomości po odłączeniu zasilania, wykorzystując wyindukowany przez burze geomagnetyczną prąd(<a href="https://link.springer.com/article/10.1007/s11084-014-9368-3">C. Muller, 2014</a>). Przykład ten pokazuje podatność infrastruktury przewodzącej prąd na skutki ekstremalnej pogody kosmicznej.</p>
+<h3 id="11d-aktualne-wyzwania-w-prognozowaniu-pogody-kosmicznej">1.1d Aktualne wyzwania w prognozowaniu pogody kosmicznej</h3>
+<p>W literaturze dotyczącej prognozowania pogody kosmicznej podkreśla się liczne wyzwania, ograniczające skuteczność jej monitorowania i prognozowania. Do głównych problemów definiowanych w literaturze należą:</p>
+<ul>
+<li>Niepewność w modelach - modele fizyczne i prognostyczne przyjmują liczne przybliżenia, co prowadzi do istotnej niepewności w wynikach(<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108">S.K. Morley, 2019</a>)</li>
+<li>Niewielki czas wyprzedzenia prognozy - wiele modeli działa dobrze w krótkim terminie, ale ich wydajność spada dla dłuższych okresów, ograniczając ich wydajność(<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108">S.K. Morley, 2019</a>).</li>
+<li>Problem dokładnej specyfikacji stanu wiatru słonecznego przed Ziemią - pomiary w punkcie L1 mogą nie odpowiadać dokładnie warunkom w magnetosferze Ziemi(<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018SW002108">S.K. Morley, 2019</a>).</li>
+<li>Nierównomierne rozłożenie sieci obserwacyjnej - globalna sieć obserwacyjna nie jest w pełni równomiernie rozłożona po globie, zwłaszcza w obszarach trudno dostępnych, co ogranicza zdolność do pełnego monitorowania warunków pogody kosmicznej(<a href="https://agupubs.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/2017SW001665">J.J. Love, 2017</a>).</li>
+<li>Poprawa jakości danych - aby zwiększyć użyteczność prognoz, należy zwiększyć częstotliwość próbkowania, jakość zbieranych danych oraz minimalizowanie czasu opóźnienia(<a href="https://agupubs.onlinelibrary.wiley.com/doi/pdfdirect/10.1002/2017SW001665">J.J. Love, 2017</a>).</li>
+</ul>
+<p>Podsumowując, prognozowanie i monitorowanie pogody kosmicznej napotyka wiele wyzwań, które ograniczają jego skuteczność. Można je jednak częściowo minimalizować poprzez odpowiednie działania, takie jak poprawa jakości i częstotliwości danych. </p>
+<h2 id="12-zjawiska-pogody-kosmicznej">1.2 Zjawiska pogody kosmicznej</h2>
+<p>W podrozdziale 1.2 przedstawione zostaną główne zjawiska pogody kosmicznej, które wpływają na technologię i infrastrukturę na Ziemi. Omówione zostaną kolejno: rozbłyski słoneczne, koronalne wyrzuty masy(CME), burze geomagnetyczne, protony słoneczne i cząstki energetyczne, pole magnetyczne międzyplanetarne oraz aktywne regiony słoneczne. Ich zrozumienie jest niezbędne w celu efektywnego monitorowania, pobierania i analizowania zjawisk pogody kosmicznej. </p>
+<h3 id="12a-rozbyski-soneczne">1.2a Rozbłyski słoneczne</h3>
+<p>Rozbłyski słoneczne to gwałtowne uwolnienia energii magnetycznej w atmosferze Słońca, zachodzące w wyniku rekonekcji linii pola magnetycznego. Energia uwalniana podczas rozbłysku ma około 10^28 - 10^32 erg(1 erg = 1E-7 J) i przyjmuje zróżnicowane formy takie jak: energii promieniowania, kinetycznej ruchu masowego, termicznej oraz nietermicznej(<a href="https://link.springer.com/article/10.12942/lrsp-2011-6">K. Shibata, 2011</a>). </p>
+<p>Rozbłyski słoneczne generują fale uderzeniowe, wyrzuty plazmy i cząstek energetycznych, które mogą oddziaływać na Ziemię i systemy znajdujące się w przestrzeni kosmicznej np. satelity(<a href="https://link.springer.com/article/10.12942/lrsp-2011-6">K. Shibata, 2011</a>). </p>
+<p>W trakcie rozbłysków Słońce generuje promieniowanie elektromagnetyczne trwające od kilku minut do kilku godzin, promieniowanie to przemieszcza się z prędkością światła, a po dotarciu do Ziemi prowadzi do wzrostu jonizacji dolnej warstwy jonosfery po oświetlonej części Ziemi. W przypadku wystąpienia odpowiednio mocnego rozbłysku jonizacja następuje w niższej, gęstszej warstwie jonosfery w wyniku czego mogą wystąpić zakłócenia i utrata łączności radiowej dla wysokich częstotliwości(<a href="https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts">Space Weather Prediction Center</a>).</p>
+<p>Strumień promieniowania röntgenowskiego mieszony w paśmie od 1 do 8Å stanowi podstawową miarę natężenia rozbłysku słonecznego(<a href="https://www.swpc.noaa.gov/phenomena/solar-flares-radio-blackouts">Space Weather Prediction Center</a>). Rozbłyski są klasyfikowane w oparciu o maksymalny poziom danego strumienia(<a href="https://solar-center.stanford.edu/sid/activities/flare.html">Solar Center Stanford</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Klasa</th>
+<th>Zakres maksymalnej mocy(<em>I</em>, W/m^2) pomiędzy 1 a 8Å (1Å = 0.1nm)</th>
+<th>Wpływ na Ziemię</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>10E-8 &lt;= <em>I</em>  &lt; 10E-7 W/m^2</td>
+<td>Za małe, żeby wyrządzić krzywdę</td>
+</tr>
+<tr>
+<td>B</td>
+<td>10E-7 W/m^2 &lt;= <em>I</em>  &lt; 10E-6 W/m^2</td>
+<td>Za małe, żeby wyrządzić krzywdę</td>
+</tr>
+<tr>
+<td>C</td>
+<td>10E-6 W/m^2 &lt;= <em>I</em>  &lt; 10E-5 W/m^2</td>
+<td>Możliwe minimalne zaburzenia w komunikacji radiowej</td>
+</tr>
+<tr>
+<td>M</td>
+<td>10E-5 W/m^2 &lt;= <em>I</em>  &lt; 10E-4 W/m^2</td>
+<td>Może powodować krótkie blackouty radiowe</td>
+</tr>
+<tr>
+<td>X</td>
+<td>10E-4 W/m^2 &lt;= <em>I</em></td>
+<td>Może powodować długotrwałe blackouty radiowe i burze radiacyjne</td>
+</tr>
+</tbody>
+</table>
+<p>Na podstawie tej klasyfikacji NOAA ustanowiło klasyfikację radiowych blackoutów(<a href="https://www.swpc.noaa.gov/noaa-scales-explanation">Space Weather Prediction Center</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Skala</th>
+<th>Opis blackoutu</th>
+<th>Wpływ na infrastrukturę</th>
+<th>Fizyczny pomiar, będący wielokrotnością klas rozbłysku</th>
+<th>Średnia częstotliwość<br />(1 cykl = 11 lat)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-1</td>
+<td>Słaby</td>
+<td>Słaba degradacja komunikacji radiowej wysokiej częstotliwości po oświetlonej stronie Ziemi</td>
+<td>M1</td>
+<td>2000 na cykl</td>
+</tr>
+<tr>
+<td>R-2</td>
+<td>Umiarkowany</td>
+<td>Ograniczony blackout komunikacji radiowej wysokiej częstotliwości po oświetlonej stronie Ziemi</td>
+<td>M5</td>
+<td>350 na cykl</td>
+</tr>
+<tr>
+<td>R-3</td>
+<td>Mocny</td>
+<td>Blackout komunikacji radiowej wysokiej częstotliwości na szerokim obszarze</td>
+<td>X1</td>
+<td>175 na cykl</td>
+</tr>
+<tr>
+<td>R-4</td>
+<td>Poważny</td>
+<td>Blackout komunikacji radiowej wysokiej częstotliwości po większości oświetlonej strony Ziemi</td>
+<td>X10</td>
+<td>8 na cykl</td>
+</tr>
+<tr>
+<td>R-5</td>
+<td>Ekstremalny</td>
+<td>Całkowity blackout komunikacji radiowej wysokiej częstotliwości po całej oświetlonej stronie Ziemi</td>
+<td>X20</td>
+<td>mniej niż jeden na cykl</td>
+</tr>
+</tbody>
+</table>
+<p>Rozmiar i czas trwania rozbłysków zależą od ich mocy, czas trwania rozbłysku to od 10^3 do 10^4 s, a ich wysokość pętli magnetycznych przyjmuje wartości od około 10^4 km do 10^5 km(<a href="https://link.springer.com/article/10.12942/lrsp-2011-6">K. Shibata, 2011</a>).</p>
+<h3 id="12b-koronalne-wyrzuty-masy">1.2b Koronalne wyrzuty masy</h3>
+<p>Koronalne wyrzuty masy(ang. Coronal Mass Ejection, CME) to ogromne wyrzuty masy plazmy i pola magnetycznego z korony Słońca, które przemieszcza się w przestrzeni międzyplanetarnej. Plazma wyrzucana przez CME może mieć masę rzędu miliardów ton(tj. ~10^12kg lub więcej) i zawierać zamrożone w niej pola magnetyczne silniejsze niż tło wiatru słonecznego. Najszybsze CME skierowane w stronę Ziemi mogą do niej dotrzeć w czasie od 15 do 18 godzin i przemieszczają się z prędkością od ~250 km/s do ~3000 km/s, a w trakcie oddalania się od Słońca stają się coraz większe. Niektóre koronalne wyrzuty masy mogą osiągnąć rozmiar prawie ćwierć dystansu z Ziemi do Słońca(<a href="https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections">Space Weather Prediction Center</a>).</p>
+<p>Wyrzuty są istotnym składnikiem pogody kosmicznej i podczas kontaktu z Ziemskim środowiskiem magnetycznym mogą doprowadzić do poważnych konsekwencji takich jak np. tymczasowo podgrzać górną atmosferę Ziemi potencjalnie powodować utratę wysokości przez satelity, spowodować poważne burze geomagnetyczne, czy uszkadzać sieci energetyczne(<a href="https://science.nasa.gov/sun/solar-storms-and-flares/#coronal-mass-ejection">Science NASA</a>).</p>
+<p>Ważnymi parametrami CME są rozmiar, prędkość i kierunek, są one określane na podstawie danych z koronografów satelitarnych, które pozwalają również na określenie prawdopodobieństwa dotarcia do Ziemi i jaki może mieć efekt(<a href="https://www.swpc.noaa.gov/phenomena/coronal-mass-ejections">Space Weather Prediction Center</a>).</p>
+<h3 id="12c-burze-geomagnetyczne">1.2c Burze geomagnetyczne</h3>
+<p>Burza geomagnetyczna to znaczne zaburzenie magnetosfery Ziemi, wynikające z efektywnego przekazania energii wiatru słonecznego do otaczającego Ziemię środowiska kosmicznego. Wynikają głownie z przedłużonych okresów wysokiej prędkości wiatru słonecznego oraz skierowanego południowo pola magnetycznego wiatru słonecznego, co sprzyja transferowi energii(<a href="https://www.swpc.noaa.gov/phenomena/geomagnetic-storms">Space Weather Prediction Center</a>).</p>
+<p>Głównymi czynnikami odpowiadającymi za powstawanie burz geomagnetycznych są koronalne wyrzuty masy(CME) oraz strumienie wiatru słonecznego dużej prędkości(HSS, high-speed solar wind streams), po spełnieniu warunku południowego pola magentycznego dochodzi do przeniesienia energii i powstania burzy(<a href="https://www.swpc.noaa.gov/phenomena/geomagnetic-storms">Space Weather Prediction Center</a>).</p>
+<p>Do skutków burz geomagnetycznych należą m.in indukowanie prądu zdolnego uszkadzać transformatory(<a href="https://ieeexplore.ieee.org/abstract/document/4075457">V. D. Albertson, 1974</a>), zakłócanie działania systemów nawigacyjnych(<a href="https://angeo.copernicus.org/articles/27/2101/2009/">P. V. S. Rama Rao, 2009</a>) oraz uszkadzanie satelitów(<a href="https://www.spaceweather.gc.ca/tech/index-en.php#sat">Space Weather Canada</a>).</p>
+<p>Do opisywania burz geomagnetycznych używa się indeks Kp oraz skalę G, które instytucje wykorzystują do ostrzegania przed ryzykiem występowania zaburzeń spowodowanych przez zaburzenia magnetosfery(<a href="https://www.swpc.noaa.gov/phenomena/geomagnetic-storms">Space Weather Prediction Center</a>). </p>
+<ul>
+<li>Indeks Kp przyjmuje wartości od 0 do 9, gdzie niższe wartości oznaczają spokojną magnetosferę, a wartości od 5 do 9 oznaczają burze geomagnetyczne oraz jest definiowana. </li>
+<li>Skala G służy do klasyfikacji burz geomagnetycznych. G-1 odpowiada wartości 5 dla Kp, a G-5 wartości 9(<a href="https://www.swpc.noaa.gov/noaa-scales-explanation">Space Weather Prediction Center</a>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Indeks Kp</th>
+<th>Skala G</th>
+<th>Opis burzy</th>
+<th>Wpływ na technologię i infrastrukturę</th>
+<th>Średnia częstotliwość <br />(1 cykl = 11 lat)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 5</td>
+<td>N/A</td>
+<td>Spokojna</td>
+<td>Brak lub minimalne</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>5</td>
+<td>G-1</td>
+<td>Słaba</td>
+<td>Mały wpływ na sieci energetyczne i satelity</td>
+<td>1700 na cykl</td>
+</tr>
+<tr>
+<td>6</td>
+<td>G-2</td>
+<td>Umiarkowana</td>
+<td>Możliwe uszkodzenia transformatorów, wpływ na predykcje orbity satelitów</td>
+<td>600 na cykl</td>
+</tr>
+<tr>
+<td>7</td>
+<td>G-3</td>
+<td>Mocna</td>
+<td>Możliwe wywoływanie fałszywych alarmów w pewnych urządzeniach, zwiększony opór satelitów</td>
+<td>200 na cykl</td>
+</tr>
+<tr>
+<td>8</td>
+<td>G-4</td>
+<td>Poważna</td>
+<td>Możliwe powszechne problemy z kontrolą napięcia, problemy z namierzaniem satelitów</td>
+<td>100 na cykl</td>
+</tr>
+<tr>
+<td>9</td>
+<td>G-5</td>
+<td>Ekstremalna</td>
+<td>Możliwe blackouty systemów energetycznych, problemy ze śledzeniem i komunikacją z satelitami</td>
+<td>4 na cykl</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12d-protony-soneczne-i-burze-promieniowania-sonecznego">1.2d Protony słoneczne i burze promieniowania słonecznego</h3>
+<p>Protony słoneczne to naładowane cząstki pochodzące ze Słońca albo jego bezpośredniego otoczenia, stanowiące obok elektronów i ciężkich jonów kluczową część tzw. słonecznych cząstek energetycznych(SEP). Ich energia przyjmuje wartości od kilku keV do nawet GeV(<a href="https://link.springer.com/article/10.1007/s11214-025-01211-4#Sec1">A. Papaioanniu, 2025</a>). Emisje protonów na odpowiednio wysokich poziomach energetycznych przyczyniają się do powstawania burz słonecznych(<a href="https://www.swpc.noaa.gov/products/goes-proton-flux">Space Weather Prediction Center</a>).</p>
+<p>Burze promieniowania słonecznego powstają podczas rozległych erupcji magnetycznych, którym często towarzyszą rozbłyski słoneczne i koronalna wyrzuty masy (CME), które przyspieszają naładowane cząstki w atmosferze słonecznej do znacznych części prędkości światła. Naładowane cząstki docierają ze zróżnicowanymi rozbłyskami i energiami na różne lokalizacje geograficzne na Ziemi(<a href="https://www.undrr.org/understanding-disaster-risk/terminology/hips/et0104">UNDRR</a>).</p>
+<p>Do skutków emitowania słonecznych cząstek wysokoenergetycznych należą m.in: zakłócenia systemów nawigacyjnych i zakłócanie wysoko częstotliwościowej komunikacji radiowej oraz satelitarnej(<a href="https://www.swpc.noaa.gov/products/goes-proton-flux">Space Weather Prediction Center</a>).</p>
+<p>Do klasyfikacji burz słonecznych używa się się skali S, przyjmującej wartości od S-1, dla słabych burz słonecznych do S-5, dla ekstremalnych burz słonecznych(<a href="https://www.swpc.noaa.gov/noaa-space-weather-scales#s_scales">Space Weather Prediction Center</a>). Odpowiednie poziomy skali S są przydzielane na podstawie wartości pfu, czyli strumienia protonów o energii &gt;= 10 MeV(<a href="https://www.swpc.noaa.gov/products/goes-proton-flux">Space Weather Prediction Center</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Skala S</th>
+<th>Opis burzy</th>
+<th>Wpływ na technologię i organizmy</th>
+<th>strumień protonów <br />&gt;= 10 MeV</th>
+<th>Średnia częstotliwość (1 cykl = 11 lat)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-1</td>
+<td>Słaba</td>
+<td>Minimalny wpływ na komunikacje radiową</td>
+<td>10 pfu</td>
+<td>50 na cykl</td>
+</tr>
+<tr>
+<td>S-2</td>
+<td>Umiarkowana</td>
+<td>Możliwy nieznaczna redukcja wydajności paneli słonecznych, osoby znajdujące się w wysoko lecących samolotach są wystawione na podwyższone ryzyko promieniowania</td>
+<td>102 pfu</td>
+<td>25 na cykl</td>
+</tr>
+<tr>
+<td>S-3</td>
+<td>Mocna</td>
+<td>Problemy nawigacyjne i możliwy spadek propagacji w komunikacji radiowej, astronauci wystawieni na możliwe do zmitygowania ryzyko promieniowania</td>
+<td>103 pfu</td>
+<td>10 na cykl</td>
+</tr>
+<tr>
+<td>S-4</td>
+<td>Poważna</td>
+<td>Problemy nawigacyjne i możliwe blackouty w komunikacji radiowej, niemożliwe do zmitygowania ryzyko promieniowania dla astronautów</td>
+<td>104 pfu</td>
+<td>3 na cykl</td>
+</tr>
+<tr>
+<td>S-5</td>
+<td>Ekstremalna</td>
+<td>Satelity mogą stać się bezużyteczne, całkowity blackout komunikacji radiowej, osoby znajdujące się w wysoko lecących samolotach są wystawione na ryzyko promieniowania</td>
+<td>105 pfu</td>
+<td>mniej niż 1 na cykl</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12e-pole-magnetyczne-miedzyplanetarne">1.2e Pole magnetyczne międzyplanetarne</h3>
+<p>Pole magnetyczne międzyplanetarne (IMF) to pole magnetyczne Słońca wynoszone na zewnątrz przez wiatr słoneczny(<a href="https://solarscience.msfc.nasa.gov/people/suess/Interstellar_Probe/IMF/IMF.html">Solar Science NASA</a>). Pole magnetyczne jest przenoszone do momentu napotkania Helisfery, a więc miejsca w którym wiatr słoneczny się zatrzymuje i koliduje z ośrodkiem międzygwiazdowym(<a href="https://www.spaceweatherlive.com/en/help/the-interplanetary-magnetic-field-imf.html">Space Weather Live</a>). Ponieważ Słońce obraca się w pełni co 25.5 dnia, a wiatr słoneczny wypływa na zewnątrz, pole magnetyczne zostaje "zawinięte" w spiralę(<a href="https://solarscience.msfc.nasa.gov/people/suess/Interstellar_Probe/ISP-ObservObj.html">Solar Science NASA</a>).</p>
+<p>Wartość <strong>Bt</strong> międzyplanetarnego pola magnetycznego opisuje całkowitą moc pola. Jest to wartość na którą składają się siły pola magnetycznego w kierunkach północno-południowym, zachodnio-wschodnim i w kierunku Słońca przeciw kierunkowi odchodzącemu od Słońca. Im wyższa wartość <strong>Bt</strong>, tym silniejsze może być oddziaływanie geomagnetyczne. Wartość <strong>Bt</strong> przekraczająca 10nT wskazuje na umiarkowanie mocne całkowite międzyplanetarne pole magnetyczne, wartości od 20nT do 30nT odpowiadają mocnemu całkowitemu polu, a powyżej 30nT o bardzo mocnym polu(<a href="https://www.spaceweatherlive.com/en/help/the-interplanetary-magnetic-field-imf.html">Space Weather Live</a>).</p>
+<p>Międzyplanetarne pole magnetyczne jest wielkością wektorową, jego skadowe <strong>Bx</strong> i <strong>By</strong> są zorientowane równolegle do Ekliptyki, a składowa <strong>Bz</strong> jest do niej prostopadła i powstaje w wyniku zaburzeń w wietrze słonecznym. Składowa <strong>Bz</strong> skierowana w kierunku południowym umożliwia sprzężenie z północną składową pola Ziemi i doprowadzić do powstania burzy geomagnetycznej. Wartości rzędu -10nT i mniejsze są dobrymi wskaźnikami możliwego wystąpienia burzy geomagnetycznej(<a href="https://www.spaceweatherlive.com/en/help/the-interplanetary-magnetic-field-imf.html">Space Weather Live</a>).</p>
+<h3 id="12f-aktywne-regiony-soneczne">1.2f Aktywne regiony słoneczne</h3>
+<p>Aktywne regiony słoneczne (AR) to całość obswerwowalnych zjawisk poprzedzających, towarzyszących i następujących po powstaniu plam słonecznych, włączając w to emisje fal radiowych, röntgenowskich, a EUV(<a href="https://link.springer.com/article/10.1007/lrsp-2015-1">Lidia van Driel-Gesztelyi, 2015</a>). Regiony słoneczne tworzą się w miejscach, gdzie wierzchołki pętli strumieni magnetycznych w kształcie greckiej litery omega przechodzą do atmosfery słonecznej(<a href="https://solar.physics.montana.edu/canfield/papers/EAA.2023.pdf">Nature Publishing Group, 2001</a>).</p>
+<p>Regiony słoneczne są obszarami mocnego podgrzewania korony Słońca, dzięki czemu są znacznie jaśniejsze od otoczenia na koronalnych zdjęciach röntgenowskich. Pole magnetyczne w AR jest bardzo mocne, typowo przyjmuje wartości rzędu od 1000 do 3000 Gaussów(<a href="https://solar.physics.montana.edu/canfield/papers/EAA.2023.pdf">Nature Publishing Group, 2001</a>).</p>
+<p>Aktywne regiony słoneczne są głównym źródłem zjawisk słonecznych, od niewielkich rozjaśnień do koronalnych wyrzutów masy (CME). Poziom i typ ich aktywności zależy od etapu ewolucji AR, osiągając największy poziom w fazie wyłaniania się i następnie malejąc. Czas życia dwóch regionów może się od siebie znacząco różnić, duże regiony słoneczne mogą być wykrywalne do 10 miesięcy(<a href="https://link.springer.com/article/10.1007/lrsp-2015-1">Lidia van Driel-Gesztelyi, 2015</a>).</p>
+<h2 id="13-satelity-i-systemy-monitorowania">1.3 Satelity i systemy monitorowania</h2>
+<p>W podrozdziale 1.3 omówione zostaną systemy monitorowania i satelity, które umożliwiają monitorowanie i pozyskiwanie danych dotyczących pogody kosmicznej. Przedstawione zostaną kluczowe satelity oraz instytucje dostarczające dane niezbędne do analiz przeprowadzanych przez zaprojektowany system.</p>
+<h3 id="13a-geostationary-operational-environmental-satellites">1.3a Geostationary Operational Environmental Satellites</h3>
+<p>Geostationary Operational Environmental Satellites (GOES) to wspólne przedsięwzięcie NOAA (National Oceanic and Atmospheric Administration) i NASA (National Aeronautics and Space Administration), mające na celu stworzenie sieci satelitów zdolnej do ciągłego dostarczania danych i obrazów dotyczących atmosfery Ziemi i zjawisk pogody kosmicznej. Satelity GOES umieszczane są na wysokości 22 236 mil nad równikiem, co pozwala na ciągłe utrzymywanie położenia nad pewnymi regionami geograficznymi, dzięki synchronizacji z prędkością obrotu Ziemi. W zaimplementowanym w pracy systemie dane są pobierane z satelitów z serii GOES-R, a dokładniej z GOES-T i GOES-RU, czyli odpowiednio GOES-18 i GOES-19(<a href="https://science.nasa.gov/mission/goes/">NASA</a>). </p>
+<p>Satelity GOES-18 i GOES-19 wyposażone są w szereg instrumentów umożliwiających obserwację Ziemi (ABI, GLM) oraz pomiar aktywności słonecznej (SUVI). GOES-19 jest dodatkowo wyposażony w koronograf CCOR-1 zdolny do monitorowania CME (<a href="https://space.oscar.wmo.int/satelliteprogrammes/view/goes_3rd_generation">SPACE OSCAR WMO</a>).</p>
+<h3 id="13b-deep-space-climate-observatory">1.3b Deep Space Climate Observatory</h3>
+<p>Deep Space Climate Observatory (DSCOVR) to wspólna misja NOAA, NASA oraz US Air Force (USAF) zaprojektowana do zastąpienia poprzedniego systemu NASA, ACE. Głównym celem DSCOVR jest monitorowanie w czasie rzeczywistym wiatru słonecznego w celu ostrzegania przed występowaniem burz geomagnetycznych(<a href="https://science.nasa.gov/mission/dscovr/">NASA</a>). </p>
+<p>DSCOVR znajduje się w punkcie Lagrange'a L1 pomiędzy Ziemią i Słońcem, w odległości około 1.5 miliona kilometrów od Ziemi, czyli punkcie w którym satelita pozostaje w spoczynku względem obu ciał niebieskich. Dzięki ustawieniu w punkcie L1 satelita jest w stanie ostrzegać przed wystąpieniem burzy solarnej od 15 do 60 minut przed jej wystąpieniem na Ziemi(<a href="https://science.nasa.gov/mission/dscovr/">NASA</a>).</p>
+<h3 id="13c-noaa-space-weather-prediction-center">1.3c NOAA Space Weather Prediction Center</h3>
+<p>NOAA Space Weather Prediction Center (SWPC) to instytucja wchodząca w skład NOAA oraz NWS (National Weather Service), znajdująca się w Boulder w stanie Kolorado w USA(<a href="https://www.swpc.noaa.gov/">SWPC</a>). </p>
+<p>Jej zadaniem jest monitorowanie w czasie rzeczywistym środowiska kosmicznego oraz jego wpływu na Ziemię, technologię i infrastrukturę. SWPC publikuje bieżące obserwacje i prognozy zjawisk pogody kosmicznej, oferując dane darmowe i ogólnodostępne, dzięki czemu stanowi główne źródło danych dla zaimplementowanego w pracy systemu(<a href="https://www.swpc.noaa.gov/products-and-data">SWPC</a>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

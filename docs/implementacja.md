@@ -46,7 +46,7 @@ async def retrieve_data(target_name: str, url: str, target_dir: Union[str, Path]
 
 W dalszej części funkcji wykonywane jest odwołanie do aktualnie przetwarzanego punkt końcowego. W przypadku zwrócenia błędu przez API punkt końcowy zostaje ponownie odpytany o dane, dodatkowo wszystkie informacje o błędach zostają zapisane w celu identyfikacji potencjalnych błędów. W przypadku zwrócenia błędu jest on dodany do logów systemu, a następnie jeśli aktualna próba nie przekracza limitu dopuszczalnej ilości prób cały proces zostaje powtórzony.
 
-![pobieranie danych](../sketches/fetch_chart_fitted.png)
+![pobieranie danych](sketches/fetch_chart_fitted.png)
 
 > Rys 3.2.2 Schemat przedstawiający pozyskiwanie danych 
 
@@ -383,7 +383,7 @@ def _load_table_cached(name, limit):
 
 Każdy z podmodułów zawiera zestaw interaktywnych wykresów opisujących wybrane parametry danego zjawiska, wraz z dokładnymi opisami przedstawianych wykresów. Dzięki temu każde zjawisko może zostać dokładnie przedstawione i przeanalizowane, nawet przez osoby niezaznajomione z teoria danych zjawisk.
 
-![integracja podmodułów](../sketches/dasboard_flow_chart.png)
+![integracja podmodułów](sketches/dasboard_flow_chart.png)
 
 > Rys 3.6.2 Schemat przedstawiający sposób integracji wszystkich podmodułów
 
@@ -399,7 +399,7 @@ Opisane wyżej moduły zostały zintegrowane w trzy bloki:
 
 Pierwszy blok zawiera moduły źródła danych, pozyskiwania danych i archiwizacji danych, natomiast drugi blok zawiera moduł przetwarzania danych i dodawania danych do bazy danych. W celu umożliwienia nieprzerwanego i niezawodnego pobierania i zapisywania danych stworzony został potok danych(ang. pipeline) działający codziennie o godzinie 18.40 czasu Polskiego, co umożliwiło ustawienie stosownego cron-jobu. Struktura potoku danych została oparta o technologię konteneryzacji (Docker) umożliwiając jej skalowanie i przenoszenie na inne platformy. Po wykonaniu dwóch pierwszych bloków na adres mailowy ustawiony w konfiguracji potoku zostaje wysłana informacja zawierająca status wykonania bloków. Jest to element monitorowania potoku, który usprawnia proces ewentualnego wykrywania błędów i restartowania potoku.
 
-![potok danych](../sketches/pipeline.png)
+![potok danych](sketches/pipeline.png)
 
 
 > Rys 3.7.1 potok danych wykorzystywany w projekcie

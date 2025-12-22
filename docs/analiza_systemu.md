@@ -8,7 +8,7 @@ W tym podrozdziale omówione zostaną cechy systemu zaimplementowanego w trzecim
 
 Opisywany system powstał w wyniku integracji poszczególnych modułów w trzy bloki, które dodatkowo współpracują ze sobą umożliwia szybki, w pełni opisany i klarowny proces przepływ danych. Dane pochodzące z zewnętrznego interfejsu programistycznego są przetwarzane codziennie niemal bez problemów, co świadczy o niezawodności projektu. Zgrupowanie wszystkich modułów poza modułem wizualizacji w połączone ze sobą przez potok danych bloki umożliwiło usprawnienie przepływu danych.
 
-![github action](../sketches/github_action.png)
+![github action](sketches/github_action.png)
 
 > Rys 4.1.1 Potok danych zaimplementowany przy pomocy Github Actions
 
@@ -38,7 +38,7 @@ W tym podrozdziale przedstawiono przykłady analizy danych rzeczywistych uzyskan
 
 ### 4.2.1 Analiza składników pola magnetycznego międzyplanetarnego
 
-![pole magnetyczne wykres](../sketches/dscovr_plot.png)
+![pole magnetyczne wykres](sketches/dscovr_plot.png)
 
 > Rys 4.2.1 Figura przedstawiająca rozkład wartości składników pola magnetycznego międzyplanetarnego w czasie
 
@@ -50,7 +50,7 @@ Dodatkowo, okresy braku danych zostały zaznaczone na szaro, co pozwala na ich o
 
 ### 4.2.2 Analiza wartości indeksu Kp
 
-![pole magnetyczne wykres](../sketches/kp_index.png)
+![pole magnetyczne wykres](sketches/kp_index.png)
 
 > Rys 4.2.2 Figura przedstawiająca wartości planetarnego indeksu Kp w czasie
 
@@ -60,7 +60,7 @@ W celu uzyskania szczegółowych wartości dla danego dnia należy najechać kur
 
 Dodatkowo, również na tym wykresie braki danych zostały zaznaczone kolorem szarym w celu odróżnienia ich od danych możliwych do analizy.
 
-![pole magnetyczne wykres](../sketches/geomagnetic_storm.png)
+![pole magnetyczne wykres](sketches/geomagnetic_storm.png)
 
 >Rys 4.2.3 Figura przedstawiająca burze geomagnetyczne w czasie
 
