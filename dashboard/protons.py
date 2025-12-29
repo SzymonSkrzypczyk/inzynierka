@@ -113,12 +113,12 @@ def render(limit: Optional[int] = None):
                 markers=True,
                 color_discrete_sequence=px.colors.qualitative.Dark24
             )
-            fig.update_traces(line=dict(width=2), marker=dict(size=5))
+            fig.update_traces(line=dict(width=3), marker=dict(size=2))
             set_layout(fig, f'{name} — Proton Fluxes by Energy', rangeslider=True, legend_title_text="Proton Energy", tcol_data=df[tcol])
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol: 'Observation date', ycol: 'Proton Flux [pfu]', 'energy': 'Proton Energy'}, log_y=True, markers=True)
-            fig.update_traces(line=dict(width=1.8), marker=dict(size=4))
+            fig.update_traces(line=dict(width=1.8), marker=dict(size=3))
             set_layout(fig, f'{name} — Proton Fluxes', rangeslider=True, legend_title_text="Proton Energy", tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)

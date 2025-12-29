@@ -102,13 +102,23 @@ def render(limit: Optional[int] = None):
             uses a logarithmic scale due to the very wide range of flux values.
             ''')
         if 'satellite' in df.columns and 'flux' in df.columns:
-            fig = px.line(df.sort_values(tcol), x=tcol, y='flux', color='satellite', labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class', 'satellite': 'Satellite'}, log_y=True, color_discrete_sequence=px.colors.qualitative.Set2)
-            fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.6))
+            satellites = sorted(df['satellite'].unique())
+            fig = px.line(
+                df.sort_values(tcol),
+                x=tcol, y='flux',
+                color='satellite', 
+                labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class', 'satellite': 'Satellite'}, 
+                category_orders={'satellite': satellites},
+                log_y=True, 
+                color_discrete_sequence=px.colors.qualitative.Set2
+            )
+
+            fig.update_traces(mode='lines+markers', marker=dict(size=3), line=dict(width=1.6))
             set_layout(fig, f'{name} — X-Ray Fluxes by Satellite', legend_title_text="Satellite", tcol_data=df[tcol])
         else:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
             fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, labels={tcol:'Observation date', ycol:'Flux [W·m⁻²]'}, log_y=True, color_discrete_sequence=['#636EFA'])
-            fig.update_traces(mode='lines+markers', marker=dict(size=4), line=dict(width=1.4))
+            fig.update_traces(mode='lines+markers', marker=dict(size=3), line=dict(width=1.4))
             set_layout(fig, f'{name} — X-Ray Fluxes', tcol_data=df[tcol])
 
 
@@ -144,9 +154,24 @@ def render(limit: Optional[int] = None):
                 **Colors:** X (red), M (orange), C (blue), B (brown), A (green), Unknown (grey)
                 ''')
             df['flare_class'] = df['flux'].apply(_classify_flux)
-            fig2 = px.scatter(df, x=tcol, y='flux', color='flare_class', labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class'}, log_y=True,
-                              color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'})
-            fig2.update_traces(marker=dict(size=6))
+
+            flare_class = sorted(
+                df['flare_class'].unique(),
+                key=lambda s: (len(s) != 1, s)
+            )
+
+            fig2 = px.scatter(
+                df, 
+                x=tcol, 
+                y='flux', 
+                color='flare_class', 
+                category_orders={'flare_class': flare_class},
+                labels={tcol:'Observation date','flux':'Flux [W·m⁻²]', 'flare_class': 'Flare Class'}, 
+                log_y=True,
+                color_discrete_map={'X':'#7f0000','M':'#ff7f0e','C':'#1f77b4','B':'#8c564b','A':'#2ca02c','Unknown':'#d3d3d3'}
+            )
+
+            fig2.update_traces(marker=dict(size=3))
             set_layout(fig2, f'{name} — Solar Flare Classification', legend_title_text="Flare Class", tcol_data=df[tcol])
             add_gray_areas_empty(fig2, df, tcol)
             st.plotly_chart(fig2, width='stretch')
