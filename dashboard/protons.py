@@ -1,9 +1,10 @@
+import logging
+import re
 from typing import Optional, Union
 import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import logging
 
 try:
     from db import find_table_like, read_table, pick_time_column
@@ -97,8 +98,21 @@ def render(limit: Optional[int] = None):
             ''')
         if 'energy' in df.columns:
             ycol = 'flux' if 'flux' in df.columns else df.select_dtypes('number').columns[0]
-            fig = px.line(df.sort_values(tcol), x=tcol, y=ycol, color='energy',
-                          labels={tcol: 'Observation date', ycol: 'Flux [pfu]', 'energy': 'Proton Energy'}, log_y=True, markers=True, color_discrete_sequence=px.colors.qualitative.Dark24)
+            energies = sorted(
+                df['energy'].unique(),
+                key=lambda s: float(re.findall(r'[\d.]+', s)[0])
+            )
+            fig = px.line(
+                df.sort_values([tcol, 'energy']),
+                x=tcol,
+                y=ycol,
+                color='energy',
+                category_orders={'energy': energies},
+                labels={tcol: 'Observation date', ycol: 'Flux [pfu]', 'energy': 'Proton Energy'},
+                log_y=True,
+                markers=True,
+                color_discrete_sequence=px.colors.qualitative.Dark24
+            )
             fig.update_traces(line=dict(width=2), marker=dict(size=5))
             set_layout(fig, f'{name} — Proton Fluxes by Energy', rangeslider=True, legend_title_text="Proton Energy", tcol_data=df[tcol])
         else:
