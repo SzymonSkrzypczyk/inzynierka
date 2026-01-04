@@ -16,7 +16,7 @@ parameters of space weather. As mentioned the flow is fully automated using GH A
 - [Dashboard](https://inzynierka-sskrzypczyk.streamlit.app/)
 - [Thesis Online](https://szymonskrzypczyk.github.io/inzynierka/)
 
-## Setup guide
+## [Setup guide](detailed_guide.md)
 1. Fork the repo
 2. Enable GH Actions in your fork - https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#managing-github-actions-permissions-for-your-repository
 3. Setup Dropbox app to get access token - https://www.dropbox.com/developers/apps
