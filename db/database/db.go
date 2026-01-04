@@ -308,7 +308,9 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 func ProcessDailyData(db *gorm.DB, targetDate string) error {
 	fmt.Println("\n=== PROCESSING DAILY DATA TO DATABASE ===")
 
-	if targetDate != "" {
+	if targetDate == "" {
+    return fmt.Errorf("target date not specified")
+	} else {
 		fmt.Printf("Target date specified: %s\n", targetDate)
 	}
 
