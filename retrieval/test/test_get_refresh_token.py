@@ -4,7 +4,7 @@ from retrieval.get_refresh_token import get_refresh_token
 
 
 class TestGetRefreshToken:
-    @patch('get_refresh_token.DropboxOAuth2FlowNoRedirect')
+    @patch('retrieval.get_refresh_token.DropboxOAuth2FlowNoRedirect')
     @patch('builtins.input')
     @patch('builtins.print')
     def test_get_refresh_token(self, mock_print, mock_input, mock_flow_class):
