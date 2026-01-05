@@ -21,7 +21,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: retrieval
-          file: Dockerfile
+          file: retrieval/Dockerfile
           push: false
           tags: szymonskrzypczyk/inzynierka:latest
           load: true
@@ -56,7 +56,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: db
-          file: Dockerfile
+          file: db/Dockerfile
           push: false
           tags: db-save:latest
           load: true
