@@ -1,14 +1,15 @@
 FROM python:3.10-slim
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+WORKDIR /app
 
-# Copy python scripts
-COPY send2dropbox.py .
-COPY fetch_data.py .
-COPY logger.py .
-COPY url_mapping.py .
+COPY requirements.txt ./retrieval/
+RUN pip install --upgrade pip && pip install -r ./retrieval/requirements.txt
 
-RUN chmod +x send2dropbox.py fetch_data.py logger.py url_mapping.py
+COPY . ./retrieval/
 
-CMD ["python", "fetch_data.py"]
+RUN chmod +x ./retrieval/*.py
+
+ENV PYTHONPATH=/app
+
+# Run fetch_data.py by default
+ENTRYPOINT ["python", "./retrieval/fetch_data.py"]

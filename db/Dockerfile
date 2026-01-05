@@ -1,27 +1,25 @@
 FROM golang:1.24.3-bookworm AS builder
 
-# Install CA certificates
 RUN apt-get update && apt-get install -y ca-certificates
 
-WORKDIR /app
+WORKDIR /app/db
 
-COPY db/go.mod db/go.sum ./db/
-RUN cd db && go mod download
+# Copy only Go module files first
+COPY go.mod go.sum ./
+RUN go mod download
 
-COPY db ./db
+# Copy the rest of the db folder
+COPY . ./
 
-RUN cd db && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o db_save .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o db_save .
 
 FROM debian:bookworm-slim
 
-# Install CA certificates
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy binary from builder
+# Copy the binary
 COPY --from=builder /app/db/db_save ./db_save
 
-# Default command
-# Pass date at runtime, e.g. docker run ... 2025-01-05
 ENTRYPOINT ["./db_save"]
