@@ -22,4 +22,12 @@ parameters of space weather. As mentioned the flow is fully automated using GH A
 - [Dashboard](https://inzynierka-sskrzypczyk.streamlit.app/)
 - [Thesis Online](https://szymonskrzypczyk.github.io/inzynierka/)
 
+## Project structure
+- `.github/workflows/` - workflows working with GitHub Actions
+- `dashboard/` - all resources related to space weather vizualization
+- `db/` - all resources related to data saving to a data base
+- `docs/` - static site resources for thesis hosting
+- `documents/` - all markdown documents, sketches etc.
+- `retrieval/` - all resources related to data retrieval
+
 ## [Setup guide](detailed_guide.md)
