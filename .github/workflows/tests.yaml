@@ -53,3 +53,20 @@ jobs:
 
       - name: Run Go tests
         run: go test ./... -v
+
+    test-workflows:
+      name: Validate GitHub Workflow YAML
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install yamllint
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y yamllint
+
+        - name: Lint workflow YAML files
+          run: |
+            yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}" .github/workflows/*.yaml
