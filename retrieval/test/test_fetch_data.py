@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock, mock_open, AsyncMock
 from pathlib import Path
 
-from fetch_data import retrieve_data, compress_data, retrieve_all_data
+from retrieval.fetch_data import retrieve_data, compress_data, retrieve_all_data
 
 
 class TestFetchData:

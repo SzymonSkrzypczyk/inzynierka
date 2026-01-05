@@ -23,14 +23,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          if [ -f retrieval/requirements.txt ]; then pip install -r retrieval/requirements.txt; fi
+          if [ -f retrieval/requirements-dev.txt ]; then pip install -r retrieval/requirements-dev.txt; fi
 
       - name: Run Python tests
         env:
           PYTHONPATH: "${{ github.workspace }}"
         run: |
-          pytest --maxfail=1 --disable-warnings -q
+          pytest --maxfail=1 --disable-warnings -q retrieval/
 
   test-go:
     name: Go Tests

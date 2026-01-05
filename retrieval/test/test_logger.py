@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
 from dropbox.exceptions import ApiError, AuthError
 
-from send2dropbox import send_to_dropbox, MAX_RETRIES, SEND_RETRY_SLEEP_TIME
+from retrieval.send2dropbox import send_to_dropbox, MAX_RETRIES, SEND_RETRY_SLEEP_TIME
 
 
 class TestSendToDropbox:

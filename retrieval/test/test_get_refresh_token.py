@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from get_refresh_token import get_refresh_token
+from retrieval.get_refresh_token import get_refresh_token
 
 
 class TestGetRefreshToken:
