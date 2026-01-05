@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import dropbox
 from dropbox.files import WriteMode
 from dropbox.exceptions import AuthError, ApiError
-from logger import Logger
+from retrieval.logger import Logger
 
 load_dotenv()
 
