@@ -109,7 +109,7 @@ jobs:
           subject: "${{ github.workflow }} - ${{ steps.date.outputs.date }}"
           body: |
             Workflow results for ${{ steps.date.outputs.date }}:
-            
+
             Data fetching & upload to Dropbox: ${{ needs.collect-data.result }}
             Database processing: ${{ needs.save-database.result }}
           to: ${{ secrets.EMAIL_TO }}
