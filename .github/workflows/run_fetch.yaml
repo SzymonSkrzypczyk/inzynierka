@@ -20,8 +20,8 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: retrieval/Dockerfile
+          context: retrieval
+          file: Dockerfile
           push: false
           tags: szymonskrzypczyk/inzynierka:latest
           load: true
@@ -45,13 +45,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Get today's date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Build db-save Docker image
-        run: |
-          docker build -t db-save .
+        uses: docker/build-push-action@v5
+        with:
+          context: db
+          file: Dockerfile
+          push: false
+          tags: db-save:latest
+          load: true
 
       - name: Run db-save container
         id: db_script
@@ -74,7 +82,7 @@ jobs:
             -e DB_PASSWORD \
             -e DB_NAME \
             -e DB_PORT \
-            db-save ${{ steps.date.outputs.date }}
+            db-save:latest ${{ steps.date.outputs.date }}
 
       - name: Report Go script status
         if: always()
