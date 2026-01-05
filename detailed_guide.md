@@ -9,7 +9,7 @@
 ![dropbox_app](documents/guide/dropbox_app_3.png)
 4. Using Dropbox app's `App key` and `App secret` [generate access token](https://dropbox.github.io/dropbox-api-v2-explorer/#oauth2-token-from-oauth2-authorize)
 
-> Use [script](https://github.com/SzymonSkrzypczyk/inzynierka/blob/master/get_refresh_token.py) to generate refresh token
+> Use [script](https://github.com/SzymonSkrzypczyk/inzynierka/blob/master/retrieval/get_refresh_token.py) to generate refresh token
 5. Setup database, I used [Neon, because of its free tier](https://neon.com/) 
 ![neon](documents/guide/neon_login_5.png)
 ![neon_connect](documents/guide/neon_connect_5.png)
