@@ -5,9 +5,9 @@ from datetime import datetime
 import csv
 import asyncio
 import aiohttp
-from url_mapping import NAME2URL
-from logger import Logger
-from send2dropbox import send_to_dropbox
+from retrieval.url_mapping import NAME2URL
+from retrieval.logger import Logger
+from retrieval.send2dropbox import send_to_dropbox
 
 SAVE_DIR = Path(__file__).parent / "data"
 RETRY_SLEEP_TIME = 15

@@ -20,8 +20,8 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: retrieval
+          file: retrieval/Dockerfile
           push: false
           tags: szymonskrzypczyk/inzynierka:latest
           load: true
@@ -38,8 +38,6 @@ jobs:
   save-database:
     needs: collect-data
     runs-on: ubuntu-latest
-    container:
-      image: node:20-bookworm-slim
     if: always()
     outputs:
       result: ${{ steps.db_script.outcome }}
@@ -47,26 +45,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install CA certificates
-        run: |
-          apt-get update
-          apt-get install -y ca-certificates
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.24.3'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Get today's date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-      - name: Build Go application
-        run: |
-          cd db
-          go build -o db_save .
+      - name: Build db-save Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: db
+          file: db/Dockerfile
+          push: false
+          tags: db-save:latest
+          load: true
 
-      - name: Run Go application
+      - name: Run db-save container
         id: db_script
         env:
           DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
@@ -78,13 +73,21 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_PORT: ${{ secrets.DB_PORT }}
         run: |
-          cd db
-          ./db_save ${{ steps.date.outputs.date }}
+          docker run --rm \
+            -e DROPBOX_APP_KEY \
+            -e DROPBOX_APP_SECRET \
+            -e DROPBOX_REFRESH_TOKEN \
+            -e DB_HOST \
+            -e DB_USER \
+            -e DB_PASSWORD \
+            -e DB_NAME \
+            -e DB_PORT \
+            db-save:latest ${{ steps.date.outputs.date }}
 
       - name: Report Go script status
         if: always()
         run: |
-          if [ $? -eq 0 ]; then
+          if [ "${{ steps.db_script.outcome }}" = "success" ]; then
             echo "Go script executed successfully"
           else
             echo "Go script execution failed"
@@ -106,7 +109,7 @@ jobs:
           subject: "${{ github.workflow }} - ${{ steps.date.outputs.date }}"
           body: |
             Workflow results for ${{ steps.date.outputs.date }}:
-            
+
             Data fetching & upload to Dropbox: ${{ needs.collect-data.result }}
             Database processing: ${{ needs.save-database.result }}
           to: ${{ secrets.EMAIL_TO }}
