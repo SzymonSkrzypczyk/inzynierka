@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  collect-data:
+    build:
+      context: ./retrieval
+      dockerfile: Dockerfile
+    image: szymonskrzypczyk/inzynierka:latest
+    container_name: collect-data
+    environment:
+      - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
+      - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
+      - DROPBOX_REFRESH_TOKEN=${DROPBOX_REFRESH_TOKEN}
+    restart: "no"
+
+  save-database:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    image: db-save:latest
+    container_name: save-database
+    environment:
+      - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
+      - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
+      - DROPBOX_REFRESH_TOKEN=${DROPBOX_REFRESH_TOKEN}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+    command: ${DATE:-}
+    depends_on:
+      collect-data:
+        condition: service_completed_successfully
+    restart: "no"
