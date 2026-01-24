@@ -149,7 +149,7 @@ def render(limit: Optional[int] = None):
         storms = df_p[df_p[ycol] >= 5].copy()
         if not storms.empty:
             storms['G_Scale'] = storms[ycol].apply(kp_to_g_scale)
-            storms['G_Label'] = storms['G_Scale'].apply(lambda x: f'G{x}')
+            storms['G_Label'] = storms['G_Scale'].apply(lambda x: f'G-{x}')
             
             st.markdown('#### Geomagnetic storm analysis')
             with st.expander('Description'):
@@ -164,11 +164,11 @@ def render(limit: Optional[int] = None):
                 - **Point Color**: Corresponds to the G-scale value according to the 'inferno' color palette
                 
                 **Storm Classification (G-Scale):**
-                - **G1 (Kp = 5)**: Minor storm
-                - **G2 (Kp = 6)**: Moderate storm
-                - **G3 (Kp = 7)**: Strong storm
-                - **G4 (Kp = 8)**: Severe storm
-                - **G5 (Kp = 9)**: Extreme storm
+                - **G-1 (Kp = 5)**: Minor storm
+                - **G-2 (Kp = 6)**: Moderate storm
+                - **G-3 (Kp = 7)**: Strong storm
+                - **G-4 (Kp = 8)**: Severe storm
+                - **G-5 (Kp = 9)**: Extreme storm
                 ''')
             fig3 = px.scatter(storms, x=tcol, y='G_Scale', color='G_Scale', color_continuous_scale='inferno',
                               size='G_Scale', size_max=12, 
@@ -185,7 +185,7 @@ def render(limit: Optional[int] = None):
                 tickmode='linear',
                 tick0=1,
                 dtick=1,
-                ticktext=['G1', 'G2', 'G3', 'G4', 'G5'],
+                ticktext=['G-1', 'G-2', 'G-3', 'G-4', 'G-5'],
                 tickvals=[1, 2, 3, 4, 5]
             )
             set_layout(fig3, 'Geomagnetic storms (G-Scale)', legend_title_text="G-Scale values", tcol_data=df_p[tcol])
