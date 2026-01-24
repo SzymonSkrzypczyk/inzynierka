@@ -127,7 +127,7 @@ def render(limit: Optional[int] = None):
                 font=dict(size=10)
             )
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         download_df = df.copy()
         source_suffix = "primary" if name == 'Primary Data Source' else "secondary"
         add_download_button(download_df, f"protons_{source_suffix}", "Download chart data as CSV")

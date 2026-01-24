@@ -123,7 +123,7 @@ def render(limit: Optional[int] = None):
 
 
         add_gray_areas_empty(fig, df, tcol)
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         download_df = df.copy()
         source_suffix = "primary" if name == 'Primary Data Source' else "secondary"
         add_download_button(download_df, f"x_ray_{source_suffix}", "Download chart data as CSV")
@@ -174,7 +174,7 @@ def render(limit: Optional[int] = None):
             fig2.update_traces(marker=dict(size=3))
             set_layout(fig2, f'{name} — Solar Flare Classification', legend_title_text="Flare Class", tcol_data=df[tcol])
             add_gray_areas_empty(fig2, df, tcol)
-            st.plotly_chart(fig2, width='stretch')
+            st.plotly_chart(fig2, use_container_width=True)
             download_df = df[[tcol, 'flux', 'flare_class']].copy() if tcol and 'flux' in df.columns else df.copy()
             add_download_button(download_df, f"flares_classification_{source_suffix}", "Download chart data as CSV")
 
@@ -206,6 +206,6 @@ def render(limit: Optional[int] = None):
             ''')
         fig4 = px.histogram(df, x='flux', nbins=50, labels={'flux':'Flux [W·m⁻²]', 'count': 'count'}, log_y=True, color_discrete_sequence=['#00CC96'])
         set_layout(fig4, 'X-Ray Flux Distribution', rangeslider=False, yaxis_title="Count in range")
-        st.plotly_chart(fig4, width='stretch')
+        st.plotly_chart(fig4, use_container_width=True)
         download_df = df[['flux']].copy() if 'flux' in df.columns else df.copy()
         add_download_button(download_df, f"x_ray_distribution_{str(uuid4())}", "Download chart data as CSV")
