@@ -9,7 +9,7 @@ try:
 except Exception:
     from dashboard.db import find_table_like, read_table, pick_time_column
 
-from plot_utils import add_gray_areas_empty, set_layout, add_download_button
+from plot_utils import add_gray_areas_empty, set_layout, add_download_button, kp_to_g_scale
 
 logger = logging.getLogger(__name__)
 
@@ -146,36 +146,51 @@ def render(limit: Optional[int] = None):
         download_df = pivot.copy()
         add_download_button(download_df, "kp_heatmap", "Download chart data as CSV")
 
-        storms = df_p[df_p[ycol] >= 5]
+        storms = df_p[df_p[ycol] >= 5].copy()
         if not storms.empty:
+            storms['G_Scale'] = storms[ycol].apply(kp_to_g_scale)
+            storms['G_Label'] = storms['G_Scale'].apply(lambda x: f'G{x}')
+            
             st.markdown('#### Geomagnetic storm analysis')
             with st.expander('Description'):
                 st.markdown('''
-                **Description:** A scatter plot showing all geomagnetic storm events (Kp ≥ 5) during the analyzed time period.
+                **Description:** A scatter plot showing all geomagnetic storm events (Kp ≥ 5) during the analyzed time period, displayed using the NOAA G-scale classification.
                 
                 **Purpose of the plot:** To identify and analyze the occurrence of geomagnetic storms and assess their intensity. The visualization allows for the frequency and temporal distribution of storms, which is important for understanding the cyclical nature of geomagnetic activity.
                 
                 **Variables:**
                 - **Observation date**: Time of geomagnetic storm occurrence
-                - **Kp Index**: Kp index value during the storm (always ≥ 5)
-                - **Point Color**: Corresponds to the Kp value according to the 'inferno' color palette
+                - **G-Scale**: NOAA geomagnetic storm scale (G1-G5)
+                - **Point Color**: Corresponds to the G-scale value according to the 'inferno' color palette
                 
-                **Storm Classification:**
-                - **Kp = 5**: Weak storm
-                - **Kp = 6**: Moderate storm
-                - **Kp = 7**: Strong storm
-                - **Kp = 8-9**: Very strong to extreme storm
+                **Storm Classification (G-Scale):**
+                - **G1 (Kp = 5)**: Minor storm
+                - **G2 (Kp = 6)**: Moderate storm
+                - **G3 (Kp = 7)**: Strong storm
+                - **G4 (Kp = 8)**: Severe storm
+                - **G5 (Kp = 9)**: Extreme storm
                 ''')
-            fig3 = px.scatter(storms, x=tcol, y=ycol, color=ycol, color_continuous_scale='inferno',
-                              size=ycol, size_max=12, labels={tcol: 'Observation date', ycol: 'Kp Index', 'estimated_kp': 'Estimated Kp Index'},
+            fig3 = px.scatter(storms, x=tcol, y='G_Scale', color='G_Scale', color_continuous_scale='inferno',
+                              size='G_Scale', size_max=12, 
+                              labels={tcol: 'Observation date', 'G_Scale': 'G-Scale', ycol: 'Kp Index', 'estimated_kp': 'Estimated Kp Index', 'G_Label': 'Storm Class'},
                               hover_data={
                                 tcol: True,
                                 ycol: True,
-                                'estimated_kp': True
+                                'estimated_kp': True,
+                                'G_Label': True,
+                                'G_Scale': False
                             })
-            set_layout(fig3, 'Geomagnetic storms points (Kp>=5)', legend_title_text="Kp Index values", tcol_data=df_p[tcol])
+
+            fig3.update_yaxes(
+                tickmode='linear',
+                tick0=1,
+                dtick=1,
+                ticktext=['G1', 'G2', 'G3', 'G4', 'G5'],
+                tickvals=[1, 2, 3, 4, 5]
+            )
+            set_layout(fig3, 'Geomagnetic storms (G-Scale)', legend_title_text="G-Scale values", tcol_data=df_p[tcol])
             st.plotly_chart(fig3, width='stretch')
-            download_df = storms[[tcol, ycol]].copy() if tcol and ycol else storms.copy()
+            download_df = storms[[tcol, ycol, 'G_Scale', 'G_Label']].copy() if tcol and ycol else storms.copy()
             add_download_button(download_df, "geomagnetic_storms", "Download chart data as CSV")
         else:
             st.write(df_p.head())
