@@ -93,7 +93,7 @@ def render(limit: Optional[int] = None):
             range=[0, y_max + 1]
         )
 
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         download_df = df_p[[tcol, ycol]].copy() if tcol and ycol else df_p.copy()
         add_download_button(download_df, "planetary_kp", "Download chart data as CSV")
 
@@ -142,7 +142,7 @@ def render(limit: Optional[int] = None):
         fig2.update_xaxes(tickmode='array')
         fig2.update_yaxes(tickmode='array')
         set_layout(fig2, 'Heatmap Kp (Day vs Hour)', rangeslider=False, legend_title_text="Kp Index values")
-        st.plotly_chart(fig2, width='stretch', key='kp_heatmap')
+        st.plotly_chart(fig2, use_container_width=True, key='kp_heatmap')
         download_df = pivot.copy()
         add_download_button(download_df, "kp_heatmap", "Download chart data as CSV")
 
@@ -189,7 +189,7 @@ def render(limit: Optional[int] = None):
                 tickvals=[1, 2, 3, 4, 5]
             )
             set_layout(fig3, 'Geomagnetic storms (G-Scale)', legend_title_text="G-Scale values", tcol_data=df_p[tcol])
-            st.plotly_chart(fig3, width='stretch')
+            st.plotly_chart(fig3, use_container_width=True)
             download_df = storms[[tcol, ycol, 'G_Scale', 'G_Label']].copy() if tcol and ycol else storms.copy()
             add_download_button(download_df, "geomagnetic_storms", "Download chart data as CSV")
         else:
@@ -231,7 +231,7 @@ def render(limit: Optional[int] = None):
             fig.update_traces(marker=dict(size=3), line=dict(width=1.25))
             set_layout(fig, 'K Index vs Observation date', tcol_data=df_p[tcol])
             add_gray_areas_empty(fig, df_b, tcol)
-            st.plotly_chart(fig, width='stretch')
+            st.plotly_chart(fig, use_container_width=True)
             download_df = df_b[[tcol, ycol]].copy() if tcol and ycol else df_b.copy()
             add_download_button(download_df, "boulder_k_index", "Download chart data as CSV")
         else:
