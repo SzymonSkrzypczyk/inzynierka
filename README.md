@@ -40,6 +40,15 @@ You can run the entire data collection and database saving pipeline locally usin
 
 To run the complete pipeline (data collection followed by database saving):
 
+You can use the provided `run.sh` script which includes retry logic and automatically starts the dashboard upon success:
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+Alternatively, to run manually with Docker Compose:
+
 ```bash
 # Run with today's date
 DATE=$(date +'%Y-%m-%d') docker-compose up

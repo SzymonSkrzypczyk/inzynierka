@@ -22,7 +22,7 @@ while [ $attempt -le $MAX_RETRIES ]; do
     echo "Attempt $attempt of $MAX_RETRIES..."
     
     run_pipeline
-    exit_code=0
+    exit_code=$?
     
     if [ $exit_code -eq 0 ]; then
         echo "Data pipeline completed successfully."
