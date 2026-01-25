@@ -100,7 +100,7 @@ def render(limit: Optional[int] = None):
                    rangeslider=True, yaxis_title='Magnetic Field Induction [nT]', tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         download_cols = [tcol] + comps if tcol and comps else df.columns.tolist()
         download_df = df[download_cols].copy()
         add_download_button(download_df, "magnetic_field_dscovr", "Download chart data as CSV")
@@ -135,6 +135,6 @@ def render(limit: Optional[int] = None):
             ''')
         fig2 = px.histogram(df, x=bzg, nbins=15, labels={bzg: 'Bz (GSM) [nT]'}, color_discrete_sequence=['#636EFA'])
         set_layout(fig2, 'Statistical Distribution of Bz Component (GSM)', rangeslider=False, yaxis_title="Count in range")
-        st.plotly_chart(fig2, width='stretch')
+        st.plotly_chart(fig2, use_container_width=True)
         download_df = df[[bzg]].copy() if bzg else df.copy()
         add_download_button(download_df, "bz_distribution", "Download chart data as CSV")

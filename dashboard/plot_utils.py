@@ -149,3 +149,13 @@ def add_download_button(df: pd.DataFrame, filename: str, button_label: str = "Do
         help="Click to download the data in CSV format used in the chart.",
         use_container_width=True
     )
+
+
+def kp_to_g_scale(kp_value):
+                """Convert Kp index to G-scale"""
+                g_value = int(kp_value) - 4
+                if g_value < 1:
+                    g_value = 1
+                elif g_value > 5:
+                    g_value = 5
+                return g_value

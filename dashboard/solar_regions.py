@@ -77,7 +77,7 @@ def render(limit: Optional[int] = None):
         area_ts = df.groupby('observed_date')['area'].mean().reset_index()
         fig2 = px.line(area_ts, x='observed_date', y='area', labels={'observed_date':'Observation date','area':'Mean Area [μhem]'})
         set_layout(fig2, rangeslider=True, tcol_data=area_ts['observed_date'])
-        st.plotly_chart(fig2, width='stretch')
+        st.plotly_chart(fig2, use_container_width=True)
         add_download_button(area_ts, "solar_regions_areas_evolution", "Download chart data as CSV")
 
     if 'observed_date' in df.columns:
@@ -104,5 +104,5 @@ def render(limit: Optional[int] = None):
             ''')
         counts = df.groupby('observed_date').size().reset_index(name='count')
         fig4 = px.bar(counts, x='observed_date', y='count', labels={'observed_date':'Observation date','count':'Active Region Count'})
-        st.plotly_chart(fig4, width='stretch')
+        st.plotly_chart(fig4, use_container_width=True)
         add_download_button(counts, "solar_regions_statistics", "Download chart data as CSV")
