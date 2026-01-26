@@ -29,12 +29,33 @@ jobs:
       - name: Run Docker container
         id: run_docker
         run: |
-            docker run --rm \
-            -e DROPBOX_APP_KEY=${{ secrets.DROPBOX_APP_KEY }} \
-            -e DROPBOX_APP_SECRET=${{ secrets.DROPBOX_APP_SECRET }} \
-            -e DROPBOX_REFRESH_TOKEN=${{ secrets.DROPBOX_REFRESH_TOKEN }} \
-            szymonskrzypczyk/inzynierka:latest
-
+          attempt=1
+          max_attempts=3
+          
+          while [ $attempt -le $max_attempts ]; do
+            echo "Attempt $attempt of $max_attempts"
+            
+            if docker run --rm \
+              -e DROPBOX_APP_KEY=${{ secrets.DROPBOX_APP_KEY }} \
+              -e DROPBOX_APP_SECRET=${{ secrets.DROPBOX_APP_SECRET }} \
+              -e DROPBOX_REFRESH_TOKEN=${{ secrets.DROPBOX_REFRESH_TOKEN }} \
+              szymonskrzypczyk/inzynierka:latest; then
+              echo "Docker container ran successfully on attempt $attempt"
+              echo "success=true" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "Docker container failed on attempt $attempt"
+              if [ $attempt -lt $max_attempts ]; then
+                echo "Waiting 1 minute before retry..."
+                sleep 60
+              fi
+              attempt=$((attempt + 1))
+            fi
+          done
+          
+          echo "All $max_attempts attempts failed"
+          echo "success=false" >> $GITHUB_OUTPUT
+          exit 1
   save-database:
     needs: collect-data
     runs-on: ubuntu-latest
