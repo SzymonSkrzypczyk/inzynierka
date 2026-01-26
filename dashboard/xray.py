@@ -41,7 +41,6 @@ def _classify_flux(v: float) -> str:
     return 'A'
 
 
-@st.cache_data(ttl=600)
 def _load_table_cached(name: str, limit: Optional[int] = None):
     """
     Load table from database with caching
@@ -52,7 +51,7 @@ def _load_table_cached(name: str, limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
-    return read_table(name, limit=limit)
+    return read_table(name, limit=limit, use_cache=True, ttl_seconds=600)
 
 
 def render(limit: Optional[int] = None):

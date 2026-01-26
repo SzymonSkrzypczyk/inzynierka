@@ -38,7 +38,6 @@ def _parse_energy_val(e: Union[str, float, int, None]) -> float:
     return float(parts[0]) if parts else np.nan
 
 
-@st.cache_data(ttl=600)
 def _load_table_cached(name: str, limit: Optional[int] = None):
     """
     Load table with caching
@@ -49,7 +48,7 @@ def _load_table_cached(name: str, limit: Optional[int] = None):
     :type limit: Optional[int]
     :return:
     """
-    return read_table(name, limit=limit)
+    return read_table(name, limit=limit, use_cache=True, ttl_seconds=600)
 
 
 def render(limit: Optional[int] = None):

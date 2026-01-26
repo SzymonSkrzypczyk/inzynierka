@@ -29,7 +29,6 @@ def _detect_k_column(df: pd.DataFrame):
     return nums[0] if nums else None
 
 
-@st.cache_data(ttl=600)
 def _load_table_cached(name: str, limit: Optional[int] = None):
     """
     Load table from database with caching
@@ -40,7 +39,7 @@ def _load_table_cached(name: str, limit: Optional[int] = None):
     :type limit: int or None
     :return:
     """
-    return read_table(name, limit=limit)
+    return read_table(name, limit=limit, use_cache=True, ttl_seconds=600)
 
 
 def render(limit: Optional[int] = None):

@@ -14,7 +14,6 @@ from plot_utils import set_layout, add_gray_areas_empty, add_download_button
 logger = logging.getLogger(__name__)
 
 
-@st.cache_data(ttl=600)
 def _load_table_cached(name: str, limit: Optional[int] = None) -> pd.DataFrame:
     """
     Load table with caching
@@ -26,7 +25,7 @@ def _load_table_cached(name: str, limit: Optional[int] = None) -> pd.DataFrame:
     :return:
     :rtype: pd.DataFrame
     """
-    return read_table(name, limit=limit)
+    return read_table(name, limit=limit, use_cache=True, ttl_seconds=600)
 
 
 def _label_for_col(col_name: str) -> str:
