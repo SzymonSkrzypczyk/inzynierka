@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, exc
 import pandas as pd
 import os
 import re
@@ -20,6 +20,29 @@ if not (DB_USER and DB_PASSWORD and DB_HOST and DB_NAME):
 else:
     engine = create_engine(f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}", pool_pre_ping=True)
     logger.info(f"Database engine created for {DB_HOST}:{DB_PORT}/{DB_NAME}")
+
+
+class DatabaseConnectionError(Exception):
+    """Exception raised when database connection fails or resources are exhausted"""
+    pass
+
+
+def check_db_connection():
+    """
+    Check if database connection is available
+    :raises DatabaseConnectionError: if connection fails
+    """
+    if engine is None:
+        raise DatabaseConnectionError("Database credentials not configured")
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+    except exc.SQLAlchemyError as e:
+        logger.error(f"Database connection check failed: {e}")
+        raise DatabaseConnectionError("Resources have been used up and please contact the author")
+    except Exception as e:
+        logger.error(f"Unexpected error during database connection check: {e}")
+        raise DatabaseConnectionError("Resources have been used up and please contact the author")
 
 
 def list_public_tables():
@@ -129,7 +152,15 @@ def read_table(table_name: str, limit: Optional[int] = None, use_cache: bool = T
     q = f'SELECT * FROM "{table_name}"'
     if limit:
         q += f" LIMIT {limit}"
-    df = pd.read_sql(text(q), con=engine)
+    
+    try:
+        df = pd.read_sql(text(q), con=engine)
+    except exc.SQLAlchemyError as e:
+        logger.error(f"Error reading table {table_name}: {e}")
+        raise DatabaseConnectionError("Resources have been used up and please contact the author")
+    except Exception as e:
+        logger.error(f"Unexpected error reading table {table_name}: {e}")
+        raise DatabaseConnectionError("Resources have been used up and please contact the author")
     # normalize column names
     df.columns = [c.lower() for c in df.columns]
 

@@ -2,6 +2,7 @@ import streamlit as st
 import runpy
 import logging
 from pathlib import Path
+from db import DatabaseConnectionError, check_db_connection
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ if not sel_path.exists():
     st.error(f"Page file not found: {sel_file}")
 else:
     try:
+        check_db_connection()
         logger.info(f"Loading and rendering page: {sel_file}")
         mod = runpy.run_path(str(sel_path))
         if 'render' in mod and callable(mod['render']):
@@ -40,6 +42,9 @@ else:
         else:
             logger.error(f"Page {sel_file} does not have a render() function")
             st.error('Missing render(limit=...) function in page module')
+    except DatabaseConnectionError as e:
+        logger.error(f"Database error on page {sel_file}: {e}")
+        st.error(str(e))
     except Exception as e:
         logger.exception(f"Error rendering page {sel_file}: {e}")
         st.exception(e)
