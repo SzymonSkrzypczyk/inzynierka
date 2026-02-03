@@ -5,50 +5,48 @@ from datetime import datetime, timedelta
 
 API_KEY = os.getenv("NEON_API_KEY")
 PROJECT_ID = os.getenv("NEON_PROJECT_ID")
+THRESHOLD = 0.8
+LIMIT_CU = 100
+LIMIT_STORAGE = 0.5
 
-# Free Tier Limits
-LIMIT_CU_HOURS = 100
-LIMIT_STORAGE_GB = 0.5
 
-def get_neon_usage():
-    start_date = (datetime.now() - timedelta(days=30)).isoformat() + "Z"
+def check_resources():
+    start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
     
-    url = f"https://console.neon.tech/api/v2/consumption_history/projects"
+    url = "https://console.neon.tech/api/v2/consumption_history/projects"
     headers = {
-        "accept": "application/json",
-        "authorization": f"Bearer {API_KEY}"
+        "authorization": f"Bearer {API_KEY}",
+        "accept": "application/json"
     }
     params = {
-        "project_id": PROJECT_ID,
+        "project_id": PROJECT_ID, 
         "from": start_date,
         "metrics": "compute_time_seconds,synthetic_storage_size_bytes"
     }
 
     response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-    return response.json()
-
-def analyze_usage(data):
-    # 1 CU-hour = 3600 seconds at 1 CU
-    total_seconds = sum(item['compute_time_seconds'] for item in data['usage'])
-    cu_hours_used = total_seconds / 3600
     
-    # Get latest storage size (bytes to GB)
-    latest_storage_bytes = data['usage'][-1]['synthetic_storage_size_bytes'] if data['usage'] else 0
-    storage_gb_used = latest_storage_bytes / (1024**3)
-
-    print(f"--- Neon Resource Report ({datetime.now().date()}) ---")
-    print(f"Compute: {cu_hours_used:.2f} / {LIMIT_CU_HOURS} CU-hours")
-    print(f"Storage: {storage_gb_used:.4f} / {LIMIT_STORAGE_GB} GB")
-
-    if cu_hours_used > (LIMIT_CU_HOURS * 0.8):
-        print("⚠️ WARNING: Compute usage exceeds 80%!")
+    if response.status_code != 200:
+        print(f"API Error {response.status_code}: {response.text}")
         sys.exit(1)
+
+    data = response.json()
+    usage = data.get('usage', [])
+    
+    current_cu = sum(item.get('compute_time_seconds', 0) for item in usage) / 3600
+
+    current_storage = (usage[-1].get('synthetic_storage_size_bytes', 0) / (1024**3)) if usage else 0
+    if "GITHUB_OUTPUT" in os.environ:
+        with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write(f"cu_used={current_cu:.2f}\n")
+            f.write(f"storage_used={current_storage:.4f}\n")
+
+    print(f"Usage: {current_cu:.2f} CU-h / {current_storage:.4f} GB")
+
+    if current_cu > (LIMIT_CU * THRESHOLD) or current_storage > (LIMIT_STORAGE * THRESHOLD):
+        print("CRITICAL: Resource threshold exceeded.")
+        sys.exit(1)
+
 
 if __name__ == "__main__":
-    try:
-        usage_data = get_neon_usage()
-        analyze_usage(usage_data)
-    except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+    check_resources()
