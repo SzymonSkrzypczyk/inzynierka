@@ -1,0 +1,55 @@
+name: Monitor Neon Resources
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-usage:
+    runs-on: ubuntu-latest
+    outputs:
+      cu_used: ${{ steps.stats.outputs.cu_used }}
+      storage_used: ${{ steps.stats.outputs.storage_used }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Monitor Script
+        id: stats
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+        run: python monitor_neon.py
+
+  send-email:
+    needs: [check-usage]
+    if: failure() && needs.check-usage.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get today's date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Send Alert Email
+        uses: dawidd6/action-send-mail@v6
+        with:
+          connection_url: ${{ secrets.MAIL_CONNECTION }}
+          subject: "🚨 NEON RESOURCE ALERT - ${{ steps.date.outputs.date }}"
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.APP_NAME }}
+          body: |
+            Neon Resource Threshold Reached!
+
+            The monitor script triggered an alert for your project.
+            Check your Neon Console: https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}
+
+            Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
