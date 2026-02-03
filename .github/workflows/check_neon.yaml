@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       cu_used: ${{ steps.stats.outputs.cu_used }}
-      storage_used: ${{ steps.steps.outputs.storage_used }}
+      storage_used: ${{ steps.stats.outputs.storage_used }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,8 +48,8 @@ jobs:
           from: ${{ secrets.APP_NAME }}
           body: |
             Neon Resource Threshold Reached!
-            
+
             The monitor script triggered an alert for your project.
             Check your Neon Console: https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}
-            
+
             Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
