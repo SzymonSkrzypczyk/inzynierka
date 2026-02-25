@@ -3,6 +3,7 @@ import { getDscovrMag } from "@/lib/queries/space-weather";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
+import { HistogramChart } from "@/components/charts/HistogramChart";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
@@ -58,9 +59,13 @@ export default function MagneticFieldPage({ data }: { data: any[] }) {
                     <CardTitle>Bz Component Statistics</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="h-[200px] flex items-center justify-center text-muted-foreground italic">
-                        Statistical distribution of Bz values (Histogram) would be implemented here.
-                    </div>
+                    <HistogramChart
+                        data={data}
+                        dataKey="bzGsm"
+                        bins={15}
+                        xLabel="Bz (GSM) [nT]"
+                        yLabel="Count"
+                    />
                 </CardContent>
             </Card>
         </div>

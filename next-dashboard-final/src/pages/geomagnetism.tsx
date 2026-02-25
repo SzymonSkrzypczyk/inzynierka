@@ -3,6 +3,7 @@ import { getPlanetaryKIndex } from "@/lib/queries/space-weather";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
+import { KpHeatmap } from "@/components/charts/KpHeatmap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
@@ -51,6 +52,18 @@ export default function GeomagnetismPage({ data }: { data: any[] }) {
                         ]}
                         yLabel="Kp Index"
                     />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Heatmap — Kp Index Intensity</CardTitle>
+                    <ChartDescription>
+                        <p>Average Kp index values grouped by day and UTC hour. Color intensity corresponds to the Kp index value.</p>
+                    </ChartDescription>
+                </CardHeader>
+                <CardContent>
+                    <KpHeatmap data={data} />
                 </CardContent>
             </Card>
 

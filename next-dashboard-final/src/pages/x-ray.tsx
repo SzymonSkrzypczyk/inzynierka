@@ -3,6 +3,8 @@ import { getPrimaryXray } from "@/lib/queries/space-weather";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
+import { FlareScatterChart } from "@/components/charts/FlareScatterChart";
+import { HistogramChart } from "@/components/charts/HistogramChart";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const limit = context.query.limit ? parseInt(context.query.limit as string) : 1000;
@@ -84,7 +86,19 @@ export default function XrayPage({ data }: { data: any[] }) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Solar Flare Classification</CardTitle>
+                    <CardTitle>Solar Flare Classification Scatter</CardTitle>
+                    <ChartDescription>
+                        <p>A scatter plot showing all X-ray flux measurements classified by solar flare class.</p>
+                    </ChartDescription>
+                </CardHeader>
+                <CardContent>
+                    <FlareScatterChart data={pivotedData} />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Solar Flare Classification Table</CardTitle>
                     <ChartDescription>
                         <p>Classification based on peak X-ray flux in the 0.1–0.8 nm range.</p>
                     </ChartDescription>
@@ -123,6 +137,25 @@ export default function XrayPage({ data }: { data: any[] }) {
                             </tbody>
                         </table>
                     </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>X-Ray Flux Distribution</CardTitle>
+                    <ChartDescription>
+                        <p>Statistical distribution of X-ray flux values. Shift to the right indicates increased solar activity.</p>
+                    </ChartDescription>
+                </CardHeader>
+                <CardContent>
+                    <HistogramChart
+                        data={pivotedData}
+                        dataKey="maxFlux"
+                        bins={30}
+                        xLabel="Flux [W/m²]"
+                        yLabel="Count"
+                        color="var(--chart-3)"
+                    />
                 </CardContent>
             </Card>
         </div>
