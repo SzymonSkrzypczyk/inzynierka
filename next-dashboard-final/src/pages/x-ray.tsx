@@ -7,7 +7,7 @@ import { FlareScatterChart } from "@/components/charts/FlareScatterChart";
 import { HistogramChart } from "@/components/charts/HistogramChart";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const limit = context.query.limit ? parseInt(context.query.limit as string) : 1000;
+    const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
     const data = await getPrimaryXray(limit);
 
     return {

@@ -5,7 +5,7 @@ import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const limit = context.query.limit ? parseInt(context.query.limit as string) : 2000;
+    const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
     const data = await getPrimaryProtons(limit);
 
     return {
