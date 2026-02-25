@@ -19,15 +19,18 @@ const navItems = [
     { name: 'Solar Regions', href: '/solar-regions', icon: BarChart3 },
 ];
 
+import { ModeToggle } from '@/components/mode-toggle';
+
 export function Sidebar() {
     const router = useRouter();
 
     return (
         <div className="flex bg-slate-100 dark:bg-slate-900 h-screen w-64 flex-col border-r">
-            <div className="flex h-16 items-center px-6 border-b">
+            <div className="flex h-16 items-center justify-between px-6 border-b">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                     Space Weather
                 </h1>
+                <ModeToggle />
             </div>
             <nav className="flex-1 space-y-1 p-4 overflow-y-auto">
                 {navItems.map((item) => {
