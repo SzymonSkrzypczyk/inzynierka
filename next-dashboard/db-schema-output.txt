@@ -1,0 +1,39 @@
+
+Matching Table for [planetary, k]: planetary_k_index1ms
+  - id: bigint
+  - time_tag: timestamp without time zone
+  - kp_index: smallint
+  - estimated_kp: real
+  - kp: character varying
+
+Matching Table for [dscovr, mag]: dscovr_mag1s
+  - id: bigint
+  - time_tag: timestamp without time zone
+  - bt: real
+  - bx_gsm: real
+  - by_gsm: real
+  - bz_gsm: real
+
+Matching Table for [primary, integral, proton]: primary_integral_protons1_days
+  - id: bigint
+  - time_tag: timestamp without time zone
+  - satellite: smallint
+  - flux: real
+  - energy: character varying
+
+Matching Table for [primary, xray]: primary_xray1_days
+  - id: bigint
+  - time_tag: timestamp without time zone
+  - satellite: smallint
+  - flux: real
+
+Matching Table for [solar, region]: solar_regions
+  - id: bigint
+  - observed_date: date
+  - region: smallint
+  - area: smallint
+  - mag_class: character varying
+  - m_xray_events: smallint
+  - x_xray_events: smallint
+  - m_flare_probability: smallint
+  - x_flare_probability: smallint
