@@ -5,7 +5,7 @@ import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
+    const limit = context.query.limit ? parseInt(context.query.limit as string) : 2000;
     const data = await getPrimaryProtons(limit);
 
     return {
@@ -16,7 +16,32 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function ProtonsPage({ data }: { data: any[] }) {
-    const energies = [...new Set(data.map(d => d.energy))].sort();
+    // Collect unique energies and sort them numerically if possible
+    const energies = [...new Set(data.map(d => d.energy))].sort((a, b) => {
+        const aNum = parseFloat(a.replace(/[^\d.]/g, '')) || 0;
+        const bNum = parseFloat(b.replace(/[^\d.]/g, '')) || 0;
+        return aNum - bNum;
+    });
+
+    // Pivot data: Group by timeTag
+    const pivotedDataMap = data.reduce((acc: any, d: any) => {
+        const time = d.timeTag;
+        if (!acc[time]) {
+            acc[time] = { timeTag: time };
+        }
+        acc[time][d.energy] = d.flux;
+        return acc;
+    }, {});
+
+    const pivotedData = (Object.values(pivotedDataMap) as any[]).sort((a: any, b: any) =>
+        new Date(a.timeTag).getTime() - new Date(b.timeTag).getTime()
+    );
+
+    const lines = energies.map((energy, i) => ({
+        key: energy,
+        name: energy,
+        color: `var(--chart-${(i % 5) + 1})`
+    }));
 
     return (
         <div className="space-y-6">
@@ -38,16 +63,14 @@ export default function ProtonsPage({ data }: { data: any[] }) {
                 </CardHeader>
                 <CardContent>
                     <TimeSeriesChart
-                        data={data}
+                        data={pivotedData}
                         timeKey="timeTag"
-                        lines={[
-                            { key: 'flux', name: 'Integral Flux', color: '#f59e0b' }
-                        ]}
+                        lines={lines}
                         yLabel="Flux [pfu]"
                         logScale={true}
                     />
                     <div className="mt-4 text-xs text-muted-foreground">
-                        Showing aggregated flux data. Energy bands detected in this set: {energies.join(', ')}
+                        Showing data across {energies.length} energy bands: {energies.join(', ')}
                     </div>
                 </CardContent>
             </Card>

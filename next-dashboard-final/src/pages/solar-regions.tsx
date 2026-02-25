@@ -64,7 +64,7 @@ export default function SolarRegionsPage({ data }: { data: any[] }) {
                         data={dailyArea}
                         timeKey="date"
                         lines={[
-                            { key: 'meanArea', name: 'Mean Area [μhem]', color: '#16a34a' }
+                            { key: 'meanArea', name: 'Mean Area [μhem]', color: 'var(--chart-1)' }
                         ]}
                         yLabel="Area [μhem]"
                     />
@@ -82,11 +82,19 @@ export default function SolarRegionsPage({ data }: { data: any[] }) {
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={dailyCounts}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                                <Tooltip />
-                                <Bar dataKey="count" name="Region Count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                                <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} stroke="var(--muted-foreground)" />
+                                <YAxis fontSize={12} tickLine={false} axisLine={false} stroke="var(--muted-foreground)" />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'var(--card)',
+                                        borderColor: 'var(--border)',
+                                        color: 'var(--foreground)',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                                    }}
+                                />
+                                <Bar dataKey="count" name="Region Count" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

@@ -5,7 +5,7 @@ import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { ChartDescription } from "@/components/charts/ChartDescription";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const limit = context.query.limit ? parseInt(context.query.limit as string) : 500;
+    const limit = context.query.limit ? parseInt(context.query.limit as string) : 1000;
     const data = await getPrimaryXray(limit);
 
     return {
@@ -24,9 +24,33 @@ function classifyFlux(v: number): string {
 }
 
 export default function XrayPage({ data }: { data: any[] }) {
-    const processedData = data.map(d => ({
+    // Collect unique satellites
+    const satellites = [...new Set(data.map(d => `GOES-${d.satellite}`))].sort();
+
+    // Pivot data: Group by timeTag
+    const pivotedDataMap = data.reduce((acc: any, d: any) => {
+        const time = d.timeTag;
+        const satName = `GOES-${d.satellite}`;
+        if (!acc[time]) {
+            acc[time] = { timeTag: time };
+        }
+        acc[time][satName] = d.flux;
+        // For classification, we use the max flux at this time point if multiple sats exist
+        acc[time].maxFlux = Math.max(acc[time].maxFlux || 0, d.flux);
+        return acc;
+    }, {});
+
+    const pivotedData = (Object.values(pivotedDataMap) as any[]).sort((a: any, b: any) =>
+        new Date(a.timeTag).getTime() - new Date(b.timeTag).getTime()
+    ).map(d => ({
         ...d,
-        flareClass: classifyFlux(d.flux)
+        flareClass: classifyFlux(d.maxFlux)
+    }));
+
+    const lines = satellites.map((sat, i) => ({
+        key: sat,
+        name: sat,
+        color: `var(--chart-${(i % 5) + 1})`
     }));
 
     return (
@@ -49,11 +73,9 @@ export default function XrayPage({ data }: { data: any[] }) {
                 </CardHeader>
                 <CardContent>
                     <TimeSeriesChart
-                        data={processedData}
+                        data={pivotedData}
                         timeKey="timeTag"
-                        lines={[
-                            { key: 'flux', name: 'X-Ray Flux', color: '#ea580c' }
-                        ]}
+                        lines={lines}
                         yLabel="Flux [W/m²]"
                         logScale={true}
                     />
@@ -78,10 +100,10 @@ export default function XrayPage({ data }: { data: any[] }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {processedData.filter(d => d.flux >= 1e-6).slice(0, 10).map((flare, i) => (
+                                {pivotedData.filter((d: any) => d.maxFlux >= 1e-6).slice(0, 10).map((flare: any, i: number) => (
                                     <tr key={i} className="border-b">
                                         <td className="py-2">{new Date(flare.timeTag).toLocaleString()}</td>
-                                        <td className="py-2 text-center font-mono">{flare.flux.toExponential(2)}</td>
+                                        <td className="py-2 text-center font-mono">{flare.maxFlux.toExponential(2)}</td>
                                         <td className="py-2 text-center font-bold">
                                             <span className={
                                                 flare.flareClass === 'X' ? 'text-red-600' :
@@ -93,7 +115,7 @@ export default function XrayPage({ data }: { data: any[] }) {
                                         </td>
                                     </tr>
                                 ))}
-                                {processedData.filter(d => d.flux >= 1e-6).length === 0 && (
+                                {pivotedData.filter((d: any) => d.maxFlux >= 1e-6).length === 0 && (
                                     <tr>
                                         <td colSpan={3} className="py-4 text-center text-muted-foreground">No moderate or strong flares in recent data.</td>
                                     </tr>

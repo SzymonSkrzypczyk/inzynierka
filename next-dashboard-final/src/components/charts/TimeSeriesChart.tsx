@@ -26,14 +26,14 @@ export function TimeSeriesChart({ data, timeKey, lines, yLabel, logScale }: Time
         <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={sortedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
                     <XAxis
                         dataKey={timeKey}
                         tickFormatter={(value) => format(new Date(value), "HH:mm")}
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
-                        stroke="hsl(var(--muted-foreground))"
+                        stroke="var(--muted-foreground)"
                     />
                     <YAxis
                         scale={logScale ? "log" : "auto"}
@@ -41,15 +41,15 @@ export function TimeSeriesChart({ data, timeKey, lines, yLabel, logScale }: Time
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
-                        stroke="hsl(var(--muted-foreground))"
-                        label={yLabel ? { value: yLabel, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: 12, fill: 'hsl(var(--muted-foreground))' } } : undefined}
+                        stroke="var(--muted-foreground)"
+                        label={yLabel ? { value: yLabel, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: 12, fill: 'var(--muted-foreground)' } } : undefined}
                     />
                     <Tooltip
                         labelFormatter={(value) => format(new Date(value), "yyyy-MM-dd HH:mm:ss")}
                         contentStyle={{
-                            backgroundColor: 'hsl(var(--card))',
-                            borderColor: 'hsl(var(--border))',
-                            color: 'hsl(var(--foreground))',
+                            backgroundColor: 'var(--card)',
+                            borderColor: 'var(--border)',
+                            color: 'var(--foreground)',
                             borderRadius: '8px',
                             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                         }}

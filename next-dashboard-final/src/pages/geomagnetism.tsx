@@ -46,8 +46,8 @@ export default function GeomagnetismPage({ data }: { data: any[] }) {
                         data={data}
                         timeKey="timeTag"
                         lines={[
-                            { key: 'kpIndex', name: 'Kp Index', color: '#2563eb' },
-                            { key: 'estimatedKp', name: 'Estimated Kp', color: '#6366f1' }
+                            { key: 'kpIndex', name: 'Kp Index', color: 'var(--chart-1)' },
+                            { key: 'estimatedKp', name: 'Estimated Kp', color: 'var(--chart-2)' }
                         ]}
                         yLabel="Kp Index"
                     />

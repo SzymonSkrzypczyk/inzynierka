@@ -43,10 +43,10 @@ export default function MagneticFieldPage({ data }: { data: any[] }) {
                         data={data}
                         timeKey="timeTag"
                         lines={[
-                            { key: 'bt', name: 'Bt (Total)', color: '#4b5563' },
-                            { key: 'bxGsm', name: 'Bx (GSM)', color: '#ef4444' },
-                            { key: 'byGsm', name: 'By (GSM)', color: '#10b981' },
-                            { key: 'bzGsm', name: 'Bz (GSM)', color: '#3b82f6' }
+                            { key: 'bt', name: 'Bt (Total)', color: 'var(--chart-1)' },
+                            { key: 'bxGsm', name: 'Bx (GSM)', color: 'var(--chart-2)' },
+                            { key: 'byGsm', name: 'By (GSM)', color: 'var(--chart-3)' },
+                            { key: 'bzGsm', name: 'Bz (GSM)', color: 'var(--chart-4)' }
                         ]}
                         yLabel="Induction [nT]"
                     />
