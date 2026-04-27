@@ -2,14 +2,14 @@
   <div class="panel sub-panel">
     <div class="flex justify-between items-start mb-4">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-wider text-sm">Solar Wind</h2>
-        <p class="text-[#c8c6ca] text-[10px] mt-1 font-mono uppercase">Speed (km/s) & Bz (nT) | 24H</p>
+        <h2 class="text-secondary font-bold uppercase tracking-wider text-base">Solar Wind</h2>
+        <p class="text-[#c8c6ca] text-sm mt-1 font-mono uppercase">Speed (km/s) & Bz (nT) | 24H</p>
       </div>
     </div>
 
     <div class="relative flex-1">
-      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-8 h-full">
-        <span v-for="val in [900, 600, 300, 0]" :key="val" class="text-[#7e7d7f] text-[10px] font-mono leading-none absolute right-2" :style="{ bottom: (val/1000 * 100) + '%' }">{{ val }}</span>
+      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full">
+        <span v-for="val in [900, 600, 300, 0]" :key="val" class="text-[#7e7d7f] text-sm font-mono leading-none absolute right-2" :style="{ bottom: (val/1000 * 100) + '%' }">{{ val }}</span>
       </div>
 
       <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">

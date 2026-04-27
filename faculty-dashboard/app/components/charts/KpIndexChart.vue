@@ -2,12 +2,12 @@
   <div class="panel hero-panel">
     <div class="flex justify-between items-start mb-6 z-20">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-wider text-sm">Planetary Kp Index</h2>
-        <p class="text-[#c8c6ca] text-xs mt-1 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
+        <h2 class="text-secondary font-bold uppercase tracking-wider text-base">Planetary Kp Index</h2>
+        <p class="text-[#c8c6ca] text-sm mt-1 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
       </div>
       <div class="text-right">
-        <div class="text-secondary text-5xl font-bold leading-none">{{ currentKp.toFixed(2) }}</div>
-        <div class="text-[#c8c6ca] text-[10px] font-bold mt-2 bg-[#201f1f] px-2 py-1 inline-block rounded uppercase tracking-widest">
+        <div class="text-secondary text-7xl font-bold leading-none">{{ currentKp.toFixed(2) }}</div>
+        <div class="text-[#c8c6ca] text-sm font-bold mt-2 bg-[#201f1f] px-2 py-1 inline-block rounded uppercase tracking-widest">
           CURRENT G-SCALE: {{ gScale }}
         </div>
       </div>
@@ -15,20 +15,20 @@
 
     <div class="relative flex-1">
       <!-- Custom Y-Axis labels -->
-      <div class="absolute left-0 top-0 bottom-8 flex flex-col justify-between items-end pr-3 z-10 w-8 h-full">
-        <span v-for="val in [9, 7, 5, 3, 1, 0]" :key="val" class="text-[#7e7d7f] text-[10px] font-mono leading-none absolute right-3" :style="{ bottom: (val/9 * 100) + '%' }">{{ val }}</span>
+      <div class="absolute left-0 top-0 bottom-8 flex flex-col justify-between items-end pr-3 z-10 w-12 h-full">
+        <span v-for="val in [9, 7, 5, 3, 1, 0]" :key="val" class="text-[#7e7d7f] text-sm font-mono leading-none absolute right-3" :style="{ bottom: (val/9 * 100) + '%' }">{{ val }}</span>
       </div>
 
       <div class="absolute inset-0 left-8 bottom-8 border-l border-b border-[#353434] bg-grid overflow-hidden">
         <!-- Threshold Lines -->
         <div class="absolute w-full border-t border-dashed border-[#ef4444]/50 z-10" style="top: 0%;">
-          <span class="absolute right-2 top-0 text-[#ef4444] text-[10px] font-bold">G5 - EXTREME (Kp 9)</span>
+          <span class="absolute right-2 top-0 text-[#ef4444] text-sm font-bold">G5 - EXTREME (Kp 9)</span>
         </div>
         <div class="absolute w-full border-t border-dashed border-orange-500/50 z-10" style="top: 11.11%;">
-          <span class="absolute right-2 -top-4 text-orange-500 text-[10px] font-bold">G4 - SEVERE (Kp 8)</span>
+          <span class="absolute right-2 -top-4 text-orange-500 text-sm font-bold">G4 - SEVERE (Kp 8)</span>
         </div>
         <div class="absolute w-full border-t border-dashed border-yellow-500/50 z-10" style="top: 22.22%;">
-          <span class="absolute right-2 -top-4 text-yellow-500 text-[10px] font-bold">G3 - STRONG (Kp 7)</span>
+          <span class="absolute right-2 -top-4 text-yellow-500 text-sm font-bold">G3 - STRONG (Kp 7)</span>
         </div>
 
         <!-- Bars -->
@@ -45,10 +45,10 @@
 
       <!-- X-Axis -->
       <div class="absolute left-8 right-0 bottom-0 flex justify-between pt-2">
-        <span class="text-[#7e7d7f] text-[10px] font-mono">-72h</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono">-48h</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono">-24h</span>
-        <span class="text-secondary text-[10px] font-bold font-mono">CURRENT</span>
+        <span class="text-[#7e7d7f] text-sm font-mono">-72h</span>
+        <span class="text-[#7e7d7f] text-sm font-mono">-48h</span>
+        <span class="text-[#7e7d7f] text-sm font-mono">-24h</span>
+        <span class="text-secondary text-sm font-bold font-mono">CURRENT</span>
       </div>
     </div>
   </div>
