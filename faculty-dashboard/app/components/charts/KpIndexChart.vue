@@ -32,12 +32,26 @@
         </div>
 
         <!-- Bars -->
-        <div class="flex items-end h-full w-full justify-around px-2">
+        <div class="flex items-end h-full w-full justify-around px-2 relative">
+          <!-- Observed data -->
           <div
-            v-for="(val, i) in data"
-            :key="i"
+            v-for="(val, i) in observedData"
+            :key="'obs-' + i"
             class="w-[3%] rounded-t-sm transition-all duration-500"
             :class="getBarColor(val)"
+            :style="{ height: (val / 9 * 100) + '%' }"
+          ></div>
+          <!-- Divider between observed and predicted -->
+          <div v-if="observedData.length > 0 && predictedData.length > 0" 
+               class="absolute w-0.5 h-full bg-[#7e7d7f] opacity-50" 
+               :style="{ left: (observedData.length * 3.3) + '%' }">
+          </div>
+          <!-- Predicted data -->
+          <div
+            v-for="(val, i) in predictedData"
+            :key="'pred-' + i"
+            class="w-[3%] rounded-t-sm transition-all duration-500 opacity-60"
+            :class="getPredictedBarColor(val)"
             :style="{ height: (val / 9 * 100) + '%' }"
           ></div>
         </div>
@@ -47,8 +61,8 @@
       <div class="absolute left-8 right-0 bottom-0 grid grid-cols-4 pt-2 px-2 bg-[#141313]">
         <span class="text-[#7e7d7f] text-sm font-mono pl-1">-72h</span>
         <span class="text-[#7e7d7f] text-sm font-mono text-center">-48h</span>
-        <span class="text-[#7e7d7f] text-sm font-mono text-center">-24h</span>
-        <span class="text-secondary text-sm font-bold font-mono text-right pr-1">CURRENT</span>
+        <span class="text-secondary text-sm font-bold font-mono text-center">CURRENT</span>
+        <span class="text-[#7e7d7f] text-sm font-mono text-right pr-1">PREDICTED</span>
       </div>
     </div>
   </div>
@@ -58,13 +72,25 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  data: {
+  observedData: {
+    type: Array,
+    default: () => []
+  },
+  observedLabels: {
+    type: Array,
+    default: () => []
+  },
+  predictedData: {
+    type: Array,
+    default: () => []
+  },
+  predictedLabels: {
     type: Array,
     default: () => []
   }
 })
 
-const currentKp = computed(() => props.data[props.data.length - 1] || 0)
+const currentKp = computed(() => props.observedData[props.observedData.length - 1] || 0)
 
 const gScale = computed(() => {
   const kp = currentKp.value
@@ -80,6 +106,12 @@ function getBarColor(val) {
   if (val >= 7) return 'bg-[#ef4444]'
   if (val >= 5) return 'bg-yellow-500'
   return 'bg-[#4ae183]/80'
+}
+
+function getPredictedBarColor(val) {
+  if (val >= 7) return 'bg-[#ef4444]/60'
+  if (val >= 5) return 'bg-yellow-500/60'
+  return 'bg-[#4ae183]/40'
 }
 </script>
 
