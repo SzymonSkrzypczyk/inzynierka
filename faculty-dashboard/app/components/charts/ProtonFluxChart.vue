@@ -9,11 +9,11 @@
 
     <div class="relative flex-1">
       <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-8 h-full">
-        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 80%;">10³</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 60%;">10²</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 40%;">10¹</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 20%;">10⁰</span>
-        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 0%;">10⁻¹</span>
+        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 80%;">10⁻³</span>
+        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 60%;">10⁻⁴</span>
+        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 40%;">10⁻⁵</span>
+        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 20%;">10⁻⁶</span>
+        <span class="text-[#7e7d7f] text-[10px] font-mono absolute right-2" style="bottom: 0%;">10⁻⁷</span>
       </div>
 
       <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">
@@ -41,12 +41,14 @@ const props = defineProps({
   p100: Array
 })
 
+const safe = (arr) => (arr || []).map(v => v > 0 ? v : 1e-10)
+
 const chartData = computed(() => ({
   labels: props.labels,
   datasets: [
     {
       label: '>10 MeV',
-      data: props.p10,
+      data: safe(props.p10),
       borderColor: '#c8c6c8',
       tension: 0.4,
       pointRadius: 0,
@@ -55,7 +57,7 @@ const chartData = computed(() => ({
     },
     {
       label: '>100 MeV',
-      data: props.p100,
+      data: safe(props.p100),
       borderColor: '#47464a',
       tension: 0.4,
       pointRadius: 0,
@@ -77,8 +79,8 @@ const chartOptions = {
     y: {
       type: 'logarithmic',
       display: false,
-      min: 0.1,
-      max: 1000
+      min: 1e-7,
+      max: 1e-3
     }
   }
 }
