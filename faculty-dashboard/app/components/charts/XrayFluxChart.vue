@@ -8,7 +8,7 @@
     </div>
 
     <div class="relative flex-1">
-      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full">
+      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full bg-[#141313]">
         <span class="text-[#ef4444] text-sm font-bold absolute right-2" style="bottom: 83.33%;">X</span>
         <span class="text-orange-500 text-sm font-bold absolute right-2" style="bottom: 66.66%;">M</span>
         <span class="text-yellow-500 text-sm font-bold absolute right-2" style="bottom: 50%;">C</span>
@@ -18,9 +18,15 @@
 
       <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">
         <!-- Thresholds -->
-        <div class="absolute w-full border-t border-[#ef4444]/20" style="top: 16.66%;"></div>
-        <div class="absolute w-full border-t border-orange-500/20" style="top: 33.33%;"></div>
-        <div class="absolute w-full border-t border-yellow-500/20" style="top: 50%;"></div>
+        <div class="absolute w-full border-t border-[#ef4444]/20" style="top: 16.66%;">
+          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-[#ef4444] text-sm font-bold">X</span>
+        </div>
+        <div class="absolute w-full border-t border-orange-500/20" style="top: 33.33%;">
+          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-orange-500 text-sm font-bold">M</span>
+        </div>
+        <div class="absolute w-full border-t border-yellow-500/20" style="top: 50%;">
+          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-yellow-500 text-sm font-bold">C</span>
+        </div>
 
         <Line :data="chartData" :options="chartOptions" />
       </div>

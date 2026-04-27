@@ -8,7 +8,7 @@
     </div>
 
     <div class="relative flex-1">
-      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full">
+      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full bg-[#141313]">
         <span v-for="val in [900, 600, 300, 0]" :key="val" class="text-[#7e7d7f] text-sm font-mono leading-none absolute right-2" :style="{ bottom: (val/1000 * 100) + '%' }">{{ val }}</span>
       </div>
 
