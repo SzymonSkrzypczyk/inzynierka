@@ -1,19 +1,34 @@
-export default defineEventHandler(() => {
-  const p10 = []
-  const p100 = []
-  const labels = []
-  const now = new Date()
+export default defineEventHandler(async () => {
+  const res = await $fetch('https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json') as any[]
 
-  for (let i = 100; i >= 0; i--) {
-    const time = new Date(now.getTime() - i * 15 * 60 * 1000)
-    labels.push(time.toISOString())
-    p10.push(0.1 + Math.pow(10, (i/100) * 3) * (0.5 + Math.random() * 0.5))
-    p100.push(0.01 + Math.pow(10, (i/100) * 2) * (0.5 + Math.random() * 0.5))
+  const byTime = new Map<string, { p10?: number; p100?: number }>()
+
+  for (const item of res) {
+    const tag = item.time_tag
+    if (!byTime.has(tag)) {
+      byTime.set(tag, {})
+    }
+    const entry = byTime.get(tag)!
+    if (item.channel === 'P5') {
+      entry.p10 = Number(item.flux)
+    }
+    if (item.channel === 'P8C') {
+      entry.p100 = Number(item.flux)
+    }
   }
 
+  const merged: { label: string; p10: number; p100: number }[] = []
+  for (const [label, values] of byTime) {
+    if (values.p10 !== undefined && values.p100 !== undefined) {
+      merged.push({ label, p10: values.p10, p100: values.p100 })
+    }
+  }
+
+  merged.sort((a, b) => new Date(a.label).getTime() - new Date(b.label).getTime())
+
   return {
-    labels,
-    p10,
-    p100
+    labels: merged.map(m => m.label),
+    p10: merged.map(m => m.p10),
+    p100: merged.map(m => m.p100)
   }
 })

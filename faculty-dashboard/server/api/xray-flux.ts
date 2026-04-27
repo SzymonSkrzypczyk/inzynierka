@@ -1,19 +1,8 @@
-export default defineEventHandler(() => {
-  const flux = []
-  const labels = []
-  const now = new Date()
+export default defineEventHandler(async () => {
+  const res = await $fetch('https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json') as any[]
 
-  for (let i = 100; i >= 0; i--) {
-    const time = new Date(now.getTime() - i * 15 * 60 * 1000)
-    labels.push(time.toISOString())
-    let base = 1e-8
-    if (i > 45 && i < 55) base = 1e-4 // X-flare
-    if (i > 15 && i < 25) base = 5e-6 // C-flare
-    flux.push(base + Math.random() * base)
-  }
+  const labels = res.map(item => item.time_tag)
+  const flux = res.map(item => Number(item.flux))
 
-  return {
-    labels,
-    flux
-  }
+  return { labels, flux }
 })
