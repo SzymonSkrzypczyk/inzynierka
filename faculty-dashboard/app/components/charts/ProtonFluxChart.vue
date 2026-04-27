@@ -3,7 +3,7 @@
     <div class="flex justify-between items-start mb-4">
       <div>
         <h2 class="text-secondary font-bold uppercase tracking-wider text-base">Proton Flux</h2>
-        <p class="text-[#c8c6ca] text-sm mt-1 font-mono uppercase">Radiation Events | 24H</p>
+        <p class="text-[#c8c6ca] text-sm mt-1 font-mono uppercase">Proton Flux (pfu) | Log Scale | 24H</p>
       </div>
     </div>
 
@@ -23,6 +23,18 @@
         </div>
 
         <Line :data="chartData" :options="chartOptions" />
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex items-center gap-4 mt-2">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-0.5 bg-[#c8c6c8]"></div>
+        <span class="text-[#c8c6ca] text-xs font-mono">&gt;10 MeV</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-0.5 bg-[#47464a]"></div>
+        <span class="text-[#c8c6ca] text-xs font-mono">&gt;100 MeV</span>
       </div>
     </div>
   </div>

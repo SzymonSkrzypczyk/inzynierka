@@ -16,6 +16,20 @@
         <Line :data="chartData" :options="chartOptions" />
       </div>
     </div>
+
+    <!-- Legend -->
+    <div class="flex items-center gap-4 mt-2">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-0.5 bg-[#06bb63]"></div>
+        <span class="text-[#c8c6ca] text-xs font-mono">Speed (km/s)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-0 relative">
+          <div class="absolute top-1/2 w-full border-t-2 border-dashed border-[#eab308]"></div>
+        </div>
+        <span class="text-[#c8c6ca] text-xs font-mono">Bz (nT)</span>
+      </div>
+    </div>
   </div>
 </template>
 
