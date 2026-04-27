@@ -30,11 +30,11 @@
     <div class="flex items-center gap-4 mt-2">
       <div class="flex items-center gap-2">
         <div class="w-6 h-0.5 bg-[#c8c6c8]"></div>
-        <span class="text-[#c8c6ca] text-xs font-mono">&gt;10 MeV</span>
+        <span class="text-[#c8c6ca] text-sm font-mono">&gt;10 MeV</span>
       </div>
       <div class="flex items-center gap-2">
         <div class="w-6 h-0.5 bg-[#47464a]"></div>
-        <span class="text-[#c8c6ca] text-xs font-mono">&gt;100 MeV</span>
+        <span class="text-[#c8c6ca] text-sm font-mono">&gt;100 MeV</span>
       </div>
     </div>
   </div>

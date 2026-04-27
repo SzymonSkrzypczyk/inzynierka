@@ -44,11 +44,11 @@
       </div>
 
       <!-- X-Axis -->
-      <div class="absolute left-8 right-0 bottom-0 flex justify-between pt-2 bg-[#141313]">
-        <span class="text-[#7e7d7f] text-sm font-mono">-72h</span>
-        <span class="text-[#7e7d7f] text-sm font-mono">-48h</span>
-        <span class="text-[#7e7d7f] text-sm font-mono">-24h</span>
-        <span class="text-secondary text-sm font-bold font-mono">CURRENT</span>
+      <div class="absolute left-8 right-0 bottom-0 grid grid-cols-4 pt-2 px-2 bg-[#141313]">
+        <span class="text-[#7e7d7f] text-sm font-mono pl-1">-72h</span>
+        <span class="text-[#7e7d7f] text-sm font-mono text-center">-48h</span>
+        <span class="text-[#7e7d7f] text-sm font-mono text-center">-24h</span>
+        <span class="text-secondary text-sm font-bold font-mono text-right pr-1">CURRENT</span>
       </div>
     </div>
   </div>

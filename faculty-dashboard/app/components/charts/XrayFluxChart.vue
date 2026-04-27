@@ -32,13 +32,6 @@
       </div>
     </div>
 
-    <!-- Legend -->
-    <div class="flex items-center gap-4 mt-2">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-0.5 bg-[#06bb63]"></div>
-        <span class="text-[#c8c6ca] text-xs font-mono">X-ray Flux (W/m²)</span>
-      </div>
-    </div>
   </div>
 </template>
 
