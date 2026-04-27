@@ -1,5 +1,7 @@
+import type { ProtonFluxItem } from '../types'
+
 export default defineEventHandler(async () => {
-  const res = await $fetch('https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json') as any[]
+  const res = await $fetch<ProtonFluxItem[]>('https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json')
 
   const byTime = new Map<string, { p10?: number; p100?: number }>()
 

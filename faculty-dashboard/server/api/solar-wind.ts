@@ -1,8 +1,10 @@
+import type { AceSwepamItem, AceMagItem } from '../types'
+
 export default defineEventHandler(async () => {
   const [swepam, mag] = await Promise.all([
-    $fetch('https://services.swpc.noaa.gov/json/ace/swepam/ace_swepam_1h.json'),
-    $fetch('https://services.swpc.noaa.gov/json/ace/mag/ace_mag_1h.json')
-  ]) as [any[], any[]]
+    $fetch<AceSwepamItem[]>('https://services.swpc.noaa.gov/json/ace/swepam/ace_swepam_1h.json'),
+    $fetch<AceMagItem[]>('https://services.swpc.noaa.gov/json/ace/mag/ace_mag_1h.json')
+  ])
 
   const speedMap = new Map<string, number>()
   for (const item of swepam) {

@@ -1,5 +1,7 @@
+import type { KpForecastItem } from '../types'
+
 export default defineEventHandler(async () => {
-  const res = await $fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json') as any[]
+  const res = await $fetch<KpForecastItem[]>('https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json')
 
   const observed = res.filter(item => item.observed !== 'predicted')
 
