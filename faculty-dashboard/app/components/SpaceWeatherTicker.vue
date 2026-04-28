@@ -15,10 +15,6 @@
         </p>
       </transition>
     </div>
-
-    <div class="text-[#7e7d7f] font-mono text-[10px] uppercase tracking-widest border-l border-[#353434] pl-6 whitespace-nowrap">
-      Live Feed // MISSION-CTRL-{{ (currentIndex + 1).toString().padStart(2, '0') }}
-    </div>
   </div>
 </template>
 
