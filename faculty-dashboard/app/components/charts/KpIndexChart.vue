@@ -22,13 +22,13 @@
       <div class="absolute inset-0 left-8 bottom-8 border-l border-b border-[#353434] bg-grid overflow-hidden">
         <!-- Threshold Lines -->
         <div class="absolute w-full border-t border-dashed border-[#ef4444]/50 z-10" style="top: 0%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-[#ef4444] text-sm font-bold">G5 - EXTREME (Kp 9)</span>
+          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-[#ef4444] text-[10px] font-bold whitespace-nowrap">G5 - EXTREME (Kp 9)</span>
         </div>
         <div class="absolute w-full border-t border-dashed border-orange-500/50 z-10" style="top: 11.11%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-orange-500 text-sm font-bold">G4 - SEVERE (Kp 8)</span>
+          <span class="absolute right-[160px] top-1 bg-[#141313] px-1 text-orange-500 text-[10px] font-bold whitespace-nowrap">G4 - SEVERE (Kp 8)</span>
         </div>
         <div class="absolute w-full border-t border-dashed border-yellow-500/50 z-10" style="top: 22.22%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-yellow-500 text-sm font-bold">G3 - STRONG (Kp 7)</span>
+          <span class="absolute right-[320px] top-1 bg-[#141313] px-1 text-yellow-500 text-[10px] font-bold whitespace-nowrap">G3 - STRONG (Kp 7)</span>
         </div>
 
         <!-- Bars -->

@@ -1,5 +1,7 @@
 <template>
   <div class="aspect-16-9-container">
+    <SpaceWeatherTicker :kp-data="kpData" :solar-wind-data="solarWindData" :xray-data="xrayData" :proton-data="protonData" />
+
     <ChartsKpIndexChart v-if="kpData" :observed-data="kpData.observedData" :observed-labels="kpData.observedLabels" :predicted-data="kpData.predictedData" :predicted-labels="kpData.predictedLabels" />
     <div v-else class="panel hero-panel animate-pulse flex items-center justify-center">
       <span class="text-[#c8c6ca] font-mono">LOADING MISSION DATA...</span>

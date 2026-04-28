@@ -19,7 +19,7 @@
     padding: 24px;
     box-sizing: border-box;
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 24px;
 }
@@ -34,11 +34,16 @@
     position: relative;
 }
 
-.hero-panel {
+.ticker-panel {
     grid-column: 1 / -1;
     grid-row: 1 / 2;
 }
 
-.sub-panel {
+.hero-panel {
+    grid-column: 1 / -1;
     grid-row: 2 / 3;
+}
+
+.sub-panel {
+    grid-row: 3 / 4;
 }
