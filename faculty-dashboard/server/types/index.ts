@@ -35,8 +35,6 @@ export interface ProtonFluxItem {
   satellite: number
   flux: number
   energy: string
-  yaw_flip: number
-  channel: string
 }
 
 export interface XrayFluxItem {

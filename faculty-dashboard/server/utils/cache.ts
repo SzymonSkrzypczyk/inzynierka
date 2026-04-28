@@ -6,7 +6,7 @@ interface TimeSeriesData {
 export function createDataCache<T extends TimeSeriesData>() {
   let cache: T | null = null
   let lastFetch = 0
-  const TTL = 15 * 60 * 1000
+  const TTL = 5 * 60 * 1000
 
   function merge(existing: T, fresh: T): T {
     const existingLabels = new Set(existing.labels)
