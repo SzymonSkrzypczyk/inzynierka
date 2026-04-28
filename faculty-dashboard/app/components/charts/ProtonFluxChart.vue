@@ -8,12 +8,14 @@
     </div>
 
     <div class="relative flex-1">
-      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full bg-[#141313]">
-        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2" style="bottom: 80%;">10⁻³</span>
-        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2" style="bottom: 60%;">10⁻⁴</span>
-        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2" style="bottom: 40%;">10⁻⁵</span>
-        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2" style="bottom: 20%;">10⁻⁶</span>
-        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2" style="bottom: 0%;">10⁻⁷</span>
+      <div class="absolute left-0 top-0 bottom-6 pr-2 z-10 w-12 h-full bg-[#141313]">
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 100%;">10⁴</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 83.33%;">10³</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 66.66%;">10²</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 50%;">10¹</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 33.33%;">10⁰</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 16.66%;">10⁻¹</span>
+        <span class="text-[#7e7d7f] text-sm font-mono absolute right-2 translate-y-1/2" style="bottom: 0%;">10⁻²</span>
       </div>
 
       <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">
@@ -53,7 +55,7 @@ const props = defineProps({
   p100: Array
 })
 
-const safe = (arr) => (arr || []).map(v => v > 0 ? v : 1e-10)
+const safe = (arr) => (arr || []).map(v => v > 0 ? v : 1e-3)
 
 const chartData = computed(() => ({
   labels: props.labels,
@@ -91,8 +93,8 @@ const chartOptions = {
     y: {
       type: 'logarithmic',
       display: false,
-      min: 1e-7,
-      max: 1e-3
+      min: 1e-2,
+      max: 1e4
     }
   }
 }
