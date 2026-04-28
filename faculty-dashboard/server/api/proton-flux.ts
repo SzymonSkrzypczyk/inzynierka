@@ -1,11 +1,13 @@
 import { createDataCache } from '../utils/cache'
 import type { ProtonFluxItem } from '../types'
 
-const cache = createDataCache<{ labels: string[], p10: number[], p100: number[] }>()
+const cache = createDataCache<{ labels: string[]; p10: number[]; p100: number[] }>()
 
 export default defineEventHandler(async () => {
   return cache.get(async () => {
-    const res = await $fetch<ProtonFluxItem[]>('https://services.swpc.noaa.gov/json/goes/primary/differential-protons-1-day.json')
+    const res = await $fetch<ProtonFluxItem[]>(
+      'https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json'
+    )
 
     const byTime = new Map<string, { p10?: number; p100?: number }>()
 
@@ -14,19 +16,27 @@ export default defineEventHandler(async () => {
       if (!byTime.has(tag)) {
         byTime.set(tag, {})
       }
+
       const entry = byTime.get(tag)!
-      if (item.channel === 'P5') {
+
+      if (item.energy === '>=10 MeV') {
         entry.p10 = Number(item.flux)
       }
-      if (item.channel === 'P8C') {
+
+      if (item.energy === '>=100 MeV') {
         entry.p100 = Number(item.flux)
       }
     }
 
     const merged: { label: string; p10: number; p100: number }[] = []
+
     for (const [label, values] of byTime) {
       if (values.p10 !== undefined && values.p100 !== undefined) {
-        merged.push({ label, p10: values.p10, p100: values.p100 })
+        merged.push({
+          label,
+          p10: values.p10,
+          p100: values.p100
+        })
       }
     }
 

@@ -18,15 +18,9 @@
 
       <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">
         <!-- Thresholds -->
-        <div class="absolute w-full border-t border-[#ef4444]/20" style="top: 16.66%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-[#ef4444] text-sm font-bold">X</span>
-        </div>
-        <div class="absolute w-full border-t border-orange-500/20" style="top: 33.33%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-orange-500 text-sm font-bold">M</span>
-        </div>
-        <div class="absolute w-full border-t border-yellow-500/20" style="top: 50%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-yellow-500 text-sm font-bold">C</span>
-        </div>
+        <div class="absolute w-full border-t border-[#ef4444]/20" style="top: 16.66%;"></div>
+        <div class="absolute w-full border-t border-orange-500/20" style="top: 33.33%;"></div>
+        <div class="absolute w-full border-t border-yellow-500/20" style="top: 50%;"></div>
 
         <Line :data="chartData" :options="chartOptions" />
       </div>
