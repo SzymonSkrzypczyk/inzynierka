@@ -9,3 +9,9 @@ data
 
 .venv
 __pycache__
+
+# Nuxt artifacts
+node_modules
+.nuxt
+.output
+dist
