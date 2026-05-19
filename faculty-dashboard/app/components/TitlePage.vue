@@ -13,6 +13,10 @@
       <div class="w-24 h-1 bg-[#4ae183] mt-8 animate-pulse shadow-[0_0_15px_#4ae183]"></div>
     </div>
 
+    <!-- Bottom Right Credit -->
+    <div class="absolute bottom-12 right-12 z-10 animate-fade-in-delayed">
+      <span class="text-[#7e7d7f] font-mono text-sm tracking-wider">Created by Szymon Skrzypczyk</span>
+    </div>
   </div>
 </template>
 
