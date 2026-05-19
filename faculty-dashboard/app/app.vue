@@ -78,14 +78,19 @@ let timer = null
 const nextSlide = () => {
   transitionName.value = 'slide-left'
   currentSlideIndex.value = (currentSlideIndex.value + 1) % slides.length
+
+  // Set next timeout based on the new slide
+  const duration = currentSlide.value === 'title' ? 10000 : 40000
+  timer = setTimeout(nextSlide, duration)
 }
 
 onMounted(() => {
-  timer = setInterval(nextSlide, 40000)
+  // Start the first transition after the initial slide duration (Title is first)
+  timer = setTimeout(nextSlide, 10000)
 })
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer)
+  if (timer) clearTimeout(timer)
 })
 </script>
 
