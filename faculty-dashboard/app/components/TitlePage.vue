@@ -11,23 +11,8 @@
         Space<br>Weather
       </h1>
       <div class="w-24 h-1 bg-[#4ae183] mt-8 animate-pulse shadow-[0_0_15px_#4ae183]"></div>
-      <p class="text-[#c8c6ca] mt-12 font-mono tracking-[0.5em] uppercase text-xl animate-fade-in">Mission Control System</p>
     </div>
 
-    <!-- Bottom Right Credit -->
-    <div class="absolute bottom-12 right-12 z-10 flex flex-col items-end animate-fade-in-delayed">
-      <span class="text-[#7e7d7f] font-mono text-xs uppercase tracking-widest">System Architect</span>
-      <span class="text-[#e5e2e1] font-mono text-lg uppercase tracking-wider font-bold">created by: Szymon Skrzypczyk</span>
-      <a href="https://www.linkedin.com/in/szymon-skrzypczyk" class="text-[#4ae183] font-mono text-xs underline mt-1 opacity-70 hover:opacity-100 transition-opacity">
-        www.linkedin.com/in/szymon-skrzypczyk
-      </a>
-    </div>
-
-    <!-- Decorative elements -->
-    <div class="absolute top-12 right-12 text-[#353434] font-mono text-xs flex flex-col items-end opacity-50">
-      <span>REF: SWPC-MC-2024</span>
-      <span>STATUS: OPERATIONAL</span>
-    </div>
   </div>
 </template>
 
