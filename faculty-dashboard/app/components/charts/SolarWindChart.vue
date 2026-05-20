@@ -1,18 +1,18 @@
 <template>
   <div class="panel sub-panel">
-    <div class="flex justify-between items-start mb-4">
+    <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-wider text-base">Solar Wind</h2>
-        <p class="text-[#c8c6ca] text-sm mt-1 font-mono uppercase">Speed (km/s) | 24H</p>
+        <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">Solar Wind</h2>
+        <p class="text-[#c8c6ca] text-lg mt-2 font-mono uppercase tracking-widest">Particle Velocity (km/s) | 24H Real-time Telemetry</p>
       </div>
     </div>
 
     <div class="relative flex-1">
-      <div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between items-end pr-2 z-10 w-12 h-full bg-[#141313]">
-        <span v-for="val in [900, 600, 300, 0]" :key="val" class="text-[#7e7d7f] text-sm font-mono leading-none absolute right-2" :style="{ bottom: (val/1000 * 100) + '%' }">{{ val }}</span>
+      <div class="absolute left-0 top-0 bottom-12 flex flex-col justify-between items-end pr-4 z-10 w-20 h-full bg-[#141313]">
+        <span v-for="val in [1000, 750, 500, 250, 0]" :key="val" class="text-[#7e7d7f] text-lg font-mono leading-none absolute right-4" :style="{ bottom: (val/1000 * 100) + '%' }">{{ val }}</span>
       </div>
 
-      <div class="absolute inset-0 left-8 bottom-6 border-l border-b border-[#353434] bg-grid overflow-hidden">
+      <div class="absolute inset-0 left-20 bottom-12 border-l border-b border-[#353434] bg-grid overflow-hidden">
         <Line :data="chartData" :options="chartOptions" />
       </div>
     </div>

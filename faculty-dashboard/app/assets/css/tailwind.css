@@ -18,17 +18,18 @@
     height: 100%;
     padding: 24px;
     box-sizing: border-box;
-    display: grid;
-    grid-template-rows: auto 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
+    overflow: hidden;
+    cursor: none;
 }
 
 .panel {
     background-color: #141313;
     border: 1px solid #1C1C1E;
     border-radius: 0.125rem;
-    padding: 24px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -40,10 +41,6 @@
 }
 
 .hero-panel {
-    grid-column: 1 / -1;
-    grid-row: 2 / 3;
+    flex: 1;
 }
 
-.sub-panel {
-    grid-row: 3 / 4;
-}
