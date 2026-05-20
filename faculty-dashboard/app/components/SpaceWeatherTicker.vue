@@ -153,18 +153,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="ticker-panel flex items-center gap-4 h-16 px-6 bg-[#141313] border border-[#1C1C1E] rounded-sm">
-    <div class="flex items-center gap-3 border-r border-[#353434] pr-6">
-      <div class="w-2.5 h-2.5 bg-[#4ae183] rounded-full animate-pulse shadow-[0_0_8px_#4ae183]"></div>
-      <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.2em] text-2xl whitespace-nowrap font-mono">
+  <div class="ticker-panel flex items-center gap-10 h-40 px-12 bg-[#111112] border border-[#1C1C1E] rounded-sm shadow-2xl">
+    <div class="flex items-center gap-8 border-r border-[#353434] pr-12">
+      <div class="w-8 h-8 bg-[#4ae183] rounded-full animate-pulse shadow-[0_0_25px_#4ae183]"></div>
+      <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-6xl whitespace-nowrap font-mono">
         Space Weather
       </h1>
     </div>
 
-    <div class="flex-1 overflow-hidden px-4">
+    <div class="flex-1 overflow-hidden px-10">
       <transition name="fade" mode="out-in">
-        <p :key="currentIndex" class="text-[#c8c6ca] font-mono text-sm md:text-base uppercase tracking-wider">
-          <span class="text-[#4ae183] mr-2 font-bold">>>></span>
+        <p :key="currentIndex" class="text-[#e5e2e1] font-mono text-xl md:text-2xl uppercase tracking-[0.1em] leading-tight font-medium">
+          <span class="text-[#4ae183] mr-5 font-bold">>>></span>
           {{ activeMessages[currentIndex] }}
         </p>
       </transition>
