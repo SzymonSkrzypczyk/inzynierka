@@ -1,15 +1,12 @@
 <template>
   <div class="aspect-16-9-container">
-    <!-- Ticker Section (Hidden on Title Page) -->
+    <!-- Centered Header Title (Hidden on Title Page) -->
     <transition name="fade">
-      <SpaceWeatherTicker
-        v-if="currentSlide !== 'title'"
-        :kp-data="kpData"
-        :solar-wind-data="solarWindData"
-        :xray-data="xrayData"
-        :proton-data="protonData"
-        :active-mode="currentSlide"
-      />
+      <div v-if="currentSlide !== 'title'" class="flex justify-center items-center py-4">
+        <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-5xl font-mono">
+          Space Weather
+        </h1>
+      </div>
     </transition>
 
     <!-- Main Content Carousel -->
@@ -57,6 +54,18 @@
         </div>
       </transition>
     </div>
+
+    <!-- Ticker Section at Bottom (Hidden on Title Page) -->
+    <transition name="fade">
+      <SpaceWeatherTicker
+        v-if="currentSlide !== 'title'"
+        :kp-data="kpData"
+        :solar-wind-data="solarWindData"
+        :xray-data="xrayData"
+        :proton-data="protonData"
+        :active-mode="currentSlide"
+      />
+    </transition>
   </div>
 </template>
 

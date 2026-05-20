@@ -153,18 +153,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="ticker-panel flex items-center gap-10 h-40 px-12 bg-[#111112] border border-[#1C1C1E] rounded-sm shadow-2xl">
-    <div class="flex items-center gap-8 border-r border-[#353434] pr-12">
-      <div class="w-8 h-8 bg-[#4ae183] rounded-full animate-pulse shadow-[0_0_25px_#4ae183]"></div>
-      <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-6xl whitespace-nowrap font-mono">
-        Space Weather
-      </h1>
+  <div class="ticker-panel flex items-center gap-6 h-14 px-8 bg-[#0D0D0E] border border-[#1C1C1E] rounded-sm shadow-xl">
+    <div class="flex items-center gap-4 border-r border-[#353434] pr-6">
+      <div class="w-3 h-3 bg-[#4ae183] rounded-full animate-pulse shadow-[0_0_10px_#4ae183]"></div>
     </div>
 
-    <div class="flex-1 overflow-hidden px-10">
+    <div class="flex-1 overflow-hidden px-6">
       <transition name="fade" mode="out-in">
-        <p :key="currentIndex" class="text-[#e5e2e1] font-mono text-xl md:text-2xl uppercase tracking-[0.1em] leading-tight font-medium">
-          <span class="text-[#4ae183] mr-5 font-bold">>>></span>
+        <p :key="currentIndex" class="text-[#c8c6ca] font-mono text-base md:text-lg uppercase tracking-wider leading-tight">
+          <span class="text-[#4ae183] mr-3 font-bold">>>></span>
           {{ activeMessages[currentIndex] }}
         </p>
       </transition>
