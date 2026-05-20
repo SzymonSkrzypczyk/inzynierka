@@ -3,7 +3,7 @@
     <!-- Centered Header Title (Hidden on Title Page) -->
     <transition name="fade">
       <div v-if="currentSlide !== 'title'" class="flex justify-center items-center py-4">
-        <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-5xl font-mono">
+        <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-7xl font-mono">
           Space Weather
         </h1>
       </div>
