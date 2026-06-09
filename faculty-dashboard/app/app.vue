@@ -72,10 +72,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-const { data: kpData } = useFetch('/api/kp-index')
-const { data: solarWindData } = useFetch('/api/solar-wind')
-const { data: xrayData } = useFetch('/api/xray-flux')
-const { data: protonData } = useFetch('/api/proton-flux')
+const { data: kpData, refresh: refreshKp } = useFetch('/api/kp-index')
+const { data: solarWindData, refresh: refreshSolarWind } = useFetch('/api/solar-wind')
+const { data: xrayData, refresh: refreshXray } = useFetch('/api/xray-flux')
+const { data: protonData, refresh: refreshProton } = useFetch('/api/proton-flux')
 
 const slides = ['title', 'kpIndex', 'solarWind', 'xrayFlux', 'protonFlux']
 const currentSlideIndex = ref(0)
@@ -84,9 +84,22 @@ const transitionName = ref('slide-left')
 
 let timer = null
 
+const refreshNextSlideData = () => {
+  const nextIndex = (currentSlideIndex.value + 1) % slides.length
+  const nextSlideName = slides[nextIndex]
+
+  if (nextSlideName === 'kpIndex') refreshKp()
+  else if (nextSlideName === 'solarWind') refreshSolarWind()
+  else if (nextSlideName === 'xrayFlux') refreshXray()
+  else if (nextSlideName === 'protonFlux') refreshProton()
+}
+
 const nextSlide = () => {
   transitionName.value = 'slide-left'
   currentSlideIndex.value = (currentSlideIndex.value + 1) % slides.length
+
+  // Refresh data for the slide AFTER the one we just switched to
+  refreshNextSlideData()
 
   // Set next timeout based on the new slide
   const duration = currentSlide.value === 'title' ? 10000 : 40000
@@ -94,6 +107,9 @@ const nextSlide = () => {
 }
 
 onMounted(() => {
+  // Pre-fetch data for the first data slide (kpIndex) while on Title
+  refreshNextSlideData()
+
   // Start the first transition after the initial slide duration (Title is first)
   timer = setTimeout(nextSlide, 10000)
 })
