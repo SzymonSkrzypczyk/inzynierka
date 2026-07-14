@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#0A0A0B] text-[#e5e2e1] font-['Inter'] m-0 p-0 h-screen w-screen overflow-hidden;
+    @apply bg-dash-bg text-dash-primary-text font-['Inter'] m-0 p-0 h-screen w-screen overflow-hidden;
   }
 
   #__nuxt {
@@ -26,8 +26,7 @@
 }
 
 .panel {
-    background-color: #141313;
-    border: 1px solid #1C1C1E;
+    @apply bg-dash-surface border border-dash-border;
     border-radius: 0.125rem;
     padding: 32px;
     display: flex;
@@ -43,4 +42,3 @@
 .hero-panel {
     flex: 1;
 }
-

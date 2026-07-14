@@ -3,11 +3,11 @@
     <div class="flex justify-between items-start mb-8 z-20">
       <div>
         <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">Planetary Kp Index</h2>
-        <p class="text-[#c8c6ca] text-lg mt-2 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
+        <p class="text-dash-text-muted text-lg mt-2 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
       </div>
       <div class="text-right">
         <div class="text-secondary text-9xl font-bold leading-none">{{ currentKp.toFixed(2) }}</div>
-        <div class="text-[#c8c6ca] text-lg font-bold mt-4 bg-[#201f1f] px-4 py-2 inline-block rounded uppercase tracking-widest border border-[#353434]">
+        <div class="text-dash-text-muted text-lg font-bold mt-4 bg-dash-surface-container px-4 py-2 inline-block rounded uppercase tracking-widest border border-dash-border-variant">
           CURRENT G-SCALE: {{ gScale }}
         </div>
       </div>
@@ -15,20 +15,20 @@
 
     <div class="relative flex-1">
       <!-- Custom Y-Axis labels -->
-      <div class="absolute left-0 top-0 bottom-12 flex flex-col justify-between items-end pr-4 z-10 w-16 h-full bg-[#141313]">
-        <span v-for="val in [9, 7, 5, 3, 1, 0]" :key="val" class="text-[#7e7d7f] text-lg font-mono leading-none absolute right-4" :style="{ bottom: (val/9 * 100) + '%' }">{{ val }}</span>
+      <div class="absolute left-0 top-0 bottom-12 flex flex-col justify-between items-end pr-4 z-10 w-16 h-full bg-dash-surface">
+        <span v-for="val in [9, 7, 5, 3, 1, 0]" :key="val" class="text-dash-text-dim text-lg font-mono leading-none absolute right-4" :style="{ bottom: (val/9 * 100) + '%' }">{{ val }}</span>
       </div>
 
-      <div class="absolute inset-0 left-12 bottom-12 border-l border-b border-[#353434] bg-grid overflow-hidden">
+      <div class="absolute inset-0 left-12 bottom-12 border-l border-b border-dash-border-variant bg-grid overflow-hidden">
         <!-- Threshold Lines -->
-        <div class="absolute w-full border-t border-dashed border-[#ef4444]/50 z-10" style="top: 0%;">
-          <span class="absolute right-2 top-1 bg-[#141313] px-1 text-[#ef4444] text-[10px] font-bold whitespace-nowrap">G5 - EXTREME (Kp 9)</span>
+        <div class="absolute w-full border-t border-dashed border-dash-danger/50 z-10" style="top: 0%;">
+          <span class="absolute right-2 top-1 bg-dash-surface px-1 text-dash-danger text-[10px] font-bold whitespace-nowrap">G5 - EXTREME (Kp 9)</span>
         </div>
-        <div class="absolute w-full border-t border-dashed border-orange-500/50 z-10" style="top: 11.11%;">
-          <span class="absolute right-[160px] top-1 bg-[#141313] px-1 text-orange-500 text-[10px] font-bold whitespace-nowrap">G4 - SEVERE (Kp 8)</span>
+        <div class="absolute w-full border-t border-dashed border-dash-warning/50 z-10" style="top: 11.11%;">
+          <span class="absolute right-[160px] top-1 bg-dash-surface px-1 text-dash-warning text-[10px] font-bold whitespace-nowrap">G4 - SEVERE (Kp 8)</span>
         </div>
-        <div class="absolute w-full border-t border-dashed border-yellow-500/50 z-10" style="top: 22.22%;">
-          <span class="absolute right-[320px] top-1 bg-[#141313] px-1 text-yellow-500 text-[10px] font-bold whitespace-nowrap">G3 - STRONG (Kp 7)</span>
+        <div class="absolute w-full border-t border-dashed border-dash-caution/50 z-10" style="top: 22.22%;">
+          <span class="absolute right-[320px] top-1 bg-dash-surface px-1 text-dash-caution text-[10px] font-bold whitespace-nowrap">G3 - STRONG (Kp 7)</span>
         </div>
 
         <!-- Bars -->
@@ -43,7 +43,7 @@
           ></div>
           <!-- Divider between observed and predicted -->
           <div v-if="observedData.length > 0 && predictedData.length > 0" 
-               class="absolute w-0.5 h-full bg-[#7e7d7f] opacity-50" 
+               class="absolute w-0.5 h-full bg-dash-text-dim opacity-50"
                :style="{ left: (observedData.length * 3.3) + '%' }">
           </div>
           <!-- Predicted data -->
@@ -58,7 +58,7 @@
       </div>
 
       <!-- X-Axis -->
-      <div class="absolute left-20 right-0 bottom-0 grid grid-cols-5 pt-4 px-8 bg-[#141313] text-lg font-mono text-[#7e7d7f]">
+      <div class="absolute left-20 right-0 bottom-0 grid grid-cols-5 pt-4 px-8 bg-dash-surface text-lg font-mono text-dash-text-dim">
         <span class="text-center">-72h</span>
         <span class="text-center">-48h</span>
         <span class="text-center">-24h</span>
@@ -70,6 +70,7 @@
 </template>
 
 <script setup>
+import DashboardColors from '~/utils/colors'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -104,23 +105,23 @@ const gScale = computed(() => {
 })
 
 function getBarColor(val) {
-  if (val >= 7) return 'bg-[#ef4444]'
-  if (val >= 5) return 'bg-yellow-500'
-  return 'bg-[#4ae183]/80'
+  if (val >= 7) return 'bg-dash-danger'
+  if (val >= 5) return 'bg-dash-caution'
+  return 'bg-dash-secondary/80'
 }
 
 function getPredictedBarColor(val) {
-  if (val >= 7) return 'bg-[#ef4444]/60'
-  if (val >= 5) return 'bg-yellow-500/60'
-  return 'bg-[#4ae183]/40'
+  if (val >= 7) return 'bg-dash-danger/60'
+  if (val >= 5) return 'bg-dash-caution/60'
+  return 'bg-dash-secondary/40'
 }
 </script>
 
 <style scoped>
 .bg-grid {
   background-image:
-    linear-gradient(to right, #1C1C1E 1px, transparent 1px),
-    linear-gradient(to bottom, #1C1C1E 1px, transparent 1px);
+    linear-gradient(to right, v-bind('DashboardColors.border') 1px, transparent 1px),
+    linear-gradient(to bottom, v-bind('DashboardColors.border') 1px, transparent 1px);
   background-size: 50px 50px;
 }
 </style>
