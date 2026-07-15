@@ -2,7 +2,7 @@
   <div class="panel sub-panel">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">Solar Proton Flux</h2>
+        <h2 class="font-bold uppercase tracking-[0.03em] text-3xl" :style="{ color: DashboardColors.primaryText }">Solar Proton Flux</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Radiation Intensity (pfu) | Logarithmic Scale | 24H</p>
       </div>
     </div>

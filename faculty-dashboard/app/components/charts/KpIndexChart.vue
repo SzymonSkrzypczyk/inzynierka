@@ -2,7 +2,7 @@
   <div class="panel hero-panel">
     <div class="flex justify-between items-start mb-8 z-20">
       <div>
-        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">Planetary Kp Index</h2>
+        <h2 class="font-bold uppercase tracking-[0.03em] text-3xl" :style="{ color: DashboardColors.primaryText }">Planetary Kp Index</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
       </div>
       <div class="text-right">
