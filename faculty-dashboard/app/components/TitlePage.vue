@@ -6,11 +6,11 @@
 
     <!-- Main Title -->
     <div class="relative z-10 flex flex-col items-center">
-      <div class="w-24 h-1 bg-dash-secondary mb-8 animate-pulse shadow-[0_0_15px_var(--tw-shadow-color)] shadow-dash-secondary"></div>
-      <h1 class="text-dash-secondary text-8xl md:text-9xl font-bold uppercase tracking-[0.3em] font-mono text-center">
+      <div class="w-24 h-1 bg-primary mb-8 animate-pulse shadow-[0_0_15px_var(--tw-shadow-color)] shadow-primary"></div>
+      <h1 class="text-8xl md:text-9xl font-bold uppercase tracking-[0.3em] font-mono text-center" :style="{ color: DashboardColors.primaryText }">
         Space<br>Weather
       </h1>
-      <div class="w-24 h-1 bg-dash-secondary mt-8 animate-pulse shadow-[0_0_15px_var(--tw-shadow-color)] shadow-dash-secondary"></div>
+      <div class="w-24 h-1 bg-primary mt-8 animate-pulse shadow-[0_0_15px_var(--tw-shadow-color)] shadow-primary"></div>
     </div>
 
     <!-- Bottom Right Credit -->

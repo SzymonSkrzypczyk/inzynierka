@@ -2,7 +2,7 @@
   <div class="panel sub-panel">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">Solar Proton Flux</h2>
+        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">Solar Proton Flux</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Radiation Intensity (pfu) | Logarithmic Scale | 24H</p>
       </div>
     </div>
@@ -31,11 +31,11 @@
     <!-- Legend -->
     <div class="flex items-center gap-8 mt-4">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-1 bg-dash-primary"></div>
+        <div class="w-8 h-1" :style="{ backgroundColor: DashboardColors.secondary }"></div>
         <span class="text-dash-text-muted text-lg font-mono tracking-widest">&gt;10 MeV ENERGY CHANNEL</span>
       </div>
       <div class="flex items-center gap-3">
-        <div class="w-8 h-1 bg-dash-tertiary"></div>
+        <div class="w-8 h-1" :style="{ backgroundColor: DashboardColors.secondaryVariant }"></div>
         <span class="text-dash-text-muted text-lg font-mono tracking-widest">&gt;100 MeV ENERGY CHANNEL</span>
       </div>
     </div>
@@ -64,20 +64,26 @@ const chartData = computed(() => ({
     {
       label: '>10 MeV',
       data: safe(props.p10),
-      borderColor: DashboardColors.primary,
+      borderColor: DashboardColors.secondary,
+      backgroundColor: DashboardColors.secondaryBg,
       tension: 0.4,
       pointRadius: 0,
-      borderWidth: 2,
-      fill: false
+      borderWidth: 3,
+      fill: false,
+      pointBackgroundColor: DashboardColors.secondary,
+      pointBorderColor: DashboardColors.primaryText
     },
     {
       label: '>100 MeV',
       data: safe(props.p100),
-      borderColor: DashboardColors.tertiary,
+      borderColor: DashboardColors.secondaryVariant,
+      backgroundColor: DashboardColors.secondaryBg,
       tension: 0.4,
       pointRadius: 0,
-      borderWidth: 1.5,
-      fill: false
+      borderWidth: 2.5,
+      fill: false,
+      pointBackgroundColor: DashboardColors.secondaryVariant,
+      pointBorderColor: DashboardColors.primaryText
     }
   ]
 }))

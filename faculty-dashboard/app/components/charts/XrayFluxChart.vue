@@ -2,7 +2,7 @@
   <div class="panel sub-panel">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">GOES X-ray Flux</h2>
+        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">GOES X-ray Flux</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Electromagnetic Flux (W/m²) | Logarithmic Scale | 24H</p>
       </div>
     </div>
@@ -18,9 +18,9 @@
 
       <div class="absolute inset-0 left-20 bottom-12 border-l border-b border-dash-border-variant bg-grid overflow-hidden">
         <!-- Thresholds -->
-        <div class="absolute w-full border-t border-dash-danger/20" style="top: 16.66%;"></div>
-        <div class="absolute w-full border-t border-dash-warning/20" style="top: 33.33%;"></div>
-        <div class="absolute w-full border-t border-dash-caution/20" style="top: 50%;"></div>
+        <div class="absolute w-full border-t border-dash-danger/80" style="top: 16.66%;"></div>
+        <div class="absolute w-full border-t border-dash-warning/80" style="top: 33.33%;"></div>
+        <div class="absolute w-full border-t border-dash-caution/80" style="top: 50%;"></div>
 
         <Line :data="chartData" :options="chartOptions" />
       </div>

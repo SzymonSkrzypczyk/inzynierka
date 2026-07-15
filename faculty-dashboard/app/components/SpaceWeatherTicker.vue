@@ -160,7 +160,7 @@ onUnmounted(() => {
 
     <div class="flex-1 overflow-hidden px-6">
       <transition name="fade" mode="out-in">
-        <p :key="currentIndex" class="text-dash-text-muted font-mono text-base text-xl md:text-2xl uppercase tracking-wider leading-tight">
+        <p :key="currentIndex" class="text-dash-text-muted font-mono text-base text-xl md:text-xl uppercase tracking-wider leading-tight">
           <span class="text-dash-secondary mr-3 font-bold">>>></span>
           {{ activeMessages[currentIndex] }}
         </p>

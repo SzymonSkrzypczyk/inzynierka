@@ -2,11 +2,11 @@
   <div class="panel hero-panel">
     <div class="flex justify-between items-start mb-8 z-20">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">Planetary Kp Index</h2>
+        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">Planetary Kp Index</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono">24-72H OBSERVATION WINDOW | STEP-BAR METRICS</p>
       </div>
       <div class="text-right">
-        <div class="text-secondary text-9xl font-bold leading-none">{{ currentKp.toFixed(2) }}</div>
+        <div class="text-9xl font-bold leading-none" :style="{ color: `${DashboardColors.secondary}CC` }">{{ currentKp.toFixed(2) }}</div>
         <div class="text-dash-text-muted text-lg font-bold mt-4 bg-dash-surface-container px-4 py-2 inline-block rounded uppercase tracking-widest border border-dash-border-variant">
           CURRENT G-SCALE: {{ gScale }}
         </div>
@@ -62,7 +62,7 @@
         <span class="text-center">-72h</span>
         <span class="text-center">-48h</span>
         <span class="text-center">-24h</span>
-        <span class="text-center text-secondary font-bold tracking-widest">CURRENT</span>
+        <span class="text-center text-primary font-bold tracking-widest">CURRENT</span>
         <span class="text-center">PREDICTED</span>
       </div>
     </div>

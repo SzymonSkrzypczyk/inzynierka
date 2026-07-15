@@ -2,7 +2,7 @@
   <div class="panel sub-panel">
     <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="text-secondary font-bold uppercase tracking-[0.2em] text-3xl">Solar Wind</h2>
+        <h2 class="font-bold uppercase tracking-[0.2em] text-3xl" :style="{ color: DashboardColors.primaryText }">Solar Wind</h2>
         <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Particle Velocity (km/s) | 24H Real-time Telemetry</p>
       </div>
     </div>
