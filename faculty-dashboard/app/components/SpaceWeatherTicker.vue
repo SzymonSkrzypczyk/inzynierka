@@ -153,15 +153,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="ticker-panel flex items-center gap-6 h-14 px-8 bg-[#0D0D0E] border border-[#1C1C1E] rounded-sm shadow-xl">
-    <div class="flex items-center gap-4 border-r border-[#353434] pr-6">
-      <div class="w-3 h-3 bg-[#4ae183] rounded-full animate-pulse shadow-[0_0_10px_#4ae183]"></div>
+  <div class="ticker-panel flex items-center gap-6 h-14 px-8 bg-dash-surface-variant border border-dash-border rounded-sm shadow-xl">
+    <div class="flex items-center gap-4 border-r border-dash-border-variant pr-6">
+      <div class="w-3 h-3 bg-dash-secondary rounded-full animate-pulse shadow-[0_0_10px_var(--tw-shadow-color)] shadow-dash-secondary"></div>
     </div>
 
     <div class="flex-1 overflow-hidden px-6">
       <transition name="fade" mode="out-in">
-        <p :key="currentIndex" class="text-[#c8c6ca] font-mono text-base text-xl md:text-2xl uppercase tracking-wider leading-tight">
-          <span class="text-[#4ae183] mr-3 font-bold">>>></span>
+        <p :key="currentIndex" class="text-dash-text-muted font-mono text-base text-xl md:text-xl uppercase tracking-wider leading-tight">
+          <span class="text-dash-secondary mr-3 font-bold">>>></span>
           {{ activeMessages[currentIndex] }}
         </p>
       </transition>

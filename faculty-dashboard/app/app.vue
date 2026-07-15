@@ -3,7 +3,7 @@
     <!-- Centered Header Title (Hidden on Title Page) -->
     <transition name="fade">
       <div v-if="currentSlide !== 'title'" class="flex justify-center items-center py-4">
-        <h1 class="text-[#4ae183] font-bold uppercase tracking-[0.4em] text-7xl font-mono">
+        <h1 class="font-bold uppercase tracking-[0.03em] text-7xl font-mono" :style="{ color: DashboardColors.primaryText }">
           Space Weather
         </h1>
       </div>
@@ -49,7 +49,7 @@
 
           <!-- Loading States -->
           <div v-else class="panel hero-panel animate-pulse flex items-center justify-center h-full">
-            <span class="text-[#c8c6ca] font-mono">RETRIEVING DATA STREAM FOR {{ currentSlide.toUpperCase() }}...</span>
+            <span class="text-dash-text-muted font-mono">RETRIEVING DATA STREAM FOR {{ currentSlide.toUpperCase() }}...</span>
           </div>
         </div>
       </transition>
@@ -120,6 +120,16 @@ onUnmounted(() => {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 /* Horizontal Sliding Transitions */
 .slide-left-enter-active,
 .slide-left-leave-active {

@@ -1,3 +1,5 @@
+
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -58,7 +60,26 @@ export default {
         "tertiary": "#cec4c2",
         "secondary-fixed": "#6bfe9c",
         "outline-variant": "#47464a",
-        "outline": "#919095"
+        "outline": "#919095",
+
+        // Add our extracted custom dashboard colors
+        "dash-primary": "#161d85",
+        "dash-primary-text": "#ffffff",
+        "dash-secondary": "#ff6100",
+        "dash-secondary-variant": "#d65200",
+        "dash-secondary-bg": "rgba(255, 97, 0, 0.1)",
+        "dash-tertiary": "#2632aa",
+        "dash-bg": "#020044",
+        "dash-surface": "#161d77",
+        "dash-surface-container": "#171d7b",
+        "dash-surface-variant": "#151d82",
+        "dash-border": "#1a27aa",
+        "dash-border-variant": "#2530a3",
+        "dash-text-muted": "#a0a0a0",
+        "dash-text-dim": "#707070",
+        "dash-danger": "#ff4040",
+        "dash-warning": "#ffaa00",
+        "dash-caution": "#ffff00"
       },
       borderRadius: {
         "DEFAULT": "0.125rem",
