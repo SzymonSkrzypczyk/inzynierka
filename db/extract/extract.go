@@ -95,6 +95,11 @@ func ExtractZipContents(zipFilePath string, targetDate string) error {
 			continue
 		}
 
+		if file.UncompressedSize64 == 0 {
+			log.Printf("Skipping empty file in archive: %s", file.Name)
+			continue
+		}
+
 		fmt.Printf("Extracting: %s\n", file.Name)
 
 		rc, err := file.Open()
@@ -162,6 +167,11 @@ func extractNestedZip(zipPath, baseDataDir string, targetDate string) error {
 	for _, file := range reader.File {
 		// Skip directories
 		if file.FileInfo().IsDir() {
+			continue
+		}
+
+		if file.UncompressedSize64 == 0 {
+			log.Printf("Skipping empty file in archive: %s", file.Name)
 			continue
 		}
 

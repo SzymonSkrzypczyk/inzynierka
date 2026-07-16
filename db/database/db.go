@@ -328,8 +328,20 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		}
 
 		var filesProcessed int16 = 0
+		var filesExpected int16 = 0
+		var filesSkipped int16 = 0
 		for _, file := range files {
 			if file.IsDir() || !strings.HasSuffix(file.Name(), ".csv") {
+				continue
+			}
+
+			info, err := file.Info()
+			if err != nil {
+				log.Printf("    Error getting file info for %s: %v", file.Name(), err)
+				continue
+			}
+			if info.Size() == 0 {
+				log.Printf("    Skipping empty file: %s", file.Name())
 				continue
 			}
 
@@ -342,11 +354,13 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 				continue
 			}
 
+			filesExpected++
 			fmt.Printf("  Processing: %s (type: %s)\n", file.Name(), dataType)
 
 			csvFile, err := os.Open(filePath)
 			if err != nil {
 				log.Printf("    Error opening %s: %v", file.Name(), err)
+				filesSkipped++
 				continue
 			}
 
@@ -356,11 +370,13 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 
 			if err != nil {
 				log.Printf("    Error reading CSV %s: %v", file.Name(), err)
+				filesSkipped++
 				continue
 			}
 
 			if err = saveDataToSpecificTable(db, dataType, records); err != nil {
 				log.Printf("    Error saving %s to database: %v", file.Name(), err)
+				filesSkipped++
 				continue
 			}
 
@@ -369,11 +385,15 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		}
 
 		// log processing to sync the progress
+		status := "completed"
+		if filesSkipped > 0 {
+			status = "partial"
+		}
 		processingLog := ProcessingLog{
 			Date:        dateStr,
 			FilesCount:  filesProcessed,
 			ProcessedAt: time.Now(),
-			Status:      "completed",
+			Status:      status,
 		}
 
 		if err := db.Create(&processingLog).Error; err != nil {
