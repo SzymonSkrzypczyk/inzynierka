@@ -2,6 +2,7 @@ package database
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -12,10 +13,29 @@ import (
 
 	"github.com/SzymonSkrzypczyk/db/extract"
 	"github.com/SzymonSkrzypczyk/db/utils"
+	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
+
+// isStorageError checks whether a database error is related to
+// insufficient storage or resources (PostgreSQL class 53 errors).
+func isStorageError(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) {
+		// PostgreSQL class 53: Insufficient Resources
+		// 53000 = insufficient_resources
+		// 53100 = disk_full
+		// 53200 = out_of_memory
+		// 53300 = too_many_connections
+		// 53400 = configuration_limit_exceeded
+		if strings.HasPrefix(pgErr.Code, "53") {
+			return true
+		}
+	}
+	return false
+}
 
 // InitDatabase initializes the database connection and performs auto-migration
 func InitDatabase() (*gorm.DB, error) {
@@ -330,6 +350,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		var filesProcessed int16 = 0
 		var filesExpected int16 = 0
 		var filesSkipped int16 = 0
+		var storageErrors int16 = 0
 		for _, file := range files {
 			if file.IsDir() || !strings.HasSuffix(file.Name(), ".csv") {
 				continue
@@ -375,7 +396,12 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 			}
 
 			if err = saveDataToSpecificTable(db, dataType, records); err != nil {
-				log.Printf("    Error saving %s to database: %v", file.Name(), err)
+				if isStorageError(err) {
+					log.Printf("    WARNING: Storage error saving %s: %v", file.Name(), err)
+					storageErrors++
+				} else {
+					log.Printf("    Error saving %s to database: %v", file.Name(), err)
+				}
 				filesSkipped++
 				continue
 			}
@@ -386,7 +412,10 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 
 		// log processing to sync the progress
 		status := "completed"
-		if filesSkipped > 0 {
+		if storageErrors > 0 {
+			status = "partial_storage_error"
+			log.Printf("WARNING: %d file(s) failed due to database storage issues for date %s", storageErrors, dateStr)
+		} else if filesSkipped > 0 {
 			status = "partial"
 		}
 		processingLog := ProcessingLog{
@@ -397,10 +426,14 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		}
 
 		if err := db.Create(&processingLog).Error; err != nil {
-			log.Printf("Failed to log processing for date %s: %v", dateStr, err)
+			if isStorageError(err) {
+				log.Printf("WARNING: Cannot write processing log for date %s due to storage error: %v", dateStr, err)
+			} else {
+				log.Printf("Failed to log processing for date %s: %v", dateStr, err)
+			}
 		}
 
-		fmt.Printf("  Completed processing %d files for %s\n", filesProcessed, dateStr)
+		fmt.Printf("  Completed processing %d/%d files for %s (status: %s)\n", filesProcessed, filesExpected, dateStr, status)
 
 		// If processing a specific date, we're done
 		if targetDate != "" {
