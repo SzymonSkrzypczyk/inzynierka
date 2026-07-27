@@ -3,7 +3,7 @@
     <div class="flex justify-between items-start mb-6">
       <div>
         <h2 class="font-bold uppercase tracking-[0.03em] text-3xl" :style="{ color: DashboardColors.primaryText }">Solar Proton Flux</h2>
-        <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Radiation Intensity (pfu) | Logarithmic Scale | 24H</p>
+        <p class="text-white text-lg mt-2 font-mono uppercase tracking-widest">Radiation Intensity (pfu) | Logarithmic Scale | 24H</p>
       </div>
     </div>
 
@@ -32,11 +32,11 @@
     <div class="flex items-center gap-8 mt-4">
       <div class="flex items-center gap-3">
         <div class="w-8 h-1" :style="{ backgroundColor: DashboardColors.secondary }"></div>
-        <span class="text-dash-text-muted text-lg font-mono tracking-widest">&gt;10 MeV ENERGY CHANNEL</span>
+        <span class="text-white text-lg font-mono tracking-widest">&gt;10 MeV ENERGY CHANNEL</span>
       </div>
       <div class="flex items-center gap-3">
         <div class="w-8 h-1" :style="{ backgroundColor: DashboardColors.secondaryVariant }"></div>
-        <span class="text-dash-text-muted text-lg font-mono tracking-widest">&gt;100 MeV ENERGY CHANNEL</span>
+        <span class="text-white text-lg font-mono tracking-widest">&gt;100 MeV ENERGY CHANNEL</span>
       </div>
     </div>
   </div>

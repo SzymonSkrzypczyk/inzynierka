@@ -3,7 +3,7 @@
     <div class="flex justify-between items-start mb-6">
       <div>
         <h2 class="font-bold uppercase tracking-[0.03em] text-3xl" :style="{ color: DashboardColors.primaryText }">GOES X-ray Flux</h2>
-        <p class="text-dash-text-muted text-lg mt-2 font-mono uppercase tracking-widest">Electromagnetic Flux (W/m²) | Logarithmic Scale | 24H</p>
+        <p class="text-white text-lg mt-2 font-mono uppercase tracking-widest">Electromagnetic Flux (W/m²) | Logarithmic Scale | 24H</p>
       </div>
     </div>
 
