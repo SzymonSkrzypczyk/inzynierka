@@ -81,5 +81,5 @@ type ProcessingLog struct {
 	Date        string    `gorm:"uniqueIndex;type:varchar(10)"`
 	FilesCount  int16     `gorm:"type:smallint"`
 	ProcessedAt time.Time `gorm:"type:timestamp(0)"`
-	Status      string    `gorm:"type:varchar(20)"`
+	Status      string    `gorm:"type:varchar(30)"`
 }

@@ -326,8 +326,12 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		// Check if already processed
 		var existingLog ProcessingLog
 		if db.Where("date = ?", dateStr).First(&existingLog).Error == nil {
-			if targetDate != "" {
-				fmt.Printf("Date %s already processed. Skipping to avoid duplicates.\n", dateStr)
+			// Allow re-processing of dates that previously failed due to storage errors
+			if existingLog.Status == "partial_storage_error" {
+				fmt.Printf("Date %s previously failed with storage error. Re-processing...\n", dateStr)
+				db.Delete(&existingLog)
+			} else if targetDate != "" {
+				fmt.Printf("Date %s already processed (status: %s). Skipping to avoid duplicates.\n", dateStr, existingLog.Status)
 				return nil
 			} else {
 				fmt.Printf("Date %s already processed, skipping...\n", dateStr)
