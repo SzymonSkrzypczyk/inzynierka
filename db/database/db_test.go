@@ -65,6 +65,39 @@ func TestSaveDataToSpecificTable_DscovrMag1s(t *testing.T) {
 	}
 
 	records := [][]string{
+		{"time_tag", "active", "source", "range", "scale", "sensitivity", "manual_mode", "sample_size", "bt", "bx_gse", "by_gse", "bz_gse", "theta_gse", "phi_gse", "bx_gsm", "by_gsm", "bz_gsm", "overall_quality"},
+		{"2024-06-01T00:00:00", "true", "SOLAR1", "", "", "", "false", "60", "5.0", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "0"},
+		{"2024-06-01T00:01:00", "false", "IMAP", "", "", "", "false", "60", "9.0", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "0"},
+		{"2024-06-01T00:02:00", "true", "SOLAR1", "", "", "", "false", "60", "9.0", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "1"},
+		{"invalid", "true", "SOLAR1", "", "", "", "false", "60", "9.0", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "0"},
+		{"2024-06-01T00:03:00", "true", "SOLAR1", "", "", "", "false", "60", "not-a-number", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "0"},
+	}
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(`INSERT INTO "dscovr_mag1s"`).
+		WithArgs(sqlmock.AnyArg(), float32(5.0), float32(1.5), float32(2.5), float32(3.5)).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}))
+	mock.ExpectCommit()
+
+	err = saveDataToSpecificTable(gdb, "dscovr_mag_1s", records)
+	if err != nil {
+		t.Errorf("Expected nil error, got %v", err)
+	}
+}
+
+func TestSaveDataToSpecificTable_DscovrMag1sLegacyArchive(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("failed to create sqlmock: %v", err)
+	}
+	defer db.Close()
+
+	gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+	if err != nil {
+		t.Fatalf("failed to open gorm db: %v", err)
+	}
+
+	records := [][]string{
 		{"TimeTag", "Bt", "BxGse", "ByGse", "BzGse", "ThetaGse", "PhiGse", "BxGsm", "ByGsm", "BzGsm", "ThetaGsm", "PhiGsm"},
 		{"2024-06-01T00:00:00Z", "5.0", "1.0", "2.0", "3.0", "45.0", "90.0", "1.5", "2.5", "3.5", "50.0", "95.0"},
 	}

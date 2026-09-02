@@ -18,5 +18,5 @@ NAME2URL = {
     "predicted-solar-cycle": "https://services.swpc.noaa.gov/json/solar-cycle/predicted-solar-cycle.json",
     "solar_regions": "https://services.swpc.noaa.gov/json/solar_regions.json",
     "solar-radio-flux": "https://services.swpc.noaa.gov/json/solar-radio-flux.json",
-    "dscovr_mag_1s": "https://services.swpc.noaa.gov/json/dscovr/dscovr_mag_1s.json"
+    "dscovr_mag_1s": "https://services.swpc.noaa.gov/json/rtsw/rtsw_mag_1m.json"
 }
