@@ -64,6 +64,30 @@ The system will:
 1. Build and run the `collect-data` service (retrieves space weather data and uploads to Dropbox)
 2. Once complete, automatically run the `save-database` service (processes data and saves to database)
 
+### Recovering from Dropbox
+
+The normal workflow is unchanged. If the database is unavailable or needs to be replaced, use the standalone recovery image. It downloads the archives already stored under Dropbox `/inzynierka`, creates the PostgreSQL schema, and safely inserts only missing rows.
+
+Build the image from the repository root:
+
+```bash
+docker build -f recovery/Dockerfile -t space-weather-recovery .
+```
+
+Restore every available archive using the same `.env` secret names listed above:
+
+```bash
+docker run --rm --env-file .env space-weather-recovery
+```
+
+To restore one archive only:
+
+```bash
+docker run --rm --env-file .env space-weather-recovery --date 2026-01-22
+```
+
+The target must be PostgreSQL-compatible. To restore into a new database, retain the same `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, and `DB_PORT` names and change their values in `.env`. The command exits non-zero if any archive is incomplete or fails, and can be safely rerun.
+
 ### Stopping
 
 To stop and remove containers:
