@@ -330,10 +330,10 @@ func saveXrayData(db *gorm.DB, dataType string, records [][]string) error {
 func ProcessDailyData(db *gorm.DB, targetDate string) error {
 	fmt.Println("\n=== PROCESSING DAILY DATA TO DATABASE ===")
 
-	if targetDate == "" {
-		return fmt.Errorf("target date not specified")
-	} else {
+	if targetDate != "" {
 		fmt.Printf("Target date specified: %s\n", targetDate)
+	} else {
+		fmt.Println("No target date specified: processing all extracted archives.")
 	}
 
 	entries, err := os.ReadDir(extract.DataDirectory)
@@ -341,6 +341,8 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		return fmt.Errorf("failed to read data directory: %v", err)
 	}
 
+	foundTarget := false
+	failedDates := make([]string, 0)
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue
@@ -356,17 +358,18 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 		if targetDate != "" && dateStr != targetDate {
 			continue
 		}
+		if targetDate != "" {
+			foundTarget = true
+		}
 
 		// Check if already processed
 		var existingLog ProcessingLog
 		if db.Where("date = ?", dateStr).First(&existingLog).Error == nil {
-			if targetDate != "" {
-				fmt.Printf("Date %s already processed. Skipping to avoid duplicates.\n", dateStr)
-				return nil
-			} else {
+			if existingLog.Status == "completed" {
 				fmt.Printf("Date %s already processed, skipping...\n", dateStr)
 				continue
 			}
+			fmt.Printf("Date %s was only partially processed; retrying it.\n", dateStr)
 		}
 
 		fmt.Printf("\nProcessing data for date: %s\n", dateStr)
@@ -378,6 +381,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 			if targetDate != "" {
 				return fmt.Errorf("failed to read target date directory: %v", err)
 			}
+			failedDates = append(failedDates, dateStr)
 			continue
 		}
 
@@ -450,23 +454,40 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 			Status:      status,
 		}
 
-		if err := db.Create(&processingLog).Error; err != nil {
+		if existingLog.ID == 0 {
+			err = db.Create(&processingLog).Error
+		} else {
+			err = db.Model(&existingLog).Updates(map[string]interface{}{
+				"files_count":  processingLog.FilesCount,
+				"processed_at": processingLog.ProcessedAt,
+				"status":       processingLog.Status,
+			}).Error
+		}
+		if err != nil {
 			log.Printf("Failed to log processing for date %s: %v", dateStr, err)
+			failedDates = append(failedDates, dateStr)
+		}
+		if filesSkipped > 0 {
+			failedDates = append(failedDates, dateStr)
 		}
 
 		fmt.Printf("  Completed processing %d files for %s\n", filesProcessed, dateStr)
 
 		// If processing a specific date, we're done
 		if targetDate != "" {
+			if len(failedDates) > 0 {
+				return fmt.Errorf("database processing incomplete for date(s): %s", strings.Join(failedDates, ", "))
+			}
 			fmt.Printf("\n=== COMPLETED PROCESSING FOR TARGET DATE %s ===\n", targetDate)
 			return nil
 		}
 	}
 
-	// Check if target date was not found
-	// Check if target date was not found
-	if targetDate != "" {
+	if targetDate != "" && !foundTarget {
 		return fmt.Errorf("target date %s not found in data directory", targetDate)
+	}
+	if len(failedDates) > 0 {
+		return fmt.Errorf("database processing incomplete for date(s): %s", strings.Join(failedDates, ", "))
 	}
 
 	fmt.Println("\n=== DATABASE PROCESSING COMPLETE ===")
