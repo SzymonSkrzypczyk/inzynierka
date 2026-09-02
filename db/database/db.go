@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -93,22 +94,75 @@ func saveDataToSpecificTable(db *gorm.DB, dataType string, records [][]string) e
 		}
 
 	case "dscovr_mag_1s":
+		columnIndexes := make(map[string]int, len(records[0]))
+		for index, column := range records[0] {
+			column = strings.ToLower(strings.TrimSpace(column))
+			columnIndexes[strings.ReplaceAll(column, "_", "")] = index
+		}
+		requiredColumns := []string{
+			"timetag", "bt", "bxgsm", "bygsm", "bzgsm",
+		}
+		for _, column := range requiredColumns {
+			if _, ok := columnIndexes[column]; !ok {
+				return fmt.Errorf("missing required interplanetary magnetic field column: %s", column)
+			}
+		}
+		_, hasActiveColumn := columnIndexes["active"]
+		_, hasQualityColumn := columnIndexes["overallquality"]
+		if hasActiveColumn != hasQualityColumn {
+			return fmt.Errorf("interplanetary magnetic field data must include both active and overall_quality columns")
+		}
+		isRTSWFeed := hasActiveColumn && hasQualityColumn
+
 		var data []DscovrMag1s
 		for _, record := range records[1:] {
-			if timeTag, err := utils.ParseTime(record[0]); err == nil && len(record) >= 12 {
-				bt, _ := strconv.ParseFloat(record[1], 32)
-				bxGsm, _ := strconv.ParseFloat(record[7], 32)
-				byGsm, _ := strconv.ParseFloat(record[8], 32)
-				bzGsm, _ := strconv.ParseFloat(record[9], 32)
-
-				data = append(data, DscovrMag1s{
-					TimeTag: timeTag,
-					Bt:      float32(bt),
-					BxGsm:   float32(bxGsm),
-					ByGsm:   float32(byGsm),
-					BzGsm:   float32(bzGsm),
-				})
+			value := func(column string) (string, bool) {
+				index := columnIndexes[column]
+				if index >= len(record) {
+					return "", false
+				}
+				return strings.TrimSpace(record[index]), true
 			}
+
+			if isRTSWFeed {
+				activeValue, activePresent := value("active")
+				qualityValue, qualityPresent := value("overallquality")
+				if !activePresent || !qualityPresent {
+					continue
+				}
+				active, err := strconv.ParseBool(activeValue)
+				if err != nil || !active || qualityValue != "0" {
+					continue
+				}
+			}
+
+			timeValue, timePresent := value("timetag")
+			btValue, btPresent := value("bt")
+			bxValue, bxPresent := value("bxgsm")
+			byValue, byPresent := value("bygsm")
+			bzValue, bzPresent := value("bzgsm")
+			if !timePresent || !btPresent || !bxPresent || !byPresent || !bzPresent {
+				continue
+			}
+
+			timeTag, timeErr := utils.ParseTime(timeValue)
+			bt, btErr := strconv.ParseFloat(btValue, 32)
+			bxGsm, bxErr := strconv.ParseFloat(bxValue, 32)
+			byGsm, byErr := strconv.ParseFloat(byValue, 32)
+			bzGsm, bzErr := strconv.ParseFloat(bzValue, 32)
+			if timeErr != nil || btErr != nil || bxErr != nil || byErr != nil || bzErr != nil ||
+				math.IsNaN(bt) || math.IsNaN(bxGsm) || math.IsNaN(byGsm) || math.IsNaN(bzGsm) ||
+				math.IsInf(bt, 0) || math.IsInf(bxGsm, 0) || math.IsInf(byGsm, 0) || math.IsInf(bzGsm, 0) {
+				continue
+			}
+
+			data = append(data, DscovrMag1s{
+				TimeTag: timeTag,
+				Bt:      float32(bt),
+				BxGsm:   float32(bxGsm),
+				ByGsm:   float32(byGsm),
+				BzGsm:   float32(bzGsm),
+			})
 		}
 		if len(data) > 0 {
 			return db.Clauses(clause.OnConflict{DoNothing: true}).CreateInBatches(data, 1000).Error
@@ -277,7 +331,7 @@ func ProcessDailyData(db *gorm.DB, targetDate string) error {
 	fmt.Println("\n=== PROCESSING DAILY DATA TO DATABASE ===")
 
 	if targetDate == "" {
-    return fmt.Errorf("target date not specified")
+		return fmt.Errorf("target date not specified")
 	} else {
 		fmt.Printf("Target date specified: %s\n", targetDate)
 	}

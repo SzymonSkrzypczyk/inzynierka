@@ -5,6 +5,14 @@ from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, mock_open, patch
 
 from retrieval.fetch_data import compress_data, retrieve_all_data, retrieve_data
+from retrieval.url_mapping import NAME2URL
+
+
+def test_interplanetary_magnetic_field_source_uses_rtsw_feed():
+    """The legacy pipeline name retrieves the supported SWPC RTSW feed."""
+    assert NAME2URL["dscovr_mag_1s"] == (
+        "https://services.swpc.noaa.gov/json/rtsw/rtsw_mag_1m.json"
+    )
 
 
 def _make_session_mock(mock_response):

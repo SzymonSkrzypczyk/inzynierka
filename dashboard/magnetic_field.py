@@ -52,26 +52,26 @@ def _label_for_col(col_name: str) -> str:
 
 def render(limit: Optional[int] = None):
     """
-    Render the interplanetary magnetic field (DSCOVR) dashboard section
+    Render the interplanetary magnetic field dashboard section
 
     :param limit:
     :type limit: Optional[int]
     :return:
     """
     logger.info(f"Rendering magnetic field page (limit={limit})")
-    st.title("Interplanetary Magnetic Field (DSCOVR)")
+    st.title("Interplanetary Magnetic Field")
     table_name = find_table_like(["dscovr", "mag"]) or find_table_like(["magnetometer"]) or find_table_like(["dscovr"])
     logger.debug(f"Found magnetic field table: {table_name}")
     df = _load_table_cached(table_name, limit) if table_name else pd.DataFrame()
     if df.empty:
-        st.info("No DSCOVR magnetometer data")
+        st.info("No interplanetary magnetic field data")
         return
     tcol = pick_time_column(df)
     st.subheader("Components of the Interplanetary Magnetic Field")
     with st.expander('Description'):
         st.markdown('''
         **Description:** A chart showing the temporal changes in the components of the interplanetary 
-        magnetic field measured by the DSCOVR satellite at the Lagrange point L1 (1.5 million km from Earth towards the Sun).
+        magnetic field measured in the solar wind near the Earth-Sun L1 point.
         
         **Purpose of the plot:** To monitor solar wind conditions and identify moments conducive 
         to the occurrence of geomagnetic storms. Analysis of magnetic field changes allows predicting 
@@ -96,14 +96,14 @@ def render(limit: Optional[int] = None):
             if orig in name_map:
                 tr.name = name_map[orig]
         fig.update_traces(mode='lines', line=dict(width=1.8))
-        set_layout(fig, 'Interplanetary Magnetic Field Components (DSCOVR)', legend_title_text='Magnetic Field Components',
+        set_layout(fig, 'Interplanetary Magnetic Field Components', legend_title_text='Magnetic Field Components',
                    rangeslider=True, yaxis_title='Magnetic Field Induction [nT]', tcol_data=df[tcol])
 
         add_gray_areas_empty(fig, df, tcol)
         st.plotly_chart(fig, use_container_width=True)
         download_cols = [tcol] + comps if tcol and comps else df.columns.tolist()
         download_df = df[download_cols].copy()
-        add_download_button(download_df, "magnetic_field_dscovr", "Download chart data as CSV")
+        add_download_button(download_df, "interplanetary_magnetic_field", "Download chart data as CSV")
     else:
         st.write(df.head())
 
