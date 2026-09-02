@@ -1,0 +1,12 @@
+.git
+.pytest_cache
+**/.pytest_cache
+__pycache__
+**/__pycache__
+.venv
+node_modules
+faculty-dashboard/node_modules
+data
+.env
+.local-env
+*.log
